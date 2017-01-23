@@ -35,6 +35,7 @@
         android:textSize="20sp"
         android:layout_below="@id/bt_location_record"/>
 
+
     <Button
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
