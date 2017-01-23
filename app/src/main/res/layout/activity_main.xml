@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -8,10 +9,41 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.aiosdev.isports.MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
+    tools:context="st.mapdemo1.MainActivity">
+    <Button
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:id="@+id/bt_location_start"
+        android:text="启动跟踪模式"
+        android:textSize="20sp"/>
+    <Button
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_location_record"
+        android:text="查看跟踪记录条目"
+        android:textSize="20sp"
+        android:layout_below="@id/bt_location_start"/>
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_record_del"
+        android:text="删除历史数据"
+        android:textSize="20sp"
+        android:layout_below="@id/bt_location_record"/>
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_record_del_today"
+        android:text="删除今天数据"
+        android:textSize="20sp"
+        android:layout_below="@id/bt_record_del"/>
+
+
+
 </RelativeLayout>
