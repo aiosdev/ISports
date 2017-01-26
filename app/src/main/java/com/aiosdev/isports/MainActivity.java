@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aiosdev.isports.tabmain.FirstLayerFragment;
-import com.aiosdev.isports.tabmain.FragmentTab1;
-import com.aiosdev.isports.tabmain.FragmentTab2;
-import com.aiosdev.isports.tabmain.FragmentTab3;
-import com.aiosdev.isports.tabmain.FragmentTab4;
+import com.aiosdev.isports.tabmain.fragments.FragmentTab1;
+import com.aiosdev.isports.tabmain.fragments.FragmentTab2;
+import com.aiosdev.isports.tabmain.fragments.FragmentTab3;
+import com.aiosdev.isports.tabmain.fragments.FragmentTab4;
 import com.shizhefei.view.indicator.FixedIndicatorView;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.transition.OnTransitionTextListener;

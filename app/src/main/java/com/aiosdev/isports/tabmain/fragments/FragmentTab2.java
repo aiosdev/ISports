@@ -1,4 +1,4 @@
-package com.aiosdev.isports.tabmain;
+package com.aiosdev.isports.tabmain.fragments;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aiosdev.isports.R;
+import com.aiosdev.isports.tabmain.SecondLayerFragment;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.IndicatorViewPager.IndicatorFragmentPagerAdapter;

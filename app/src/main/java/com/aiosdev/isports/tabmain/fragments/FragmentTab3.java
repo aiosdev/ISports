@@ -1,4 +1,4 @@
-package com.aiosdev.isports.tabmain;
+package com.aiosdev.isports.tabmain.fragments;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aiosdev.isports.R;
+import com.aiosdev.isports.tabmain.SecondLayerFragment;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.IndicatorViewPager.IndicatorFragmentPagerAdapter;
 
-public class FragmentTab4 extends LazyFragment {
+public class FragmentTab3 extends LazyFragment {
 	private IndicatorViewPager indicatorViewPager;
 	private LayoutInflater inflate;
 	public static final String INTENT_STRING_TABNAME = "intent_String_tabname";
@@ -25,7 +26,7 @@ public class FragmentTab4 extends LazyFragment {
 	@Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
-		setContentView(R.layout.fragment_tab_4);
+		setContentView(R.layout.fragment_tab_3);
 		Resources res = getResources();
 
 		Bundle bundle = getArguments();
