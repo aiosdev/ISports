@@ -4,19 +4,23 @@ import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aiosdev.isports.tabmain.FirstLayerFragment;
+import com.aiosdev.isports.tabmain.FragmentTab1;
+import com.aiosdev.isports.tabmain.FragmentTab2;
+import com.aiosdev.isports.tabmain.FragmentTab3;
+import com.aiosdev.isports.tabmain.FragmentTab4;
 import com.shizhefei.view.indicator.FixedIndicatorView;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 import com.shizhefei.view.viewpager.SViewPager;
+
+import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity {
 
@@ -68,12 +72,45 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public Fragment getFragmentForPage(int position) {
-            FirstLayerFragment mainFragment = new FirstLayerFragment();
+            ArrayList<Fragment> fragments = getFragments();
+
             Bundle bundle = new Bundle();
-            bundle.putString(FirstLayerFragment.INTENT_STRING_TABNAME, tabNames[position]);
-            bundle.putInt(FirstLayerFragment.INTENT_INT_INDEX, position);
-            mainFragment.setArguments(bundle);
-            return mainFragment;
+            switch (position){
+                case 0:
+                    bundle.putString(FragmentTab1.INTENT_STRING_TABNAME, tabNames[position]);
+                    bundle.putInt(FragmentTab1.INTENT_INT_INDEX, position);
+                    break;
+                case 1:
+                    bundle.putString(FragmentTab2.INTENT_STRING_TABNAME, tabNames[position]);
+                    bundle.putInt(FragmentTab2.INTENT_INT_INDEX, position);
+                    break;
+                case 2:
+                    bundle.putString(FragmentTab3.INTENT_STRING_TABNAME, tabNames[position]);
+                    bundle.putInt(FragmentTab3.INTENT_INT_INDEX, position);
+                    break;
+                case 3:
+                    bundle.putString(FragmentTab4.INTENT_STRING_TABNAME, tabNames[position]);
+                    bundle.putInt(FragmentTab4.INTENT_INT_INDEX, position);
+                    break;
+                default:
+                    bundle.putString(FirstLayerFragment.INTENT_STRING_TABNAME, tabNames[position]);
+                    bundle.putInt(FirstLayerFragment.INTENT_INT_INDEX, position);
+                    break;
+            }
+
+
+            fragments.get(position).setArguments(bundle);
+
+            return fragments.get(position);
         }
+    }
+
+    private ArrayList<Fragment> getFragments() {
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(new FragmentTab1());
+        fragments.add(new FragmentTab2());
+        fragments.add(new FragmentTab3());
+        fragments.add(new FragmentTab4());
+        return fragments;
     }
 }
