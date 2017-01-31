@@ -1,11 +1,13 @@
 package com.aiosdev.isports;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -31,7 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MoveActivity extends AppCompatActivity implements View.OnClickListener,com.google.android.gms.location.LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MoveActivity extends AppCompatActivity implements View.OnClickListener {
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest locationRequest;
@@ -53,16 +55,17 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button btStart;
     private Button btPause;
-    private Button btResume;
     private Button btStop;
+    private Button btMap;
 
     private Button btGetMap;
 
     private ArrayList<String> datelist;
 
-    final static int STATUS_STOP = 10;  //停止状态
+    final static int STATUS_STOP = 10;  //停止状态,就绪状态
     final static int STATUS_PAUSE = 20; //开始后的暂停状态
     final static int STATUS_RESUME = 30;//开始后的继续状态
+    final static int STATUS_DISABLE = 40; //不可用状态
 
 
 
@@ -78,29 +81,18 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
         //设置图片
         setMoveImage();
 
+        //初始化运行状态及按钮状态
+        setActionStatus(STATUS_STOP);
 
 
-        //首先生成一个GoogleApiClient对象并且设置属性
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-
-        //然后连接,连接成功后会在onConnected回调
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
 
     }
 
     private void initListener() {
         btStart.setOnClickListener(this);
         btPause.setOnClickListener(this);
-        btResume.setOnClickListener(this);
         btStop.setOnClickListener(this);
+        btMap.setOnClickListener(this);
     }
 
     private void initView() {
@@ -126,12 +118,10 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
         //Button
         btStart = (Button) findViewById(R.id.move_bt_start);
         btPause = (Button) findViewById(R.id.move_bt_pause);
-        btPause.setEnabled(false);
-        btResume = (Button) findViewById(R.id.move_bt_resume);
-        btResume.setEnabled(false);
         btStop = (Button) findViewById(R.id.move_bt_stop);
-        btStop.setEnabled(false);
-
+        btMap = (Button) findViewById(R.id.move_bt_map);
+        //设置运行状态为不可用状态，且按钮为不可用状态
+        setActionStatus(STATUS_DISABLE);
     }
 
     @Override
@@ -139,13 +129,14 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
         super.onSaveInstanceState(outState);
 
         outState.putSerializable("dataset", btStatus);
+        Log.d("btStatus状态保存：", btStatus + "");
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("btStatus:", btStatus + "");
+        Log.d("btStatus初始化:", btStatus + "");
 
         //设置图片
         setMoveImage();
@@ -156,24 +147,10 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        //恢复btStatus状态
-        btStatus = (Integer) savedInstanceState.getSerializable("dataset");
-
-        //设置按钮状态
-        switch (btStatus){
-            case STATUS_RESUME:
-                setBtEnable(false, true, false, true);
-                break;
-            case STATUS_PAUSE:
-                setBtEnable(false, false, true, true);
-                break;
-            case STATUS_STOP:
-                setBtEnable(true, false, false, false);
-                break;
-            default:
-                setBtEnable(true, false, false, false);
-                break;
-        }
+        //恢复btStatus状态，并设置按钮状态
+        int statusTemp = (Integer) savedInstanceState.getSerializable("dataset");
+        Log.d("btStatus状态恢复：", statusTemp + "");
+        setActionStatus(statusTemp);
 
         //设置图片
         setMoveImage();
@@ -198,202 +175,98 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-        Location myLocation =
-                LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (myLocation != null) {
-            Log.d("myLocation:", myLocation + "");
-            updateToNewLocation(myLocation);
-        }
-
-        //开始定位前构造LocationRequest类设置定位时的属性.比如隔多久定位一次，设置定位精度等等
-        createLocationRequest();
-        /*
-        //创建完成后开始定位
-        startLocation();
-        */
-
-        //设置监听器按钮可用状态
-        //btStatus = true;
-        //btStart.setEnabled(true);
-
-        Toast.makeText(this, "GPS链接成功！", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult result) {
-        Toast.makeText(this, "GPS链接失败！", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        /*
-        if (location != null) {
-            System.out.println("---测试mylocation---" + "lat = " + location.getLatitude() + "; lon = " + location.getLongitude());
-
-            //保存数据库
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(MapContract.MapEntry.COLUMN_LAT, location.getLatitude());
-            contentValues.put(MapContract.MapEntry.COLUMN_LONG, location.getLongitude());
-
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-            System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
-            contentValues.put(MapContract.MapEntry.COLUMN_DATE_TIME, df.format(new Date()));
-
-            Uri url = MapContract.MapEntry.CONTENT_URI;
-            getContentResolver().insert(url, contentValues);
-            Toast.makeText(getApplicationContext(), "成功记录一条信息：lat= " + location.getLatitude() + "; lon= " + location.getLongitude(), Toast.LENGTH_LONG).show();
-
-        } else {
-            System.out.println("---测试mylocation---location为null");
-            Toast.makeText(getApplicationContext(), "location为null", Toast.LENGTH_SHORT).show();
-        }
-        */
-    }
-
-    private void createLocationRequest() {
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(5000);
-        locationRequest.setSmallestDisplacement(0.5F);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-    }
-
-    private void updateToNewLocation(Location location) {
-        Toast.makeText(this, "位置变化：lat= " + location.getLatitude() + "; lon= " + location.getLongitude(), Toast.LENGTH_SHORT).show();
-    }
-
-    public void startLocation() {
-        Log.d("mGoogleApiClient是否链接:", mGoogleApiClient.isConnected() + "");
-        if (mGoogleApiClient.isConnected()) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    mGoogleApiClient, locationRequest, this);
-        }
-    }
-
-    public void stopLocation() {
-        Log.d("mGoogleApiClient是否链接:", mGoogleApiClient.isConnected() + "");
-        if (mGoogleApiClient.isConnected()) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
-    }
-
-    /**
-     * 判断某张表是否存在
-     */
-    public boolean tableIsExist(String tableName){
-        boolean result = false;
-        if(tableName == null){
-            return false;
-        }
-        Cursor cursor = null;
-        MapDbHelper dbHelper = new MapDbHelper(this);
-        try {
-            SQLiteDatabase db = dbHelper.getReadableDatabase();
-            //这里表名可以是Sqlite_master
-            String sql = "select count(*) as c from sqlite_master" + " where type ='table' and name ='"+tableName.trim()+"' ";
-            cursor = db.rawQuery(sql, null);
-            if(cursor.moveToNext()){
-                int count = cursor.getInt(0);
-                if(count>0){
-                    result = true;
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    private void queryPointByDate() {
-        datelist.clear();
-        String columns[] = new String[] {"distinct substr(" + MapContract.MapEntry.COLUMN_DATE_TIME + ", 1, 10) as date"};
-        Uri myUri = MapContract.MapEntry.CONTENT_URI;
-        //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
-        Cursor cur = null;
-
-        String orderbyTimeAsc = "date" + " asc";
-        cur = this.getContentResolver().query(myUri, columns, null, null, orderbyTimeAsc);
-
-        if (cur.moveToFirst()) {
-
-            do {
-                datelist.add(cur.getString(cur.getColumnIndex("date")));
-
-            } while (cur.moveToNext());
-
-        }
-    }
-
-    @Override
     public void onClick(View view) {
+        //初始化service
+        Intent moveService =  new Intent(this, MoveService.class);
         switch (view.getId()){
             case R.id.move_bt_start:
-                setBtEnable(false, true, false, true);
-                btStatus = STATUS_RESUME; //进入resume状态
-                Toast.makeText(getApplicationContext(), "start", Toast.LENGTH_SHORT).show();
+                //进入resume状态
+                setActionStatus(STATUS_RESUME);
+                //setBtStatus(false, true, false, true);
+                //btStatus = STATUS_RESUME;
+                Toast.makeText(getApplicationContext(), "resume", Toast.LENGTH_SHORT).show();
+
+                //启动MoveService
+                startService(moveService);
+                Log.d("service服务", "启动");
+
+                //启动计时器
+                timer.setBase(SystemClock.elapsedRealtime());//计时器清零
+                int hour = (int) ((SystemClock.elapsedRealtime() - timer.getBase()) / 1000 / 60);
+                timer.setFormat("0"+String.valueOf(hour)+":%s");
+                timer.start();
                 break;
             case R.id.move_bt_pause:
-                setBtEnable(false, false, true, true);
-                btStatus = STATUS_PAUSE; //进入pause状态
-                Toast.makeText(getApplicationContext(), "start", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.move_bt_resume:
-                setBtEnable(false, true, false, true);
-                btStatus = STATUS_RESUME; //进入resume状态
-                Toast.makeText(getApplicationContext(), "start", Toast.LENGTH_SHORT).show();
+
+                if(btStatus == STATUS_STOP || btStatus == STATUS_RESUME){
+                    //进入pause状态
+                    setActionStatus(STATUS_PAUSE);
+                    Toast.makeText(getApplicationContext(), "pause", Toast.LENGTH_SHORT).show();
+                }else if(btStatus == STATUS_PAUSE){
+                    //进入resume状态
+                    setActionStatus(STATUS_RESUME);
+                    Toast.makeText(getApplicationContext(), "resume", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.move_bt_stop:
-                setBtEnable(true, false, false, false);
-                btStatus = STATUS_STOP; //进入stop状态
-                Toast.makeText(getApplicationContext(), "start", Toast.LENGTH_SHORT).show();
+                //进入stop状态
+                setActionStatus(STATUS_STOP);
+                //setBtStatus(true, false, false, false);
+                //btStatus = STATUS_STOP;
+                Toast.makeText(getApplicationContext(), "stop", Toast.LENGTH_SHORT).show();
+
+                //停止MoveService
+                stopService(moveService);
+                Log.d("service服务", "停止");
+
+                //关闭timer
+                timer.stop();
+                break;
+            case R.id.move_bt_map:
+                startActivity(new Intent(MoveActivity.this, MoveMapsActivity.class));
+        }
+    }
+
+    private void setActionStatus(int status){
+
+        //设置运行状态
+        btStatus = status;
+        Log.d("btStatus Action:", btStatus + "");
+        //设置按钮状态
+        switch (status){
+            case STATUS_RESUME:
+                setBtStatus(false, true, false, true);
+                break;
+            case STATUS_PAUSE:
+                setBtStatus(false, false, true, true);
+                break;
+            case STATUS_STOP:
+                setBtStatus(true, false, false, false);
+                break;
+            case STATUS_DISABLE:
+                setBtStatus(false, false, false, false);
+                break;
+            default:
+                setBtStatus(true, false, false, false);
                 break;
         }
     }
 
-    private void setBtEnable(boolean start, boolean pause, boolean resume, boolean stop){
+    private void setBtStatus(boolean start, boolean pause, boolean resume, boolean stop){
+
         btStart.setEnabled(start);
-        btPause.setEnabled(pause);
-        btResume.setEnabled(resume);
         btStop.setEnabled(stop);
+        if(pause && !resume){
+            btPause.setEnabled(pause);
+            btPause.setText("暂停");
+        }else if(!pause && resume){
+            btPause.setEnabled(resume);
+            btPause.setText("继续");
+        }else if(!pause && !resume){
+            btPause.setEnabled(pause);
+            btPause.setText("暂停");
+        }
+
+
     }
 }

@@ -327,22 +327,24 @@
                 android:layout_marginRight="2dp"
                 android:background="@drawable/shape_corner"
                 android:layout_gravity="center_vertical"/>
+
+            <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="停止"
+            android:id="@+id/move_bt_stop"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/shape_corner"
+            android:layout_gravity="center_vertical"/>
+
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="继续"
-                android:id="@+id/move_bt_resume"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:background="@drawable/shape_corner"
-                android:layout_gravity="center_vertical"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="停止"
-                android:id="@+id/move_bt_stop"
+                android:text="地图"
+                android:id="@+id/move_bt_map"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:background="@drawable/shape_corner"

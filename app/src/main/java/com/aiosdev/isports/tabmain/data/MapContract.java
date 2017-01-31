@@ -25,7 +25,7 @@ import android.provider.BaseColumns;
  */
 public class MapContract {
 
-    public static final String CONTENT_AUTHORITY = "st.mapdemo1";
+    public static final String CONTENT_AUTHORITY = "com.aiosdev.isports";
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
