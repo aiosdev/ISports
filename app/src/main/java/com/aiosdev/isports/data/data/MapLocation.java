@@ -1,4 +1,4 @@
-package com.aiosdev.isports.tabmain.data;
+package com.aiosdev.isports.data.data;
 
 public class MapLocation {
     private String dateTime;

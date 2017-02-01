@@ -34,7 +34,7 @@
         <activity android:name=".MoveMapsActivity"/>
 
         <provider
-            android:name=".tabmain.data.MapProvider"
+            android:name=".data.data.MapProvider"
             android:authorities="com.aiosdev.isports">
         </provider>
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aiosdev.isports.tabmain.data;
+package com.aiosdev.isports.data.data;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;

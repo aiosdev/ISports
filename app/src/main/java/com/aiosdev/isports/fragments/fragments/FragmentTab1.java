@@ -1,5 +1,6 @@
-package com.aiosdev.isports.tabmain.fragments;
+package com.aiosdev.isports.fragments.fragments;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,15 +8,17 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.aiosdev.isports.MoveActivity;
 import com.aiosdev.isports.R;
 import com.aiosdev.isports.tabmain.SecondLayerFragment;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.IndicatorViewPager.IndicatorFragmentPagerAdapter;
 
-public class FragmentTab2 extends LazyFragment {
+public class FragmentTab1 extends LazyFragment {
 	private IndicatorViewPager indicatorViewPager;
 	private LayoutInflater inflate;
 	public static final String INTENT_STRING_TABNAME = "intent_String_tabname";
@@ -26,12 +29,20 @@ public class FragmentTab2 extends LazyFragment {
 	@Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
-		setContentView(R.layout.fragment_tab_2);
+		setContentView(R.layout.fragment_tab_1);
 		Resources res = getResources();
 
 		Bundle bundle = getArguments();
 		tabName = bundle.getString(INTENT_STRING_TABNAME);
 		index = bundle.getInt(INTENT_INT_INDEX);
+
+		Button btMove = (Button) findViewById(R.id.bt_move_normal);
+		btMove.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				startActivity(new Intent(getActivity(), MoveActivity.class));
+			}
+		});
 
 		/*
 		ViewPager viewPager = (ViewPager) findViewById(R.id.fragment_tabmain_viewPager);
