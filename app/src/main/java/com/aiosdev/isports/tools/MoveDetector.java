@@ -43,7 +43,7 @@ public class MoveDetector implements SensorEventListener {//实现取得感应�
 	 * @param context
 	 */
 	public MoveDetector(Context context) {
-		// TODO Auto-generated constructor stub
+
 		super();
 		int h = 480;
 		mYOffset = h * 0.5f;
@@ -103,7 +103,7 @@ public class MoveDetector implements SensorEventListener {//实现取得感应�
 						mLastExtremes[extType][k] = mLastValues[k];
 						float diff = Math.abs(mLastExtremes[extType][k]- mLastExtremes[1 - extType][k]);
 
-						if (diff > SENSITIVITY) {
+						if (diff > 3.0) {
 							boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);
 							boolean isPreviousLargeEnough = mLastDiff[k] > (diff / 3);
 							boolean isNotContra = (mLastMatch != 1 - extType);
@@ -132,7 +132,7 @@ public class MoveDetector implements SensorEventListener {//实现取得感应�
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// TODO Auto-generated method stub
+
 	}
 
 }
