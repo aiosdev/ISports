@@ -15,8 +15,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-import com.aiosdev.isports.data.data.MapContract;
-import com.aiosdev.isports.data.data.MapDbHelper;
+
+import com.aiosdev.isports.data.MapContract;
+import com.aiosdev.isports.data.MapDbHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;

@@ -10,9 +10,9 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.aiosdev.isports.data.data.MapContract;
-import com.aiosdev.isports.data.data.MapDbHelper;
-import com.aiosdev.isports.data.data.MapLocation;
+import com.aiosdev.isports.data.MapContract;
+import com.aiosdev.isports.data.MapDbHelper;
+import com.aiosdev.isports.data.MapLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
