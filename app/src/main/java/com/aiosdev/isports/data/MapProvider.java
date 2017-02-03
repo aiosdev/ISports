@@ -35,17 +35,27 @@ public class MapProvider extends ContentProvider {
 
     private static final int LOCATIONS = 100;
     private static final int MOVIE_WITH_ID = 101;
+    private static final int USER = 200;
+    private static final int TASK = 300;
 
     private static SQLiteQueryBuilder locationQueryBuilder;
+    private static SQLiteQueryBuilder userQueryBuilder;
+    private static SQLiteQueryBuilder taskQueryBuilder;
 
     static {
         locationQueryBuilder = new SQLiteQueryBuilder();
-        locationQueryBuilder.setTables(MapContract.MapEntry.TABLE_NAME);
+        locationQueryBuilder.setTables(MapContract.LoactionEntry.TABLE_NAME);
+
+        userQueryBuilder = new SQLiteQueryBuilder();
+        userQueryBuilder.setTables(MapContract.UserInfoEntry.TABLE_NAME);
+
+        taskQueryBuilder = new SQLiteQueryBuilder();
+        taskQueryBuilder.setTables(MapContract.TaskEntry.TABLE_NAME);
 
     }
 
-    public static String locationByDateSelection = MapContract.MapEntry.TABLE_NAME +
-            "." + MapContract.MapEntry.COLUMN_DATE_TIME + "=?";
+    public static String locationByDateSelection = MapContract.LoactionEntry.TABLE_NAME +
+            "." + MapContract.LoactionEntry.COLUMN_DATE_TIME + "=?";
 
 
     static UriMatcher buildUriMatcher() {
@@ -53,9 +63,14 @@ public class MapProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MapContract.CONTENT_AUTHORITY;
 
-        matcher.addURI(authority, MapContract.PATH_MAP, LOCATIONS);
-        matcher.addURI(authority, MapContract.PATH_MAP + "/#", MOVIE_WITH_ID);
+        matcher.addURI(authority, MapContract.PATH_LOC, LOCATIONS);
+        matcher.addURI(authority, MapContract.PATH_LOC + "/#", MOVIE_WITH_ID);
 
+        matcher.addURI(authority, MapContract.PATH_USER, USER);
+        matcher.addURI(authority, MapContract.PATH_USER + "/#", USER);
+
+        matcher.addURI(authority, MapContract.PATH_TASK, TASK);
+        matcher.addURI(authority, MapContract.PATH_TASK + "/#", TASK);
 
         return matcher;
     }
@@ -70,7 +85,27 @@ public class MapProvider extends ContentProvider {
                 sortOrder);
     }
 
-    private Cursor getMovieByKey(Uri uri) {
+    private Cursor getUser(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        return userQueryBuilder.query(dbHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder);
+    }
+
+    private Cursor getTask(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        return taskQueryBuilder.query(dbHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder);
+    }
+
+    private Cursor getLocByKey(Uri uri) {
         String _movieId = String.valueOf(ContentUris.parseId(uri));
 
         String[] selectionArgs = new String[]{_movieId};
@@ -99,9 +134,13 @@ public class MapProvider extends ContentProvider {
 
         switch (match) {
             case LOCATIONS:
-                return MapContract.MapEntry.CONTENT_DIR_TYPE;
+                return MapContract.LoactionEntry.CONTENT_DIR_TYPE;
             case MOVIE_WITH_ID:
-                return MapContract.MapEntry.CONTENT_ITEM_TYPE;
+                return MapContract.LoactionEntry.CONTENT_ITEM_TYPE;
+            case USER:
+                return MapContract.UserInfoEntry.CONTENT_DIR_TYPE;
+            case TASK:
+                return MapContract.TaskEntry.CONTENT_DIR_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -116,7 +155,13 @@ public class MapProvider extends ContentProvider {
                 cursor = getLocations(uri, projection, selection, selectionArgs, sortOrder);
                 break;
             case MOVIE_WITH_ID:
-                cursor = getMovieByKey(uri);
+                cursor = getLocByKey(uri);
+                break;
+            case USER:
+                cursor = getUser(uri, projection, selection, selectionArgs, sortOrder);
+                break;
+            case TASK:
+                cursor = getTask(uri, projection, selection, selectionArgs, sortOrder);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -137,9 +182,29 @@ public class MapProvider extends ContentProvider {
 
         switch (match) {
             case LOCATIONS: {
-                long _id = db.insert(MapContract.MapEntry.TABLE_NAME, null, values);
+                long _id = db.insert(MapContract.LoactionEntry.TABLE_NAME, null, values);
                 if (_id > 0) {
-                    returnUri = MapContract.MapEntry.buildMapUri(_id);
+                    returnUri = MapContract.LoactionEntry.buildMapUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+
+            case USER: {
+                long _id = db.insert(MapContract.UserInfoEntry.TABLE_NAME, null, values);
+                if (_id > 0) {
+                    returnUri = MapContract.UserInfoEntry.buildMapUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+
+            case TASK: {
+                long _id = db.insert(MapContract.TaskEntry.TABLE_NAME, null, values);
+                if (_id > 0) {
+                    returnUri = MapContract.TaskEntry.buildMapUri(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -164,7 +229,17 @@ public class MapProvider extends ContentProvider {
         switch (match) {
             case LOCATIONS: {
                 rowsDeleted = db.delete(
-                        MapContract.MapEntry.TABLE_NAME, selection, selectionArgs);
+                        MapContract.LoactionEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            }
+            case USER: {
+                rowsDeleted = db.delete(
+                        MapContract.UserInfoEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            }
+            case TASK: {
+                rowsDeleted = db.delete(
+                        MapContract.TaskEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             }
             default:
@@ -185,7 +260,17 @@ public class MapProvider extends ContentProvider {
 
         switch (match) {
             case LOCATIONS: {
-                rowsUpdated = db.update(MapContract.MapEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(MapContract.LoactionEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            }
+
+            case USER: {
+                rowsUpdated = db.update(MapContract.UserInfoEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            }
+
+            case TASK: {
+                rowsUpdated = db.update(MapContract.TaskEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
             default:

@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.MapDbHelper;
-import com.aiosdev.isports.data.MapLocation;
+import com.aiosdev.isports.data.Location;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,7 +33,7 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
 
     private GoogleMap mMap;
 
-    private ArrayList<MapLocation> locationList;
+    private ArrayList<Location> locationList;
 
     private PolylineOptions mPolylineOptions;
 
@@ -102,7 +102,7 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
 
             mPolylineOptions = new PolylineOptions();
 
-            for (MapLocation location : locationList) {
+            for (Location location : locationList) {
                 mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(location.getLat()), Double.parseDouble(location.getLon()))));
 
                 //PolylineOptions options = new PolylineOptions();
@@ -135,16 +135,19 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
             mMap.addPolyline(mPolylineOptions);
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(locationList.get(0).getLat()), Double.parseDouble(locationList.get(0).getLon())), 17));
+
+
         }
+
     }
 
-    private void initDatas(){
+    private void initDatas() {
         //初始化数据列表
         locationList = new ArrayList<>();
-        if(tableIsExist(MapContract.MapEntry.TABLE_NAME)) {
-            queryFavoriteProduct();
+        if (tableIsExist(MapContract.LoactionEntry.TABLE_NAME)) {
+            queryLocByCurrentDate();
             String res = "";
-            for(MapLocation location: locationList){
+            for (Location location : locationList) {
                 res += location.toString();
             }
             Log.d("位置列表数量", locationList.size() + "");
@@ -152,16 +155,16 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
         }
     }
 
-    private void queryFavoriteProduct() {
-        String columns[] = new String[] {MapContract.MapEntry.COLUMN_DATE_TIME,
-                MapContract.MapEntry.COLUMN_LAT,
-                MapContract.MapEntry.COLUMN_LONG, };
-        Uri myUri = MapContract.MapEntry.CONTENT_URI;
+    private void queryLocByCurrentDate() {
+        String columns[] = new String[]{MapContract.LoactionEntry.COLUMN_DATE_TIME,
+                MapContract.LoactionEntry.COLUMN_LAT,
+                MapContract.LoactionEntry.COLUMN_LONG,};
+        Uri myUri = MapContract.LoactionEntry.CONTENT_URI;
         //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
         Cursor cur = null;
 
-        String orderbyTimeAsc = MapContract.MapEntry.COLUMN_DATE_TIME + " asc";
-        cur = this.getContentResolver().query(myUri, columns, "substr(" + MapContract.MapEntry.COLUMN_DATE_TIME + ", 1, 10) = ? ", new String[]{date}, orderbyTimeAsc);
+        String orderbyTimeAsc = MapContract.LoactionEntry.COLUMN_DATE_TIME + " asc";
+        cur = this.getContentResolver().query(myUri, columns, "substr(" + MapContract.LoactionEntry.COLUMN_DATE_TIME + ", 1, 10) = ? ", new String[]{date}, orderbyTimeAsc);
 
         if (cur.moveToFirst()) {
             String dateTime = null;
@@ -169,12 +172,12 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
             String lon = null;
 
             do {
-                dateTime = cur.getString(cur.getColumnIndex(MapContract.MapEntry.COLUMN_DATE_TIME));
-                lat = cur.getString(cur.getColumnIndex(MapContract.MapEntry.COLUMN_LAT));
-                lon = cur.getString(cur.getColumnIndex(MapContract.MapEntry.COLUMN_LONG));
+                dateTime = cur.getString(cur.getColumnIndex(MapContract.LoactionEntry.COLUMN_DATE_TIME));
+                lat = cur.getString(cur.getColumnIndex(MapContract.LoactionEntry.COLUMN_LAT));
+                lon = cur.getString(cur.getColumnIndex(MapContract.LoactionEntry.COLUMN_LONG));
 
                 //Toast.makeText(this, id + ” ” + userName, Toast.LENGTH_LONG).show();
-                MapLocation favo = new MapLocation();
+                Location favo = new Location();
                 favo.setDateTime(dateTime);
                 favo.setLat(lat);
                 favo.setLon(lon);
@@ -189,9 +192,9 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
     /**
      * 判断某张表是否存在
      */
-    public boolean tableIsExist(String tableName){
+    public boolean tableIsExist(String tableName) {
         boolean result = false;
-        if(tableName == null){
+        if (tableName == null) {
             return false;
         }
         Cursor cursor = null;
@@ -199,11 +202,11 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
         try {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             //这里表名可以是Sqlite_master
-            String sql = "select count(*) as c from sqlite_master" + " where type ='table' and name ='"+tableName.trim()+"' ";
+            String sql = "select count(*) as c from sqlite_master" + " where type ='table' and name ='" + tableName.trim() + "' ";
             cursor = db.rawQuery(sql, null);
-            if(cursor.moveToNext()){
+            if (cursor.moveToNext()) {
                 int count = cursor.getInt(0);
-                if(count>0){
+                if (count > 0) {
                     result = true;
                 }
             }
@@ -222,9 +225,9 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
 
         double x, y, distance;
 
-        x = (end.longitude - begin.longitude)*PI*R* Math.cos(((begin.latitude+end.latitude)/2)*PI/180)/180;
+        x = (end.longitude - begin.longitude) * PI * R * Math.cos(((begin.latitude + end.latitude) / 2) * PI / 180) / 180;
 
-        y = (end.latitude - begin.latitude)*PI*R/180;
+        y = (end.latitude - begin.latitude) * PI * R / 180;
 
         distance = Math.hypot(x, y);
 

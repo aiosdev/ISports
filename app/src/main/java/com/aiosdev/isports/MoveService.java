@@ -80,6 +80,8 @@ public class MoveService extends Service implements SensorEventListener, com.goo
 
     private Handler handler;
 
+    private int taskNo;
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -114,6 +116,9 @@ public class MoveService extends Service implements SensorEventListener, com.goo
                         if (mActivityMessenger == null) {
                             mActivityMessenger = msg.replyTo;
                         }
+
+                        //初始化任务编号
+                        taskNo = msg.arg1;
 
                         // 获取传感器的服务，初始化传感器
                         mSensorManager = (SensorManager) MoveService.this.getSystemService(SENSOR_SERVICE);
@@ -249,16 +254,22 @@ public class MoveService extends Service implements SensorEventListener, com.goo
     public void onLocationChanged(Location location) {
         Log.d("service位置变化：", "lat= " + location.getLatitude() + "; lon= " + location.getLongitude());
         if (location != null) {
+
+            //计算距离
+            //double dis3 = computeDistanceBetween(begin, end);
+
+
             //保存数据库
             ContentValues contentValues = new ContentValues();
-            contentValues.put(MapContract.MapEntry.COLUMN_LAT, location.getLatitude());
-            contentValues.put(MapContract.MapEntry.COLUMN_LONG, location.getLongitude());
+            contentValues.put(MapContract.LoactionEntry.COLUMN_TASK_NO, taskNo);
+            contentValues.put(MapContract.LoactionEntry.COLUMN_LAT, location.getLatitude());
+            contentValues.put(MapContract.LoactionEntry.COLUMN_LONG, location.getLongitude());
 
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
             System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
-            contentValues.put(MapContract.MapEntry.COLUMN_DATE_TIME, df.format(new Date()));
+            contentValues.put(MapContract.LoactionEntry.COLUMN_DATE_TIME, df.format(new Date()));
 
-            Uri url = MapContract.MapEntry.CONTENT_URI;
+            Uri url = MapContract.LoactionEntry.CONTENT_URI;
             getContentResolver().insert(url, contentValues);
             Log.d("物理位置存档：", "成功记录一条信息：lat= " + location.getLatitude() + "; lon= " + location.getLongitude());
 
@@ -349,8 +360,8 @@ public class MoveService extends Service implements SensorEventListener, com.goo
 
     private void queryPointByDate() {
         datelist.clear();
-        String columns[] = new String[]{"distinct substr(" + MapContract.MapEntry.COLUMN_DATE_TIME + ", 1, 10) as date"};
-        Uri myUri = MapContract.MapEntry.CONTENT_URI;
+        String columns[] = new String[]{"distinct substr(" + MapContract.LoactionEntry.COLUMN_DATE_TIME + ", 1, 10) as date"};
+        Uri myUri = MapContract.LoactionEntry.CONTENT_URI;
         //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
         Cursor cur = null;
 

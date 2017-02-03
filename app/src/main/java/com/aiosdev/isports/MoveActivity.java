@@ -2,11 +2,14 @@ package com.aiosdev.isports;
 
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -23,11 +26,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aiosdev.isports.data.Location;
+import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.tools.MoveDetector;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,7 +69,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
     private ArrayList<String> datelist;
 
-    private long timer = 0;// 运动时间
+    private long sportTimer = 0;// 运动时间
     private long startTimer = 0;// 开始时间
 
     private long tempTime = 0;
@@ -80,6 +86,9 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
     final static int STATUS_PAUSE = 20; //开始后的暂停状态
     final static int STATUS_RESUME = 30;//开始后的继续状态
     final static int STATUS_DISABLE = 40; //不可用状态
+
+    private int taskNo;  //任务编号
+    private String currentTaskDate;//当前任务日期
 
     //Service端的Messenger对象
     private Messenger mServiceMessenger;
@@ -100,7 +109,28 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                             + msg.arg1, Toast.LENGTH_SHORT).show();
                     break;
                 case 0x14:
+                    //刷新步数统计
                     MoveActivity.this.paceCount.setText(msg.arg1 + "");
+
+                    //保留小数点后两位
+                    DecimalFormat df = new DecimalFormat("#.##");
+
+                    //刷新距离统计
+                    distance = msg.arg1 * 0.6;
+                    distance = Double.parseDouble(df.format(distance));
+                    MoveActivity.this.paceDistance.setText(distance + "");
+
+                    //刷新热量统计
+                    calories = 50 * distance * 0.8214 / 1000;
+                    calories = Double.parseDouble(df.format(calories));
+                    MoveActivity.this.paceCalories.setText(calories + "");
+
+                    //刷新平均速度
+
+                    velocity = distance / sportTimer;
+                    velocity = Double.parseDouble(df.format(velocity));
+                    MoveActivity.this.paceSpeedAvg.setText(velocity + "");
+
                     break;
             }
 
@@ -125,7 +155,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
             //创建消息
             Message message = Message.obtain();
             message.what = 0x11;
-            message.arg1 = 2016;
+            message.arg1 = taskNo;
             message.arg2 = 1;
 
             //设定消息要回应的Messenger
@@ -162,6 +192,12 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
         //btStart.setEnabled(false);
 
+    }
+
+    private void initTaskNo() {
+        queryNewTaskNoByCurrentDate();
+        taskNo++;
+        paceSpeedLow.setText(taskNo + "");
     }
 
     private void initListener() {
@@ -255,6 +291,13 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
         Intent moveService = new Intent(MoveActivity.this, MoveService.class);
         switch (view.getId()) {
             case R.id.move_bt_start:
+                //设置当前任务日期
+                //取当前日期
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+                currentTaskDate = df.format(new Date()).substring(0, 10);
+
+                initTaskNo();//初始化当天任务编号
+
                 //进入resume状态
                 setActionStatus(STATUS_RESUME);
                 //setBtStatus(false, true, false, true);
@@ -276,6 +319,12 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                 int hour = (int) ((SystemClock.elapsedRealtime() - chronTimer.getBase()) / 1000 / 60);
                 chronTimer.setFormat("0" + String.valueOf(hour) + ":%s");
                 chronTimer.start();
+                chronTimer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+                    @Override
+                    public void onChronometerTick(Chronometer chronometer) {
+                        sportTimer++;
+                    }
+                });
 
 
                 break;
@@ -300,6 +349,17 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
                 //停止MoveService
                 //stopService(moveService);
+
+
+                //保存数据库表Task
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MapContract.TaskEntry.COLUMN_DATE, currentTaskDate);
+                contentValues.put(MapContract.TaskEntry.COLUMN_TASK_NO, taskNo);
+                contentValues.put(MapContract.TaskEntry.COLUMN_STEP, paceCount.getText().toString());
+
+                Uri url = MapContract.TaskEntry.CONTENT_URI;
+                getContentResolver().insert(url, contentValues);
+
 
                 //解除service的绑定
                 unbindService(connection);
@@ -366,6 +426,34 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         total_step = MoveDetector.CURRENT_SETP;
+    }
+
+    private void queryNewTaskNoByCurrentDate() {
+
+        //提取数据
+        String columns[] = new String[]{"max(" + MapContract.TaskEntry.COLUMN_TASK_NO + ") as max_task_no",};
+        String columns1[] = new String[]{"count(*)",};
+        Uri myUri = MapContract.TaskEntry.CONTENT_URI;
+        //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
+        Cursor cur = null;
+
+        //String orderbyTimeAsc = MapContract.LoactionEntry.COLUMN_DATE_TIME + " asc";
+        cur = this.getContentResolver().query(myUri, columns, MapContract.TaskEntry.COLUMN_DATE + " = ? ", new String[]{currentTaskDate}, null);
+
+        if (cur.moveToFirst()) {
+            String taskMaxNo = null;
+
+            do {
+                taskMaxNo = cur.getString(cur.getColumnIndex("max_task_no"));
+                if (taskMaxNo == null) {
+                    taskNo = 0;
+                } else {
+                    taskNo = Integer.parseInt(taskMaxNo);
+                }
+            } while (cur.moveToNext());
+        }
+
+
     }
 
 }

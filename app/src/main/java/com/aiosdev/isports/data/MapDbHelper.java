@@ -36,20 +36,55 @@ public class MapDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MapContract.MapEntry.TABLE_NAME + " (" +
-                MapContract.MapEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                MapContract.MapEntry.COLUMN_DATE_TIME + " TEXT, " +
-                MapContract.MapEntry.COLUMN_LAT + " TEXT, " +
-                MapContract.MapEntry.COLUMN_LONG + " TEXT " +
+        final String SQL_CREATE_LOC_TABLE = "CREATE TABLE " + MapContract.LoactionEntry.TABLE_NAME + " (" +
+                MapContract.LoactionEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                MapContract.LoactionEntry.COLUMN_DATE_TIME + " TEXT, " +
+                MapContract.LoactionEntry.COLUMN_TASK_NO + " TEXT, " +
+                MapContract.LoactionEntry.COLUMN_LAT + " TEXT, " +
+                MapContract.LoactionEntry.COLUMN_LONG + " TEXT " +
                 " );";
 
-        sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_LOC_TABLE);
+
+        final String SQL_CREATE_USER_TABLE = "CREATE TABLE " + MapContract.UserInfoEntry.TABLE_NAME + " (" +
+                MapContract.LoactionEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                MapContract.UserInfoEntry.COLUMN_NAME + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_SEX + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_WEIGHT + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_GRADE + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_TITLE + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_STEP_COUNT + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_TOTAL_STEP + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_TOTAL_DISTANCE + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_TOTAL_CALORIES + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_TOTAL_DURATION + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_AVG_STEP + " TEXT, " +
+                MapContract.UserInfoEntry.COLUMN_AVG_SPEED + " TEXT " +
+                " );";
+
+        sqLiteDatabase.execSQL(SQL_CREATE_USER_TABLE);
+
+        final String SQL_CREATE_TASK_TABLE = "CREATE TABLE " + MapContract.TaskEntry.TABLE_NAME + " (" +
+                MapContract.TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                MapContract.TaskEntry.COLUMN_DATE + " TEXT, " +
+                MapContract.TaskEntry.COLUMN_TASK_NO + " TEXT, " +
+                MapContract.TaskEntry.COLUMN_STEP + " TEXT, " +
+                MapContract.TaskEntry.COLUMN_DISTANCE + " TEXT, " +
+                MapContract.TaskEntry.COLUMN_CALORIES + " TEXT, " +
+                MapContract.TaskEntry.COLUMN_DURATION + " TEXT, " +
+                MapContract.TaskEntry.COLUMN_AVG_STEP + " TEXT, " +
+                MapContract.TaskEntry.COLUMN_AVG_SPEED + " TEXT, " +
+                MapContract.TaskEntry.COLUMN_HIGH_SPEED + " TEXT, " +
+                MapContract.TaskEntry.COLUMN_LOW_SPEED + " TEXT " +
+                " );";
+
+        sqLiteDatabase.execSQL(SQL_CREATE_TASK_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
 
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MapContract.MapEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MapContract.LoactionEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }

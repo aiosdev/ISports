@@ -1,11 +1,11 @@
 package com.aiosdev.isports.data;
 
-public class MapLocation {
+public class Location {
     private String dateTime;
     private String lat;
     private String lon;
 
-    public MapLocation() {
+    public Location() {
     }
 
     public String getDateTime() {
@@ -34,7 +34,7 @@ public class MapLocation {
 
     @Override
     public String toString() {
-        return "MapLocation{" +
+        return "Location{" +
                 "dateTime='" + dateTime + '\'' +
                 ", lat='" + lat + '\'' +
                 ", lon='" + lon + '\'' +
