@@ -1,18 +1,23 @@
 package com.aiosdev.isports;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.MapDbHelper;
 import com.aiosdev.isports.data.Location;
+import com.aiosdev.isports.data.Task;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,7 +34,7 @@ import java.util.Date;
 
 import static com.google.maps.android.SphericalUtil.computeDistanceBetween;
 
-public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -39,18 +44,73 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
 
     private String date;
 
+    private Task mTask;
+
+    private TextView tvDate;
+    private TextView tvTaskNo;
+    private TextView tvDuration;
+    private TextView tvStartTime;
+    private TextView tvStopTime;
+    private TextView tvSteps;
+    private TextView tvDistances;
+    private TextView tvCalories;
+    private TextView tvVelocity;
+    private TextView tvAvgStep;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move_maps);
+
+        Intent intent = getIntent();
+        if("MoveActivity".equals(intent.getStringExtra("flag"))){
+            mTask = (Task) intent.getSerializableExtra("task");
+        }
+
+        initViews();
+
+        initDatas();
+
+        initViewDatas();
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-        date = df.format(new Date()).substring(0, 10);
 
+
+    }
+
+    private void initViews() {
+        tvDate = (TextView) findViewById(R.id.tv_date);
+        tvTaskNo = (TextView) findViewById(R.id.tv_task_no);
+        tvDuration = (TextView) findViewById(R.id.tv_duration);
+        tvStartTime = (TextView) findViewById(R.id.tv_start_time);
+        tvStopTime = (TextView) findViewById(R.id.tv_stop_time);
+        tvSteps = (TextView) findViewById(R.id.tv_steps);
+        tvDistances = (TextView) findViewById(R.id.tv_distances);
+        tvCalories = (TextView) findViewById(R.id.tv_calories);
+        tvAvgStep = (TextView) findViewById(R.id.tv_avg_step);
+        tvVelocity = (TextView) findViewById(R.id.tv_velocity);
+    }
+
+    private void initViewDatas() {
+        if(mTask == null){
+            Toast.makeText(this, "数据提取异常，请重试！", Toast.LENGTH_SHORT).show();
+        }else {
+            tvDate.setText(mTask.getDate());
+            tvTaskNo.setText(mTask.getTaskNo());
+            tvDuration.setText(mTask.getDuration() + "");
+            tvStartTime.setText(locationList.get(0).getDateTime());
+            tvStopTime.setText(locationList.get(locationList.size() - 1).getDateTime());
+            tvSteps.setText(mTask.getStep() + "");
+            tvDistances.setText(mTask.getDistance() + "");
+            tvCalories.setText(mTask.getCalories() + "");
+            tvAvgStep.setText(mTask.getAvg_step() + "");
+            tvVelocity.setText(mTask.getAvg_speed() + "");
+        }
     }
 
 
@@ -95,7 +155,7 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
         }
         */
 
-        initDatas();
+
         if (locationList.isEmpty()) {
             Toast.makeText(this, "暂时没有位置数据！", Toast.LENGTH_SHORT).show();
         } else {
@@ -156,7 +216,8 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
     }
 
     private void queryLocByCurrentDate() {
-        String columns[] = new String[]{MapContract.LoactionEntry.COLUMN_DATE_TIME,
+        String columns[] = new String[]{
+                MapContract.LoactionEntry.COLUMN_DATE_TIME,
                 MapContract.LoactionEntry.COLUMN_LAT,
                 MapContract.LoactionEntry.COLUMN_LONG,};
         Uri myUri = MapContract.LoactionEntry.CONTENT_URI;
@@ -164,14 +225,21 @@ public class MoveMapsActivity extends FragmentActivity implements OnMapReadyCall
         Cursor cur = null;
 
         String orderbyTimeAsc = MapContract.LoactionEntry.COLUMN_DATE_TIME + " asc";
-        cur = this.getContentResolver().query(myUri, columns, "substr(" + MapContract.LoactionEntry.COLUMN_DATE_TIME + ", 1, 10) = ? ", new String[]{date}, orderbyTimeAsc);
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        date = df.format(new Date()).substring(0, 10);
+        //String[] args = {date, mTask.getTaskNo()};
+
+        cur = this.getContentResolver().query(myUri, columns, "substr(" + MapContract.LoactionEntry.COLUMN_DATE_TIME + ", 1, 10) = ? and " + MapContract.LoactionEntry.COLUMN_TASK_NO + " = ?", new String[]{date, mTask.getTaskNo()}, orderbyTimeAsc);
 
         if (cur.moveToFirst()) {
+            //String taskNo = null;
             String dateTime = null;
             String lat = null;
             String lon = null;
 
             do {
+                //taskNo = cur.getString(cur.getColumnIndex(MapContract.LoactionEntry.COLUMN_TASK_NO));
                 dateTime = cur.getString(cur.getColumnIndex(MapContract.LoactionEntry.COLUMN_DATE_TIME));
                 lat = cur.getString(cur.getColumnIndex(MapContract.LoactionEntry.COLUMN_LAT));
                 lon = cur.getString(cur.getColumnIndex(MapContract.LoactionEntry.COLUMN_LONG));

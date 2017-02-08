@@ -1,6 +1,8 @@
 package com.aiosdev.isports;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
@@ -45,7 +47,13 @@ public class GuideActivity extends FragmentActivity {
                     @Override
                     public void run() {
                         finish();
-                        startActivity(new Intent(GuideActivity.this, MainActivity.class));
+                        SharedPreferences sharedPreferences = getSharedPreferences("init", Context.MODE_PRIVATE);
+                        boolean res  = sharedPreferences.getBoolean("first", false);
+                        if(res) {
+                            startActivity(new Intent(GuideActivity.this, MainActivity.class));
+                        }else {
+                            startActivity(new Intent(GuideActivity.this, RegisterActivity.class));
+                        }
                     }
                 });
             }

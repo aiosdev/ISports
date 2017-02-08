@@ -3,8 +3,10 @@ package com.aiosdev.isports;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -28,6 +30,8 @@ import android.widget.Toast;
 
 import com.aiosdev.isports.data.Location;
 import com.aiosdev.isports.data.MapContract;
+import com.aiosdev.isports.data.Task;
+import com.aiosdev.isports.data.User;
 import com.aiosdev.isports.tools.MoveDetector;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -39,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static android.R.attr.data;
+
 
 public class MoveActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -69,14 +74,14 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
     private ArrayList<String> datelist;
 
-    private long sportTimer = 0;// 运动时间
+    private int sportTimer = 0;// 运动时间
     private long startTimer = 0;// 开始时间
 
     private long tempTime = 0;
 
-    private Double distance = 0.0;// 路程：米
-    private Double calories = 0.0;// 热量：卡路里
-    private Double velocity = 0.0;// 速度：米每秒
+    private Float distance = Float.valueOf(0);// 路程：米
+    private Float calories = Float.valueOf(0);// 热量：卡路里
+    private Float velocity = Float.valueOf(0);// 速度：米每秒
 
     private int step_length = 0;  //步长
     private int weight = 0;       //体重
@@ -95,6 +100,8 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
     //Activity端的Messenger对象
     private Messenger mActivityMessenger;
 
+    private User user;
+
 
     /**
      * Activity端的Handler处理Service中的消息
@@ -111,25 +118,30 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                 case 0x14:
                     //刷新步数统计
                     MoveActivity.this.paceCount.setText(msg.arg1 + "");
+                    total_step = msg.arg1;
 
                     //保留小数点后两位
                     DecimalFormat df = new DecimalFormat("#.##");
 
                     //刷新距离统计
-                    distance = msg.arg1 * 0.6;
-                    distance = Double.parseDouble(df.format(distance));
-                    MoveActivity.this.paceDistance.setText(distance + "");
+                    int avgStep = user.getAvgStep();
+                    if(avgStep == 0){
+                        avgStep = 60;
+                    }
+                    distance = Float.valueOf(msg.arg1 * 60 /100);
+                    distance = Float.parseFloat(df.format(distance));
+                    MoveActivity.this.paceDistance.setText(distance + "米");
 
                     //刷新热量统计
-                    calories = 50 * distance * 0.8214 / 1000;
-                    calories = Double.parseDouble(df.format(calories));
-                    MoveActivity.this.paceCalories.setText(calories + "");
+                    calories = Float.parseFloat(String.valueOf(50 * distance * 0.8214 / 1000));
+                    calories = Float.parseFloat(df.format(calories));
+                    MoveActivity.this.paceCalories.setText(calories + "卡");
 
                     //刷新平均速度
 
                     velocity = distance / sportTimer;
-                    velocity = Double.parseDouble(df.format(velocity));
-                    MoveActivity.this.paceSpeedAvg.setText(velocity + "");
+                    velocity = Float.parseFloat(df.format(velocity));
+                    MoveActivity.this.paceSpeedAvg.setText(velocity + "米/秒");
 
                     break;
             }
@@ -191,7 +203,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
         setActionStatus(STATUS_STOP);
 
         //btStart.setEnabled(false);
-
+        user = User.getInstence(MoveActivity.this);
     }
 
     private void initTaskNo() {
@@ -355,11 +367,23 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(MapContract.TaskEntry.COLUMN_DATE, currentTaskDate);
                 contentValues.put(MapContract.TaskEntry.COLUMN_TASK_NO, taskNo);
-                contentValues.put(MapContract.TaskEntry.COLUMN_STEP, paceCount.getText().toString());
-
+                contentValues.put(MapContract.TaskEntry.COLUMN_STEP, total_step);
+                contentValues.put(MapContract.TaskEntry.COLUMN_DISTANCE, distance);
+                contentValues.put(MapContract.TaskEntry.COLUMN_CALORIES, calories);
+                contentValues.put(MapContract.TaskEntry.COLUMN_DURATION, sportTimer);
+                contentValues.put(MapContract.TaskEntry.COLUMN_AVG_SPEED, velocity);
                 Uri url = MapContract.TaskEntry.CONTENT_URI;
                 getContentResolver().insert(url, contentValues);
 
+                //累加数据，并保存数据到SharedPreferences “userInfo”
+
+                user.setTotalStep(user.getTotalStep() + total_step);
+                user.setTotalDistance(user.getTotalDistance() + distance);
+                user.setTotalCalories(user.getTotalCalories() + calories);
+                user.setTotalDuration(user.getTotalDuration() + sportTimer);
+                user.setAvgStep((int) (user.getTotalDistance() / user.getTotalStep() * 100));
+
+                user.saveData(MoveActivity.this);
 
                 //解除service的绑定
                 unbindService(connection);
@@ -370,7 +394,22 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                 chronTimer.stop();
                 break;
             case R.id.move_bt_map:
-                startActivity(new Intent(MoveActivity.this, MoveMapsActivity.class));
+                Task task = new Task();
+                task.setDate(currentTaskDate);
+                task.setTaskNo(taskNo + "");
+                task.setStep(total_step);
+                task.setDistance(distance);
+                task.setCalories(calories);
+                task.setDuration(sportTimer);
+                task.setAvg_speed(velocity);
+
+                Intent intent = new Intent();
+                intent.putExtra("flag", "MoveActivity");
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("task", task);
+                intent.putExtras(bundle);
+                intent.setClass(MoveActivity.this, MoveMapsActivity.class);
+                startActivity(intent);
         }
     }
 

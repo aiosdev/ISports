@@ -1,21 +1,23 @@
 package com.aiosdev.isports.data;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/2/3 0003.
  */
 
-public class Task {
+public class Task implements Serializable {
 
     private String date;//日期
     private String taskNo;//任务编号
     private int step;//步数
-    private Double distance;//距离
-    private Double calories;//热量
-    private Double duration;//时长
-    private Double avg_step;//平均步幅
-    private Double avg_speed;//平均速度
-    private Double high_speed;//最高速度
-    private Double low_speed;//最低速度
+    private Float distance;//距离
+    private Float calories;//热量
+    private int duration;//时长
+    private int avg_step;//平均步幅
+    private Float avg_speed;//平均速度
+    private Float high_speed;//最高速度
+    private Float low_speed;//最低速度
 
     public Task() {
     }
@@ -44,59 +46,59 @@ public class Task {
         this.step = step;
     }
 
-    public Double getDistance() {
+    public Float getDistance() {
         return distance;
     }
 
-    public void setDistance(Double distance) {
+    public void setDistance(Float distance) {
         this.distance = distance;
     }
 
-    public Double getCalories() {
+    public Float getCalories() {
         return calories;
     }
 
-    public void setCalories(Double calories) {
+    public void setCalories(Float calories) {
         this.calories = calories;
     }
 
-    public Double getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(Double duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
-    public Double getAvg_step() {
+    public int getAvg_step() {
         return avg_step;
     }
 
-    public void setAvg_step(Double avg_step) {
+    public void setAvg_step(int avg_step) {
         this.avg_step = avg_step;
     }
 
-    public Double getAvg_speed() {
+    public Float getAvg_speed() {
         return avg_speed;
     }
 
-    public void setAvg_speed(Double avg_speed) {
+    public void setAvg_speed(Float avg_speed) {
         this.avg_speed = avg_speed;
     }
 
-    public Double getHigh_speed() {
+    public Float getHigh_speed() {
         return high_speed;
     }
 
-    public void setHigh_speed(Double high_speed) {
+    public void setHigh_speed(Float high_speed) {
         this.high_speed = high_speed;
     }
 
-    public Double getLow_speed() {
+    public Float getLow_speed() {
         return low_speed;
     }
 
-    public void setLow_speed(Double low_speed) {
+    public void setLow_speed(Float low_speed) {
         this.low_speed = low_speed;
     }
 
