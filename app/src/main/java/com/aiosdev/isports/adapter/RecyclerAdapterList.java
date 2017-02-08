@@ -1,0 +1,97 @@
+package com.aiosdev.isports.adapter;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.aiosdev.isports.R;
+import com.aiosdev.isports.data.Task;
+
+import java.util.List;
+
+
+
+
+/**
+ * 日期List适配器
+ */
+
+public class RecyclerAdapterList extends RecyclerView.Adapter<RecyclerAdapterList.MyViewHolder> {
+
+
+    private Context context;
+    private List<Task> list;
+    private OnItemClickListener listener;
+
+    public RecyclerAdapterList(Context context, List<Task> list) {
+        this.context = context;
+        this.list = list;
+    }
+
+
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_list_view, parent, false);
+        return new MyViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
+        final String date = list.get(position).getDate();
+        final String taskNo = list.get(position).getTaskNo();
+        holder.tvDate.setText(date);
+        holder.tvTaskNo.setText(taskNo);
+
+        /**
+         * 调用接口回调
+         */
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != listener)
+                    listener.onItemClick(position, date, v);
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return null == list ? 0 : list.size();
+    }
+
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView tvDate;      //日期
+        private TextView tvTaskNo;    //task no
+
+
+        public MyViewHolder(View view) {
+            super(view);
+            tvDate = (TextView) view.findViewById(R.id.item_view);
+            tvTaskNo = (TextView) view.findViewById(R.id.item_task_no);
+
+        }
+    }
+
+    /**
+     * 内部接口回调方法
+     */
+    public interface OnItemClickListener {
+        void onItemClick(int position, Object object, View view);
+    }
+
+    /**
+     * 设置监听方法
+     *
+     * @param listener
+     */
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+}

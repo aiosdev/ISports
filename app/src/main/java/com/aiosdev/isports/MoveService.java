@@ -93,6 +93,9 @@ public class MoveService extends Service implements SensorEventListener, com.goo
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d("Service声明周期：", "onCreate()");
+
+        initArgus();
 
         FLAG = true;// 标记为服务正在运行
 
@@ -187,9 +190,18 @@ public class MoveService extends Service implements SensorEventListener, com.goo
 
     }
 
+    private void initArgus() {
+        //计步传感器相关参数
+        CURRENT_SETP = 0;
+        SENSITIVITY = 0;   //SENSITIVITY灵敏度
+        end = 0;
+        start = 0;
+    }
+
 
     @Override
     public void onDestroy() {
+        Log.d("Service声明周期：", "onDestroy()");
 
         FLAG = false;// 服务停止
 

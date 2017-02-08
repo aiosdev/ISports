@@ -50,7 +50,7 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
     private TextView tvTaskNo;
     private TextView tvDuration;
     private TextView tvStartTime;
-    private TextView tvStopTime;
+    //private TextView tvStopTime;
     private TextView tvSteps;
     private TextView tvDistances;
     private TextView tvCalories;
@@ -65,6 +65,10 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
         Intent intent = getIntent();
         if("MoveActivity".equals(intent.getStringExtra("flag"))){
             mTask = (Task) intent.getSerializableExtra("task");
+        }else if("FragmentTab5".equals(intent.getStringExtra("flag"))){
+            String date = intent.getStringExtra("date");
+            String taskNo = intent.getStringExtra("taskNo");
+            queryTaskByDate(date, taskNo);
         }
 
         initViews();
@@ -88,7 +92,7 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
         tvTaskNo = (TextView) findViewById(R.id.tv_task_no);
         tvDuration = (TextView) findViewById(R.id.tv_duration);
         tvStartTime = (TextView) findViewById(R.id.tv_start_time);
-        tvStopTime = (TextView) findViewById(R.id.tv_stop_time);
+        //tvStopTime = (TextView) findViewById(R.id.tv_stop_time);
         tvSteps = (TextView) findViewById(R.id.tv_steps);
         tvDistances = (TextView) findViewById(R.id.tv_distances);
         tvCalories = (TextView) findViewById(R.id.tv_calories);
@@ -103,8 +107,8 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
             tvDate.setText(mTask.getDate());
             tvTaskNo.setText(mTask.getTaskNo());
             tvDuration.setText(mTask.getDuration() + "");
-            tvStartTime.setText(locationList.get(0).getDateTime());
-            tvStopTime.setText(locationList.get(locationList.size() - 1).getDateTime());
+            tvStartTime.setText(locationList.get(0).getDateTime().substring(11, 19));
+            //tvStopTime.setText(locationList.get(locationList.size() - 1).getDateTime());
             tvSteps.setText(mTask.getStep() + "");
             tvDistances.setText(mTask.getDistance() + "");
             tvCalories.setText(mTask.getCalories() + "");
@@ -302,5 +306,31 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
         return distance;
 
     }
+
+    private void queryTaskByDate(String date, String taskNo) {
+
+        Uri myUri = MapContract.TaskEntry.CONTENT_URI;
+        //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
+        Cursor cur = null;
+        String condition = "date = ? and task_no = ?";
+        String[] argus = {date, taskNo};
+
+        cur = this.getContentResolver().query(myUri, null, condition, argus, null);
+
+        if (cur.moveToFirst()) {
+            do {
+                mTask = new Task();
+                mTask.setDate(cur.getString(cur.getColumnIndex("date"))); ;
+                mTask.setTaskNo(cur.getString(cur.getColumnIndex("task_no")));
+                mTask.setStep(cur.getInt(cur.getColumnIndex("step")));
+                mTask.setDistance(cur.getFloat(cur.getColumnIndex("distance")));
+                mTask.setCalories(cur.getFloat(cur.getColumnIndex("calories")));
+                mTask.setDuration(cur.getInt(cur.getColumnIndex("duration")));
+                mTask.setAvg_step(cur.getInt(cur.getColumnIndex("avg_step")));
+                mTask.setAvg_speed(cur.getFloat(cur.getColumnIndex("avg_speed")));
+            } while (cur.moveToNext());
+        }
+    }
+
 
 }

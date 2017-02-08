@@ -82,7 +82,7 @@ public class FragmentTab4 extends LazyFragment {
 
 		@Override
 		public int getCount() {
-			return 4;
+			return 5;
 		}
 
 		@Override

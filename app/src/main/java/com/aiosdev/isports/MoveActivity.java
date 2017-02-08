@@ -204,6 +204,9 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
         //btStart.setEnabled(false);
         user = User.getInstence(MoveActivity.this);
+
+        //设置地图按钮不可用
+        btMap.setEnabled(false);
     }
 
     private void initTaskNo() {
@@ -327,17 +330,29 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("service服务", "启动");
 
                 //启动计时器
+                sportTimer = 0;
                 chronTimer.setBase(SystemClock.elapsedRealtime());//计时器清零
                 int hour = (int) ((SystemClock.elapsedRealtime() - chronTimer.getBase()) / 1000 / 60);
-                chronTimer.setFormat("0" + String.valueOf(hour) + ":%s");
+                //chronTimer.setFormat("0" + String.valueOf(hour) + ":%s");
                 chronTimer.start();
                 chronTimer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
                     @Override
                     public void onChronometerTick(Chronometer chronometer) {
                         sportTimer++;
+                        chronTimer.setText(FormatMiss(sportTimer));
+                    }
+
+                    // 将秒转化成小时分钟秒
+                    public String FormatMiss(int miss){
+                        String hh=miss/3600>9?miss/3600+"":"0"+miss/3600;
+                        String  mm=(miss % 3600)/60>9?(miss % 3600)/60+"":"0"+(miss % 3600)/60;
+                        String ss=(miss % 3600) % 60>9?(miss % 3600) % 60+"":"0"+(miss % 3600) % 60;
+                        return hh+":"+mm+":"+ss;
                     }
                 });
 
+                //设置地图按钮不可用
+                btMap.setEnabled(false);
 
                 break;
             case R.id.move_bt_pause:
@@ -392,6 +407,10 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
                 //关闭timer
                 chronTimer.stop();
+
+                //地图按钮可用
+                btMap.setEnabled(true);
+
                 break;
             case R.id.move_bt_map:
                 Task task = new Task();
@@ -470,7 +489,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
     private void queryNewTaskNoByCurrentDate() {
 
         //提取数据
-        String columns[] = new String[]{"max(" + MapContract.TaskEntry.COLUMN_TASK_NO + ") as max_task_no",};
+        String columns[] = new String[]{"max(cast(" + MapContract.TaskEntry.COLUMN_TASK_NO + " as integer)) as max_task_no",};
         String columns1[] = new String[]{"count(*)",};
         Uri myUri = MapContract.TaskEntry.CONTENT_URI;
         //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);

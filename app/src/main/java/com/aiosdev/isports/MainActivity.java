@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aiosdev.isports.fragments.FragmentTab5;
 import com.aiosdev.isports.tabmain.FirstLayerFragment;
 import com.aiosdev.isports.fragments.FragmentTab1;
 import com.aiosdev.isports.fragments.FragmentTab2;
@@ -44,9 +45,9 @@ public class MainActivity extends FragmentActivity {
     }
 
     private class MyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"计步", "统计", "地图", "计划"};
+        private String[] tabNames = {"计步", "统计", "地图", "计划", "查询"};
         private int[] tabIcons = {R.drawable.maintab_1_selector, R.drawable.maintab_2_selector, R.drawable.maintab_3_selector,
-                R.drawable.maintab_4_selector};
+                R.drawable.maintab_4_selector, R.drawable.maintab_5_selector};
         private LayoutInflater inflater;
 
         public MyAdapter(FragmentManager fragmentManager) {
@@ -92,6 +93,10 @@ public class MainActivity extends FragmentActivity {
                     bundle.putString(FragmentTab4.INTENT_STRING_TABNAME, tabNames[position]);
                     bundle.putInt(FragmentTab4.INTENT_INT_INDEX, position);
                     break;
+                case 4:
+                    bundle.putString(FragmentTab5.INTENT_STRING_TABNAME, tabNames[position]);
+                    bundle.putInt(FragmentTab5.INTENT_INT_INDEX, position);
+                    break;
                 default:
                     bundle.putString(FirstLayerFragment.INTENT_STRING_TABNAME, tabNames[position]);
                     bundle.putInt(FirstLayerFragment.INTENT_INT_INDEX, position);
@@ -111,6 +116,7 @@ public class MainActivity extends FragmentActivity {
         fragments.add(new FragmentTab2());
         fragments.add(new FragmentTab3());
         fragments.add(new FragmentTab4());
+        fragments.add(new FragmentTab5());
         return fragments;
     }
 }
