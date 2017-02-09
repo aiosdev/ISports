@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Toast;
 
 import com.shizhefei.view.indicator.Indicator;
 import com.shizhefei.view.indicator.IndicatorViewPager;
@@ -52,6 +51,7 @@ public class GuideActivity extends FragmentActivity {
                         if(res) {
                             startActivity(new Intent(GuideActivity.this, MainActivity.class));
                         }else {
+//                            startActivity(new Intent(GuideActivity.this, MainActivity.class));
                             startActivity(new Intent(GuideActivity.this, RegisterActivity.class));
                         }
                     }

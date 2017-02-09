@@ -1,5 +1,6 @@
 package com.aiosdev.isports.fragments;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,9 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.aiosdev.isports.R;
+import com.aiosdev.isports.ViewPagerChartsActivity;
 import com.aiosdev.isports.tabmain.SecondLayerFragment;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
@@ -32,6 +35,14 @@ public class FragmentTab2 extends LazyFragment {
 		Bundle bundle = getArguments();
 		tabName = bundle.getString(INTENT_STRING_TABNAME);
 		index = bundle.getInt(INTENT_INT_INDEX);
+
+		Button btStat = (Button) findViewById(R.id.bt_stat);
+		btStat.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				startActivity(new Intent(getActivity(), ViewPagerChartsActivity.class));
+			}
+		});
 
 		/*
 		ViewPager viewPager = (ViewPager) findViewById(R.id.fragment_tabmain_viewPager);
