@@ -390,7 +390,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                 Uri url = MapContract.TaskEntry.CONTENT_URI;
                 getContentResolver().insert(url, contentValues);
 
-                //累加数据，并保存数据到SharedPreferences “userInfo”
+                //累加数据
 
                 user.setTotalStep(user.getTotalStep() + total_step);
                 user.setTotalDistance(user.getTotalDistance() + distance);
@@ -398,7 +398,6 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                 user.setTotalDuration(user.getTotalDuration() + sportTimer);
                 user.setAvgStep((int) (user.getTotalDistance() / user.getTotalStep() * 100));
 
-                user.saveData(MoveActivity.this);
 
                 //解除service的绑定
                 unbindService(connection);
@@ -410,6 +409,51 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
                 //地图按钮可用
                 btMap.setEnabled(true);
+
+                //判断等级和头衔的变化
+                String[] strGrade = {"初级", "初级", "初级", "初级", "初级", "中级", "中级", "高级", "高级", "高级", "高级",
+                        "运动专家", "运动专家", "运动专家", "资深运动专家", "资深运动专家", "资深运动专家", "资深运动专家"};
+                String[] strTitle = {"小白", "列兵", "一等兵", "二等兵", "三等兵", "少尉", "中尉", "上尉",
+                        "少校", "中校", "上校", "少将", "中将", "上将", "四星上将", "五星上将", "元帅", "奥运冠军"};
+                int[] intSteps = {0, 1000 , 2000, 4000, 8000, 24000, 60000, 120000, 240000, 360000, 500000,
+                        650000, 820000, 1000000, 1250000, 1600000, 2000000, 3000000};
+
+                String gradeAfterStep = "";
+                String titleAfterStep = "";
+
+                user.setTotalStep(820000);
+
+                for(int i=0;i<intSteps.length;i++){
+                    if(i == intSteps.length){
+                        if(user.getTotalStep() > intSteps[i]){
+                            gradeAfterStep = strGrade[i];
+                            titleAfterStep = strTitle[i];
+                            if(!titleAfterStep.equals(user.getTitle())){
+                                Toast.makeText(this, "恭喜获得新头衔！", Toast.LENGTH_LONG).show();
+                            }
+                            if(!gradeAfterStep.equals(user.getGrade())){
+                                Toast.makeText(this, "恭喜升级！", Toast.LENGTH_LONG).show();
+                            }
+                            user.setGrade(gradeAfterStep);
+                            user.setTitle(titleAfterStep);
+                        }
+                    }
+                    if(user.getTotalStep() >= intSteps[i] && user.getTotalStep() < intSteps[i + 1]){
+                        gradeAfterStep = strGrade[i];
+                        titleAfterStep = strTitle[i];
+                        if(!titleAfterStep.equals(user.getTitle())){
+                            Toast.makeText(this, "恭喜获得新头衔！", Toast.LENGTH_LONG).show();
+                        }
+                        if(!gradeAfterStep.equals(user.getGrade())){
+                            Toast.makeText(this, "恭喜升级！", Toast.LENGTH_LONG).show();
+                        }
+                        user.setGrade(gradeAfterStep);
+                        user.setTitle(titleAfterStep);
+                    }
+                }
+
+                //保存数据到SharedPreferences “userInfo”
+                user.saveData(MoveActivity.this);
 
                 break;
             case R.id.move_bt_map:
