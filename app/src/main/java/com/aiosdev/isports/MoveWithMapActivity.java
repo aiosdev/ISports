@@ -128,7 +128,7 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
         createLocationRequest();
 
         //创建完成后开始定位
-        //startLocation();
+        startLocation();
 
 
     }

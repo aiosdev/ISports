@@ -7,9 +7,16 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aiosdev.isports.R;
+import com.aiosdev.isports.data.User;
 import com.aiosdev.isports.tabmain.SecondLayerFragment;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
@@ -23,6 +30,25 @@ public class FragmentTab4 extends LazyFragment {
 	private String tabName;
 	private int index;
 
+	private EditText etPaceLength;
+	private TextView tvSb1;
+
+	private SeekBar sbPara;
+	private TextView tvSb2;
+
+	private EditText etWeight;
+	private TextView tvSb3;
+
+	private EditText etPlan;
+	private TextView tvSb4;
+
+	private Button btCommit;
+	private Button btReset;
+
+	private Switch swAlert;
+
+	private User mUser;
+
 	@Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
@@ -33,6 +59,35 @@ public class FragmentTab4 extends LazyFragment {
 		tabName = bundle.getString(INTENT_STRING_TABNAME);
 		index = bundle.getInt(INTENT_INT_INDEX);
 
+
+		btCommit = (Button) findViewById(R.id.bt_register_commit);
+		btReset = (Button) findViewById(R.id.bt_register_reset);
+
+		//初始步幅设定
+		etPaceLength = (EditText) findViewById(R.id.et_pace_length);
+		//etPaceLength.setProgress(60);
+		tvSb1 = (TextView) findViewById(R.id.tv_sb1_value);
+		tvSb1.setText("厘米");
+
+		//灵敏度设定
+		sbPara = (SeekBar) findViewById(R.id.sb_para);
+		sbPara.setProgress(3);
+		tvSb2 = (TextView) findViewById(R.id.tv_sb2_value);
+		tvSb2.setText(sbPara.getProgress() + "(推荐)");
+
+		//体重设定
+		etWeight = (EditText) findViewById(R.id.et_weight);
+		//etWeight.setProgress(50);
+		tvSb3 = (TextView) findViewById(R.id.tv_sb3_value);
+		tvSb3.setText("公斤");
+
+		//计划设定
+		etPlan = (EditText) findViewById(R.id.et_plan);
+		//etPlan.setProgress(5000);
+		tvSb4 = (TextView) findViewById(R.id.tv_sb4_value);
+		tvSb4.setText("步");
+
+		swAlert = (Switch) findViewById(R.id.sw_alert);
 		/*
 		ViewPager viewPager = (ViewPager) findViewById(R.id.fragment_tabmain_viewPager);
 		Indicator indicator = (Indicator) findViewById(R.id.fragment_tabmain_indicator);
@@ -70,6 +125,25 @@ public class FragmentTab4 extends LazyFragment {
 
 		Log.d("cccc", "Fragment 将要创建View " + this);
 		*/
+
+		mUser = User.getInstence(getActivity());
+
+		etWeight.setText(mUser.getWeight() + "");
+		etPaceLength.setText(mUser.getAvgStep() + "");
+		etPlan.setText(mUser.getStepCount() + "");
+		sbPara.setProgress(mUser.getSensitivity());
+
+		swAlert.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton button, boolean b) {
+				if(b){
+					Toast.makeText(getActivity(), "打开", Toast.LENGTH_SHORT).show();
+				}else {
+					Toast.makeText(getActivity(), "关闭", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+
 	}
 
 
