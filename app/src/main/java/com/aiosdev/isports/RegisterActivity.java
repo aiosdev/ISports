@@ -18,16 +18,16 @@ import com.aiosdev.isports.data.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private SeekBar sbPaceLength;
+    private EditText etPaceLength;
     private TextView tvSb1;
 
     private SeekBar sbPara;
     private TextView tvSb2;
 
-    private SeekBar sbWeight;
+    private EditText etWeight;
     private TextView tvSb3;
 
-    private SeekBar sbPlan;
+    private EditText etPlan;
     private TextView tvSb4;
 
     private TextView tvName;
@@ -51,85 +51,37 @@ public class RegisterActivity extends AppCompatActivity {
         btReset = (Button) findViewById(R.id.bt_register_reset);
 
         //初始步幅设定
-        sbPaceLength = (SeekBar) findViewById(R.id.sb_pace_length);
-        sbPaceLength.setProgress(60);
+        etPaceLength = (EditText) findViewById(R.id.et_pace_length);
+        //etPaceLength.setProgress(60);
         tvSb1 = (TextView) findViewById(R.id.tv_sb1_value);
-        tvSb1.setText(sbPaceLength.getProgress() + "厘米");
+        tvSb1.setText("厘米");
 
         //灵敏度设定
         sbPara = (SeekBar) findViewById(R.id.sb_para);
         sbPara.setProgress(3);
         tvSb2 = (TextView) findViewById(R.id.tv_sb2_value);
-        tvSb2.setText(sbPara.getProgress() + "");
+        tvSb2.setText(sbPara.getProgress() + "(推荐)");
 
         //体重设定
-        sbWeight = (SeekBar) findViewById(R.id.sb_weight);
-        sbWeight.setProgress(50);
+        etWeight = (EditText) findViewById(R.id.et_weight);
+        //etWeight.setProgress(50);
         tvSb3 = (TextView) findViewById(R.id.tv_sb3_value);
-        tvSb3.setText(sbWeight.getProgress() + "公斤");
+        tvSb3.setText("公斤");
 
         //计划设定
-        sbPlan = (SeekBar) findViewById(R.id.sb_plan);
-        sbPlan.setProgress(5000);
+        etPlan = (EditText) findViewById(R.id.et_plan);
+        //etPlan.setProgress(5000);
         tvSb4 = (TextView) findViewById(R.id.tv_sb4_value);
-        tvSb4.setText(sbPlan.getProgress() + "步");
-
-
-        sbPaceLength.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar bar, int i, boolean b) {
-                tvSb1.setText(i + "厘米");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar bar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar bar) {
-
-            }
-        });
+        tvSb4.setText("步");
 
         sbPara.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar bar, int i, boolean b) {
-                tvSb2.setText(i + "");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar bar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar bar) {
-
-            }
-        });
-
-        sbWeight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar bar, int i, boolean b) {
-                tvSb3.setText(i + "公斤");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar bar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar bar) {
-
-            }
-        });
-
-        sbPlan.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar bar, int i, boolean b) {
-                tvSb4.setText(i + "步");
+                if(3 == i) {
+                    tvSb2.setText(i + "(推荐)");
+                }else {
+                    tvSb2.setText(i + "");
+                }
             }
 
             @Override
@@ -147,40 +99,43 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //设定初次登录标志
-                SharedPreferences sharePreference = getSharedPreferences("init", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editorInit = sharePreference.edit();
-                editorInit.putBoolean("first", true);
-                editorInit.commit();
+                //合法性验证
+                if (validateData()) {
+
+                    //设定初次登录标志
+                    SharedPreferences sharePreference = getSharedPreferences("init", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editorInit = sharePreference.edit();
+                    editorInit.putBoolean("first", true);
+                    editorInit.commit();
 
 
-                User user = User.getInstence(RegisterActivity.this);
-                user.setName(tvName.getText().toString().trim());
-                user.setSex(spinnerSex.getSelectedItem().toString().trim());
-                user.setWeight(sbWeight.getProgress());
-                user.setAvgStep(sbPaceLength.getProgress());
-                user.setSensitivity(sbPara.getProgress());
-                user.setGrade("初级");
-                user.setTitle("列兵");
-                user.setStepCount(sbPlan.getProgress());
-                user.setTotalStep(0);
-                user.setTotalDistance(Float.parseFloat("0"));
-                user.setTotalCalories(Float.parseFloat("0"));
-                user.setTotalDuration(0);
+                    User user = User.getInstence(RegisterActivity.this);
+                    user.setName(tvName.getText().toString().trim());
+                    user.setSex(spinnerSex.getSelectedItem().toString().trim());
+                    user.setWeight(Integer.parseInt(etWeight.getText().toString()));
+                    user.setAvgStep(Integer.parseInt(etPaceLength.getText().toString()));
+                    user.setSensitivity(sbPara.getProgress());
+                    user.setGrade("初级");
+                    user.setTitle("列兵");
+                    user.setStepCount(Integer.parseInt(etPlan.getText().toString()));
+                    user.setTotalStep(0);
+                    user.setTotalDistance(Float.parseFloat("0"));
+                    user.setTotalCalories(Float.parseFloat("0"));
+                    user.setTotalDuration(0);
 
-                user.saveData(RegisterActivity.this);
+                    user.saveData(RegisterActivity.this);
                 /*
                 //设定sharerpeference
                 mPreferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = mPreferences.edit();
                 editor.putString("name", tvName.getText().toString().trim());
                 editor.putString("sex", spinnerSex.getSelectedItem().toString().trim());
-                editor.putInt("weight", sbWeight.getProgress());
-                editor.putInt("pace_length", sbPaceLength.getProgress());
+                editor.putInt("weight", etWeight.getProgress());
+                editor.putInt("pace_length", etPaceLength.getProgress());
                 editor.putInt("sensitivity", sbPara.getProgress());
                 editor.putString("grade", "初级");
                 editor.putString("title", "列兵");
-                editor.putInt("step_count_plan", sbPlan.getProgress()); //步
+                editor.putInt("step_count_plan", etPlan.getProgress()); //步
                 editor.putInt("total_step", 0);          //步
                 editor.putFloat("total_distance", 0);  //公里
                 editor.putFloat("total_calories", 0);  //卡路里
@@ -188,32 +143,40 @@ public class RegisterActivity extends AppCompatActivity {
                 editor.putFloat("avg_speed", 0);       //米/秒
                 editor.commit();
                 */
-                Toast.makeText(getApplicationContext(), "信息设定完成，准备开始运动之旅!", Toast.LENGTH_SHORT).show();
-                new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        try {
+                    Toast.makeText(getApplicationContext(), "信息设定完成，准备开始运动之旅!", Toast.LENGTH_SHORT).show();
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            try {
 
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                 finish();
-                                startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                                Thread.sleep(3000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                        });
-                    }
-                }.start();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finish();
+                                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                                }
+                            });
+                        }
+                    }.start();
+                }
             }
         });
 
         btReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                etWeight.setText(null);
+                etPaceLength.setText("60");
+                sbPara.setProgress(3);
+                etPlan.setText("6000");
+
+                /*
                 //设定sharerpeference
                 mPreferences = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                 Log.d("name:", mPreferences.getString("name", ""));
@@ -229,10 +192,75 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.d("total_calories:", String.valueOf(mPreferences.getFloat("total_calories", 0)));
                 Log.d("total_duration:", String.valueOf(mPreferences.getInt("total_duration", 0)));
                 Log.d("avg_speed:", String.valueOf(mPreferences.getFloat("avg_speed", 0)));
-
+                */
 
             }
         });
 
+    }
+
+    private boolean validateData() {
+
+        boolean res = true;
+
+        //验证名字
+        if(tvName.getText().toString().isEmpty()){
+            Toast.makeText(getApplicationContext(), "昵称不能为空！", Toast.LENGTH_LONG).show();
+            tvName.setFocusable(true);
+            tvName.setFocusableInTouchMode(true);
+            tvName.requestFocus();
+            res = false;
+        }
+
+        //验证体重
+        if(etWeight.getText().toString().isEmpty()){
+            Toast.makeText(getApplicationContext(), "体重不能为空！", Toast.LENGTH_LONG).show();
+            etWeight.setFocusable(true);
+            etWeight.setFocusableInTouchMode(true);
+            etWeight.requestFocus();
+            res = false;
+        }else if (Integer.parseInt(etWeight.getText().toString()) > 300 || Integer.parseInt(etWeight.getText().toString()) < 30) {
+            Toast.makeText(getApplicationContext(), "体重失真，请重新输入！", Toast.LENGTH_LONG).show();
+            etWeight.setText(null);
+            etWeight.setFocusable(true);
+            etWeight.setFocusableInTouchMode(true);
+            etWeight.requestFocus();
+            res = false;
+        }
+
+        //验证初始步幅
+        if(etPaceLength.getText().toString().isEmpty()){
+            Toast.makeText(getApplicationContext(), "步幅不能为空！", Toast.LENGTH_LONG).show();
+            etPaceLength.setFocusable(true);
+            etPaceLength.setFocusableInTouchMode(true);
+            etPaceLength.requestFocus();
+            res = false;
+        }else if (Integer.parseInt(etPaceLength.getText().toString()) > 150 || Integer.parseInt(etPaceLength.getText().toString()) < 20) {
+            Toast.makeText(getApplicationContext(), "步幅失真，请重新输入！", Toast.LENGTH_LONG).show();
+            etPaceLength.setText(null);
+            etPaceLength.setFocusable(true);
+            etPaceLength.setFocusableInTouchMode(true);
+            etPaceLength.requestFocus();
+            res = false;
+        }
+
+        //验证计划步数
+        if(etPlan.getText().toString().isEmpty()){
+            Toast.makeText(getApplicationContext(), "计划步数不能为空！", Toast.LENGTH_LONG).show();
+            etPlan.setFocusable(true);
+            etPlan.setFocusableInTouchMode(true);
+            etPlan.requestFocus();
+            res = false;
+        }else if (Integer.parseInt(etPlan.getText().toString()) > 10000 || Integer.parseInt(etPlan.getText().toString()) < 1000) {
+            Toast.makeText(getApplicationContext(), "计划步数不科学，请重新输入！", Toast.LENGTH_LONG).show();
+            etPlan.setText(null);
+            etPlan.setFocusable(true);
+            etPlan.setFocusableInTouchMode(true);
+            etPlan.requestFocus();
+            res = false;
+        }
+
+
+        return res;
     }
 }
