@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -44,6 +45,14 @@
         </activity>
         <activity android:name=".RegisterActivity">
         </activity>
+
+        <receiver android:name=".alerm.LoongggAlarmReceiver">
+            <intent-filter>
+                <action android:name="com.loonggg.alarm.clock"/>
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".alerm.ClockAlarmActivity"/>
     </application>
 
 </manifest>

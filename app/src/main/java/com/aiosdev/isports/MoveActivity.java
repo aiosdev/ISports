@@ -421,7 +421,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                 String gradeAfterStep = "";
                 String titleAfterStep = "";
 
-                user.setTotalStep(820000);
+                //user.setTotalStep(820000);
 
                 for(int i=0;i<intSteps.length;i++){
                     if(i == intSteps.length){
