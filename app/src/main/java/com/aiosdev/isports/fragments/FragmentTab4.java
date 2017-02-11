@@ -168,8 +168,6 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
                 }
             }
         });
-
-
     }
 
     @Override
@@ -181,7 +179,6 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
             case R.id.bt_setting_commit:
                 saveSetting();
                 break;
-
         }
     }
 
