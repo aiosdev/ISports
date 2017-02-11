@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.aiosdev.isports">
+          package="com.aiosdev.isports">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -14,36 +15,44 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key"/>
 
         <activity android:name=".GuideActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MoveActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".MoveMapsActivity" />
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MoveMapsActivity"/>
 
         <provider
             android:name=".data.MapProvider"
-            android:authorities="com.aiosdev.isports" />
+            android:authorities="com.aiosdev.isports">
+        </provider>
 
-        <service android:name=".MoveService" />
+        <service android:name=".MoveService"/>
 
         <activity
             android:name=".MoveWithMapActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".ViewPagerChartsActivity" />
-        <activity android:name=".StatActivity" />
-        <activity android:name=".GridviewActivity"></activity>
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".RegisterActivity">
+        </activity>
+
+        <receiver android:name=".alerm.LoongggAlarmReceiver">
+            <intent-filter>
+                <action android:name="com.loonggg.alarm.clock"/>
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".alerm.ClockAlarmActivity"/>
     </application>
 
 </manifest>

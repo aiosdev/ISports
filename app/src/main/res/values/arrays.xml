@@ -4,4 +4,9 @@
         <item>男</item>
         <item>女</item>
     </string-array>
+
+    <string-array name="alarm_type">
+        <item>震动</item>
+        <item>响铃</item>
+    </string-array>
 </resources>
