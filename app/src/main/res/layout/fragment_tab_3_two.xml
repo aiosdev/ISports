@@ -1,11 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <TextView
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="目的地导航页面"
-        android:gravity="center_horizontal|center_vertical"/>
+        android:layout_marginBottom="100dp"
+        android:layout_marginTop="100dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="任意位置到目的地导航："
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+
+        <AutoCompleteTextView
+            android:id="@+id/et_tab3_two_search2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:hint="起始地址,邮编或坐标"
+            android:maxLines="1"/>
+
+        <AutoCompleteTextView
+            android:id="@+id/et_tab3_two_search3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:hint="目的地址,邮编或坐标"
+            android:maxLines="1"/>
+
+        <Button
+            android:id="@+id/bt_tab3_two_go2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_corner"
+            android:text="确定"/>
+    </LinearLayout>
 
 </LinearLayout>
