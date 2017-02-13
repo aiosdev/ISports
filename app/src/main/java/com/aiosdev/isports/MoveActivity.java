@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -18,6 +19,9 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,20 +36,41 @@ import com.aiosdev.isports.data.Location;
 import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.Task;
 import com.aiosdev.isports.data.User;
+import com.aiosdev.isports.data.weather.Clouds;
+import com.aiosdev.isports.data.weather.Main;
+import com.aiosdev.isports.data.weather.Weather;
+import com.aiosdev.isports.data.weather.WeatherInfo;
+import com.aiosdev.isports.data.weather.Wind;
 import com.aiosdev.isports.tools.MoveDetector;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.R.attr.data;
 
 
-public class MoveActivity extends AppCompatActivity implements View.OnClickListener {
+public class MoveActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener  {
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest locationRequest;
@@ -66,7 +91,6 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
     private TextView paceSpeedLow;
 
     private Button btStart;
-    private Button btPause;
     private Button btStop;
     private Button btMap;
 
@@ -102,6 +126,8 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
     private User user;
 
+    private TextView tvCurrentDate;
+    private TextView tvCurrentWeek;
 
     /**
      * Activity端的Handler处理Service中的消息
@@ -143,6 +169,15 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                     velocity = Float.parseFloat(df.format(velocity));
                     MoveActivity.this.paceSpeedAvg.setText(velocity + "米/秒");
 
+                    break;
+                case 0x15:
+                    WeatherInfo weatherInfoRes = (WeatherInfo) msg.getData().getSerializable("info");
+                    cityName.setText(weatherInfoRes.getName());
+                    String ivUrl = "http://openweathermap.org/img/w/" + weatherInfoRes.getWeather().get(0).getIcon() + ".png";
+                    Picasso.with(MoveActivity.this).load(ivUrl).into(weatherImage);
+
+                    int temp = ((int) Double.parseDouble(weatherInfoRes.getMain().getTemp())) - 273;
+                    weatherTemp.setText(temp + "°C");
                     break;
             }
 
@@ -192,6 +227,25 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_move);
 
+        //设置当前任务日期
+        //取当前日期
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        currentTaskDate = df.format(new Date()).substring(0, 10);
+
+        //首先生成一个GoogleApiClient对象并且设置属性
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
+        //然后连接,连接成功后会在onConnected回调
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+
         initView(); //初始化View
 
         initListener(); //初始化按钮监听器
@@ -207,6 +261,8 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
         //设置地图按钮不可用
         btMap.setEnabled(false);
+
+
     }
 
     private void initTaskNo() {
@@ -217,7 +273,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initListener() {
         btStart.setOnClickListener(this);
-        btPause.setOnClickListener(this);
+        //btPause.setOnClickListener(this);
         btStop.setOnClickListener(this);
         btMap.setOnClickListener(this);
     }
@@ -233,6 +289,13 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
         //chronTimer
         chronTimer = (Chronometer) findViewById(R.id.chronometer_timer);
 
+        //date
+        tvCurrentDate = (TextView) findViewById(R.id.tv_move_current_date);
+        tvCurrentWeek = (TextView) findViewById(R.id.tv_move_current_week);
+
+        //设置当前日期
+        setDate();
+
         paceCount = (TextView) findViewById(R.id.move_pace_count);
         paceDistance = (TextView) findViewById(R.id.move_pace_distance);
         paceCalories = (TextView) findViewById(R.id.move_pace_calories);
@@ -243,7 +306,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
         //Button
         btStart = (Button) findViewById(R.id.move_bt_start);
-        btPause = (Button) findViewById(R.id.move_bt_pause);
+        //btPause = (Button) findViewById(R.id.move_bt_pause);
         btStop = (Button) findViewById(R.id.move_bt_stop);
         btMap = (Button) findViewById(R.id.move_bt_map);
         //设置运行状态为不可用状态，且按钮为不可用状态
@@ -355,18 +418,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                 btMap.setEnabled(false);
 
                 break;
-            case R.id.move_bt_pause:
 
-                if (btStatus == STATUS_STOP || btStatus == STATUS_RESUME) {
-                    //进入pause状态
-                    setActionStatus(STATUS_PAUSE);
-                    Toast.makeText(getApplicationContext(), "pause", Toast.LENGTH_SHORT).show();
-                } else if (btStatus == STATUS_PAUSE) {
-                    //进入resume状态
-                    setActionStatus(STATUS_RESUME);
-                    Toast.makeText(getApplicationContext(), "resume", Toast.LENGTH_SHORT).show();
-                }
-                break;
             case R.id.move_bt_stop:
                 //进入stop状态
                 setActionStatus(STATUS_STOP);
@@ -505,16 +557,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
         btStart.setEnabled(start);
         btStop.setEnabled(stop);
-        if (pause && !resume) {
-            btPause.setEnabled(pause);
-            btPause.setText("暂停");
-        } else if (!pause && resume) {
-            btPause.setEnabled(resume);
-            btPause.setText("继续");
-        } else if (!pause && !resume) {
-            btPause.setEnabled(pause);
-            btPause.setText("暂停");
-        }
+
     }
 
     /**
@@ -558,4 +601,180 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //发送Http请求（OkHttp网络框架—GET方法）
+    public String getWeatherInfo(android.location.Location myLocation) throws IOException {
+
+        String baseUrl = "http://api.openweathermap.org/data/2.5/weather?APPID=86e5dc2075020faa2d390c7f9c556355&";
+        String baseLon = "lon=" + myLocation.getLongitude();
+        String baseLat = "lat=" + myLocation.getLatitude();
+        String requestUrl = baseUrl + baseLat + "&" + baseLon;
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(requestUrl)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
+
+                String res = response.body().string();
+                System.out.println(res);
+                WeatherInfo weatherInfo = parseJson(res);
+                System.out.println("test weatherInfo: " + weatherInfo);
+
+
+
+                //displayWeatherInfo();
+                Message message = handler.obtainMessage();
+                message.what = 0x15;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("info", weatherInfo);
+                message.setData(bundle);
+                message.sendToTarget();
+
+
+            }
+        });
+
+        return "";
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        android.location.Location myLocation =
+                LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (myLocation != null) {
+            try {
+                getWeatherInfo(myLocation);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult result) {
+
+    }
+
+    //解析返回的网络数据
+    private WeatherInfo parseJson(String jsonStr) {
+        WeatherInfo weatherInfo = new WeatherInfo();
+        try {
+            JSONObject object = new JSONObject(jsonStr);
+
+            weatherInfo.setName(object.getString("name"));
+
+            List<Weather> weatherList = new ArrayList<>();
+            JSONArray jsonArray = object.getJSONArray("weather");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                Weather weather = new Weather();
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                weather.setId(jsonObject.getString("id"));
+                weather.setMain(jsonObject.getString("main"));
+                weather.setDescription(jsonObject.getString("description"));
+                weather.setIcon(jsonObject.getString("icon"));
+
+                weatherList.add(weather);
+            }
+            weatherInfo.setWeather(weatherList);
+
+            JSONObject jsonMain = object.getJSONObject("main");
+            Main main = new Main();
+            main.setTemp(jsonMain.getString("temp"));
+            main.setPressure(jsonMain.getString("pressure"));
+            main.setHumidity(jsonMain.getString("humidity"));
+            main.setTemp_min(jsonMain.getString("temp_min"));
+            main.setTemp_max(jsonMain.getString("temp_max"));
+            weatherInfo.setMain(main);
+
+            JSONObject jsonWind = object.getJSONObject("wind");
+            Wind wind = new Wind();
+            wind.setSpeed(jsonWind.getString("speed"));
+            if(!jsonWind.isNull("deg")) {
+                wind.setDeg(jsonWind.getString("deg"));
+            }
+            weatherInfo.setWind(wind);
+
+            JSONObject jsonClouds = object.getJSONObject("clouds");
+            Clouds clouds = new Clouds();
+            clouds.setAll(jsonClouds.getString("all"));
+            weatherInfo.setClouds(clouds);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return weatherInfo;
+    }
+
+    /**
+     * 设置显示的日期
+     */
+    private void setDate() {
+        Calendar mCalendar = Calendar.getInstance();// 获取当天Calendar对象
+        int weekDay = mCalendar.get(Calendar.DAY_OF_WEEK);// 当天的星期
+        int month = mCalendar.get(Calendar.MONTH) + 1;// 当前月份
+        int day = mCalendar.get(Calendar.DAY_OF_MONTH);// 当前日期
+
+        tvCurrentDate.setText(currentTaskDate);// 显示当前日期
+
+        String week_day_str = new String();
+        switch (weekDay) {
+            case Calendar.SUNDAY:// 星期天
+                week_day_str = getString(R.string.sunday);
+                break;
+
+            case Calendar.MONDAY:// 星期一
+                week_day_str = getString(R.string.monday);
+                break;
+
+            case Calendar.TUESDAY:// 星期二
+                week_day_str = getString(R.string.tuesday);
+                break;
+
+            case Calendar.WEDNESDAY:// 星期三
+                week_day_str = getString(R.string.wednesday);
+                break;
+
+            case Calendar.THURSDAY:// 星期四
+                week_day_str = getString(R.string.thursday);
+                break;
+
+            case Calendar.FRIDAY:// 星期五
+                week_day_str = getString(R.string.friday);
+                break;
+
+            case Calendar.SATURDAY:// 星期六
+                week_day_str = getString(R.string.saturday);
+                break;
+        }
+        tvCurrentWeek.setText(week_day_str);
+    }
 }

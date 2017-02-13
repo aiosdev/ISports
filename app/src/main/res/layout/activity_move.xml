@@ -23,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:text="蒙特利尔"
         android:id="@+id/move_city_name"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
@@ -49,15 +48,13 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:id="@+id/move_weather_image"
-                android:src="@mipmap/pic_woman"/>
+                android:id="@+id/move_weather_image"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:text="25°C"
                 android:id="@+id/move_weather_temp"
                 android:textColor="@color/colorAccent"
                 android:textSize="20sp"
@@ -116,14 +113,14 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="2017-01-30"/>
+                    android:id="@+id/tv_move_current_date"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
                     android:gravity="center"
-                    android:id="@+id/move_date"
+                    android:id="@+id/tv_move_current_week"
                     android:text="星期一"/>
             </LinearLayout>
 
@@ -317,16 +314,7 @@
                 android:id="@+id/move_bt_start"
                 android:background="@drawable/shape_corner"
                 android:layout_gravity="center_vertical"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="暂停"
-                android:id="@+id/move_bt_pause"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:background="@drawable/shape_corner"
-                android:layout_gravity="center_vertical"/>
+
 
             <Button
             android:layout_width="0dp"
