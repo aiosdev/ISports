@@ -256,14 +256,15 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
         //初始化运行状态及按钮状态
         setActionStatus(STATUS_STOP);
 
-        //btStart.setEnabled(false);
-        user = User.getInstence(MoveActivity.this);
+
 
         //设置地图按钮不可用
         btMap.setEnabled(false);
 
 
     }
+
+
 
     private void initTaskNo() {
         queryNewTaskNoByCurrentDate();
@@ -326,6 +327,9 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
         Log.d("btStatus初始化:", btStatus + "");
+
+        //btStart.setEnabled(false);
+        user = User.getInstence(MoveActivity.this);
 
         //设置图片
         setMoveImage();

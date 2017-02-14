@@ -1,13 +1,20 @@
 package com.aiosdev.isports.fragments;
 
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -20,6 +27,7 @@ import android.widget.Toast;
 
 import com.aiosdev.isports.R;
 import com.aiosdev.isports.alerm.AlarmManagerUtil;
+import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.User;
 import com.aiosdev.isports.tabmain.SecondLayerFragment;
 import com.shizhefei.fragment.LazyFragment;
@@ -41,6 +49,8 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
     private String tabName;
     private int index;
 
+    private EditText etName;
+
     private EditText etPaceLength;
     private TextView tvSb1;
 
@@ -55,11 +65,11 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
 
     private Button btCommit;
     private Button btReset;
+    private Button btClear;
 
     private Switch swAlerm;
-    private TextView tvAlermClock;
+    private TextView tvAlermTime;
     private Spinner spinAlarmType;
-    private boolean alarmInit;
 
     private User mUser;
 
@@ -76,6 +86,10 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
 
         btCommit = (Button) findViewById(R.id.bt_setting_commit);
         btReset = (Button) findViewById(R.id.bt_setting_reset);
+        btClear = (Button) findViewById(R.id.bt_setting_clear);
+
+        //用户名
+        etName = (EditText) findViewById(R.id.et_name);
 
         //初始步幅设定
         etPaceLength = (EditText) findViewById(R.id.et_pace_length);
@@ -103,7 +117,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
 
         //闹钟设定
         swAlerm = (Switch) findViewById(R.id.sw_alerm);
-        tvAlermClock = (TextView) findViewById(R.id.tv_alerm_clock);
+        tvAlermTime = (TextView) findViewById(R.id.tv_alerm_clock);
         spinAlarmType = (Spinner) findViewById(R.id.spinner_alarm_type);
 
 		/*
@@ -145,26 +159,40 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
 		*/
 
         mUser = User.getInstence(getActivity());
+        Log.d("setting:", mUser.toString());
 
+        etName.setText(mUser.getName());
         etWeight.setText(mUser.getWeight() + "");
         etPaceLength.setText(mUser.getAvgStep() + "");
         etPlan.setText(mUser.getStepCount() + "");
         sbPara.setProgress(mUser.getSensitivity());
+        int initSwAlerm = mUser.getAlerm();
+        if(initSwAlerm == 1) {
+            swAlerm.setChecked(true);
+        }else {
+            swAlerm.setChecked(false);
+        }
+
+        tvAlermTime.setText(mUser.getAlermTime());
+        spinAlarmType.setSelection(mUser.getAlermType());
 
         swAlerm.setOnClickListener(this);
-        tvAlermClock.setOnClickListener(this);
+        tvAlermTime.setOnClickListener(this);
         btCommit.setOnClickListener(this);
         btReset.setOnClickListener(this);
+        btClear.setOnClickListener(this);
 
         swAlerm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton button, boolean b) {
                 if (b) {
-                    alarmInit = true;
+                    mUser.setAlerm(1);
                     Toast.makeText(getActivity(), "打开", Toast.LENGTH_SHORT).show();
+
                 } else {
-                    alarmInit = false;
+                    mUser.setAlerm(0);
                     Toast.makeText(getActivity(), "关闭", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -179,33 +207,98 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
             case R.id.bt_setting_commit:
                 saveSetting();
                 break;
+            case R.id.bt_setting_clear:
+                ClearDialog();
+                break;
         }
     }
 
+    private void ClearDialog() {
+        Dialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle("警告")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setMessage("是否放弃当前等级与头衔，并删除全部历史数据？")
+                // 设置内容
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        clearAllData();
+                        //Main.this.finish();
+                    }
+                })
+                .setNegativeButton("取消",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int whichButton) {
+                            }
+                        }).create();// 创建
+        // 显示对话框
+        dialog.show();
+    }
+
+    private void clearAllData() {
+        mUser.setGrade("初级");
+        mUser.setTitle("小白");
+        mUser.setTotalStep(0);
+        mUser.setTotalDuration(0);
+        mUser.setTotalDistance(Float.parseFloat("0"));
+        mUser.setTotalCalories(Float.parseFloat("0"));
+        mUser.setAvgSpeed(Float.parseFloat("0"));
+
+        //保存数据到SharedPreferences “userInfo”
+        mUser.saveData(getActivity());
+
+        //删除数据库数据
+        ContentValues contentValues = new ContentValues();
+        Uri urlTask = MapContract.TaskEntry.CONTENT_URI;
+        getActivity().getContentResolver().delete(urlTask, null, null);
+
+        Uri urlLocation = MapContract.LoactionEntry.CONTENT_URI;
+        getActivity().getContentResolver().delete(urlLocation, null, null);
+
+        Toast.makeText(getActivity(), "数据清除干净！", Toast.LENGTH_SHORT).show();
+
+    }
+
     private void saveSetting() {
+
         //保存闹钟设置，并启动闹钟服务
-        if(alarmInit) {
+        if (1 == mUser.getAlerm()) {
             //取设定的时间
-            String time = tvAlermClock.getText().toString().trim();
+            String time = tvAlermTime.getText().toString().trim();
             //取闹钟方式
-            int ring = 0;
-            if("震动".equals(spinAlarmType.getSelectedItem())){
-                ring = 0;
-            }else if("响铃".equals(spinAlarmType.getSelectedItem())){
-                ring = 1;
+            if ("震动".equals(spinAlarmType.getSelectedItem())) {
+                mUser.setAlermType(0);
+            } else if ("响铃".equals(spinAlarmType.getSelectedItem())) {
+                mUser.setAlermType(1);
             }
+
+            //保存闹钟时间设置信息
+            mUser.setAlermTime(tvAlermTime.getText().toString().trim());
 
             if (time != null && time.length() > 0) {
                 String[] times = time.split(":");
 
                 AlarmManagerUtil.setAlarm(getActivity(), 1, Integer.parseInt(times[0]), Integer.parseInt
-                        (times[1]), 0, 0, "今天该运动了！", ring);
+                        (times[1]), 0, 0, "今天该运动了！", mUser.getAlermType());
 
                 Toast.makeText(getActivity(), "闹钟设置成功", Toast.LENGTH_LONG).show();
             }
+
+
         }
 
         //保存其他参数设置
+        mUser.setName(etName.getText().toString().trim());
+        mUser.setWeight(Integer.parseInt(etWeight.getText().toString().trim()));
+        mUser.setAvgStep(Integer.parseInt(etPaceLength.getText().toString().trim()));
+        mUser.setSensitivity((sbPara.getProgress()));
+        mUser.setStepCount(Integer.parseInt(etPlan.getText().toString().trim()));
+
+        mUser.saveData(getActivity());
+
+        Toast.makeText(getActivity(), "参数设置成功", Toast.LENGTH_LONG).show();
     }
 
     private void setAlermClock() {
@@ -240,7 +333,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
                 if (null != date) {
                     calendar.setTime(date);
                 }
-                tvAlermClock.setText(df.format(date));
+                tvAlermTime.setText(df.format(date));
             }
         }, hour, minute, true).show();
     }

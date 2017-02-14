@@ -67,28 +67,7 @@ public class FragmentTab5One extends LazyFragment {
 
         datelist = new ArrayList<>();
 
-        //加载RecyclerView数据
 
-        queryPointByDate();
-        RecyclerView recycleView = (RecyclerView) findViewById(R.id.rv_search);
-        recycleView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, true));
-        datelist = new ArrayList<>();
-        queryPointByDate();
-        adapter = new RecyclerAdapterList(getActivity(), datelist);
-        recycleView.setAdapter(adapter);
-
-        adapter.setOnItemClickListener(new RecyclerAdapterList.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, Object object, View view) {
-
-                Intent intent = new Intent();
-                intent.putExtra("flag", "FragmentTab5");
-                intent.putExtra("taskNo", datelist.get(position).getTaskNo());
-                intent.putExtra("date", datelist.get(position).getDate());
-                intent.setClass(getActivity(), MoveMapsActivity.class);
-                startActivity(intent);
-            }
-        });
 
         /*
         ViewPager viewPager = (ViewPager) findViewById(R.id.fragment_tabmain_viewPager);
@@ -136,6 +115,30 @@ public class FragmentTab5One extends LazyFragment {
 
     }
 
+    @Override
+    protected void onFragmentStartLazy() {
+        super.onFragmentStartLazy();
+        //加载RecyclerView数据
+        queryPointByDate();
+        RecyclerView recycleView = (RecyclerView) findViewById(R.id.rv_search);
+        recycleView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, true));
+        adapter = new RecyclerAdapterList(getActivity(), datelist);
+        recycleView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new RecyclerAdapterList.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, Object object, View view) {
+
+                Intent intent = new Intent();
+                intent.putExtra("flag", "FragmentTab5");
+                intent.putExtra("taskNo", datelist.get(position).getTaskNo());
+                intent.putExtra("date", datelist.get(position).getDate());
+                intent.setClass(getActivity(), MoveMapsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+    }
 
     private class MyAdapter extends IndicatorFragmentPagerAdapter {
 

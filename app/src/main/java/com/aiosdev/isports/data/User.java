@@ -22,6 +22,9 @@ public class User {
     private int avgStep;//平均步幅（厘米）
     private Float avgSpeed;//平均速度
     private int sensitivity;
+    private int alerm;   //1-开，0-关，默认闹钟开启后每天都响
+    private int alermType; //1-闹铃，0-震动
+    private String alermTime; //设定时间，格式 00:00
 
     private static User instence;
 
@@ -144,6 +147,30 @@ public class User {
         this.sensitivity = sensitivity;
     }
 
+    public int getAlerm() {
+        return alerm;
+    }
+
+    public void setAlerm(int alerm) {
+        this.alerm = alerm;
+    }
+
+    public int getAlermType() {
+        return alermType;
+    }
+
+    public void setAlermType(int alermType) {
+        this.alermType = alermType;
+    }
+
+    public String getAlermTime() {
+        return alermTime;
+    }
+
+    public void setAlermTime(String alermTime) {
+        this.alermTime = alermTime;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -160,6 +187,9 @@ public class User {
                 ", avgStep=" + avgStep +
                 ", avgSpeed=" + avgSpeed +
                 ", sensitivity=" + sensitivity +
+                ", alerm=" + alerm +
+                ", alermType=" + alermType +
+                ", alermTime=" + alermTime +
                 '}';
     }
 
@@ -180,6 +210,9 @@ public class User {
             setTotalCalories(mPreferences.getFloat("total_calories", 0));
             setTotalDuration(mPreferences.getInt("total_duration", 0));
             setAvgSpeed(mPreferences.getFloat("avg_speed", 0));
+            setAlerm(mPreferences.getInt("alerm", 0));
+            setAlermType(mPreferences.getInt("alermType", 0));
+            setAlermTime(mPreferences.getString("alermTime", "18:00"));
             res = true;
         }
         return res;
@@ -203,6 +236,9 @@ public class User {
             editor.putFloat("total_calories", getTotalCalories());  //卡路里
             editor.putInt("total_duration", getTotalDuration());  //分钟
             editor.putFloat("avg_speed", getAvgSpeed());       //米/秒
+            editor.putInt("alerm", getAlerm());  //闹钟开关
+            editor.putInt("alermType", getAlermType());
+            editor.putString("alermTime", getAlermTime());
             editor.commit();
 
             res = true;

@@ -42,6 +42,7 @@ public class FragmentTab1 extends LazyFragment {
 	private TextView tvAvgStep;
 	private ImageView ivSex;
 
+
 	@Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
 		super.onCreateViewLazy(savedInstanceState);
@@ -127,9 +128,23 @@ public class FragmentTab1 extends LazyFragment {
 		*/
 	}
 
+
+	//保证user的数据及时刷新
+	@Override
+	protected void onFragmentStartLazy() {
+		super.onFragmentStartLazy();
+		setViewData();
+	}
+
+	//保证user的数据及时刷新
 	@Override
 	protected void onResumeLazy() {
 		super.onResumeLazy();
+		setViewData();
+
+	}
+
+	private void setViewData() {
 		//获取用户基本信息和历史运动信息
 		User user = User.getInstence(getActivity());
 		tvName.setText(user.getName());
@@ -147,6 +162,7 @@ public class FragmentTab1 extends LazyFragment {
 		tvTotalDuration.setText(user.getTotalDuration() + " 秒");
 		tvAvgStep.setText(user.getAvgStep() + " 厘米");
 	}
+
 
 	private void initView() {
 		tvName = (TextView) findViewById(R.id.tv_name);
