@@ -1,5 +1,6 @@
 package com.aiosdev.isports;
 
+import android.*;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.ContentValues;
@@ -224,10 +225,16 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
         mPolylineOptions = new PolylineOptions();
         mLocations = new ArrayList<>();
 
+        initView(); //初始化View
+
+        //设置地图按钮不可用
+        btMap.setEnabled(false);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map2);
         mapFragment.getMapAsync(this);
 
+        /*
         Button btStart = (Button) findViewById(R.id.move_bt_start);
         btStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,26 +242,25 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
                 startActivity(new Intent(MoveWithMapActivity.this, RegisterActivity.class));
             }
         });
+        */
 
         //设置当前任务日期
         //取当前日期
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         currentTaskDate = df.format(new Date()).substring(0, 10);
 
-        initView(); //初始化View
-
         initListener(); //初始化按钮监听器
 
         //设置图片
-        setMoveImage();
+        //setMoveImage();
 
         //初始化运行状态及按钮状态
-        setActionStatus(STATUS_STOP);
+        //setActionStatus(STATUS_DISABLE);
 
 
 
         //设置地图按钮不可用
-        btMap.setEnabled(false);
+        //setBtStatus(false, false, false, false);
 
     }
 
@@ -323,11 +329,9 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myPoint, 17));
         }
 
-        //开始定位前构造LocationRequest类设置定位时的属性.比如隔多久定位一次，设置定位精度等等
-        createLocationRequest();
-
-        //创建完成后开始定位
-        startLocation();
+        //设置按钮状态
+        //setBtStatus(true, false, false, false);
+        setActionStatus(STATUS_STOP);
 
     }
 
@@ -455,7 +459,7 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
         user = User.getInstence(MoveWithMapActivity.this);
 
         //设置图片
-        setMoveImage();
+        //setMoveImage();
 
     }
 
@@ -469,7 +473,7 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
         setActionStatus(statusTemp);
 
         //设置图片
-        setMoveImage();
+        //setMoveImage();
 
 
     }
@@ -543,6 +547,12 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
 
                 //设置地图按钮不可用
                 btMap.setEnabled(false);
+
+                //开始定位前构造LocationRequest类设置定位时的属性.比如隔多久定位一次，设置定位精度等等
+                createLocationRequest();
+
+                //创建完成后开始定位
+                startLocation();
 
                 break;
 
@@ -634,6 +644,9 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
                 //保存数据到SharedPreferences “userInfo”
                 user.saveData(MoveWithMapActivity.this);
 
+                //创建完成后开始定位
+                stopLocation();
+
                 break;
             case R.id.move_bt_map:
                 Task task = new Task();
@@ -684,6 +697,7 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
 
         btStart.setEnabled(start);
         btStop.setEnabled(stop);
+
 
     }
 
@@ -770,6 +784,23 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
                 break;
         }
         tvCurrentWeek.setText(week_day_str);
+    }
+
+    public void stopLocation() {
+        Log.d("mGoogleApiClient是否链接:", mGoogleApiClient.isConnected() + "");
+        if (mGoogleApiClient.isConnected()) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
     }
 
 }

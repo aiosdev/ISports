@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.aiosdev.isports.MoveActivity">
+    tools:context="com.aiosdev.isports.MoveWithMapActivity">
 
     <fragment
         android:layout_width="match_parent"
@@ -66,14 +66,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:id="@+id/tv_move_current_date"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2"
                     android:gravity="center"
-                    android:id="@+id/move_date"/>
+                    android:id="@+id/tv_move_current_week"/>
             </LinearLayout>
 
 
@@ -246,16 +247,6 @@
                 android:id="@+id/move_bt_start"
                 android:background="@drawable/shape_corner"
                 android:layout_gravity="center_vertical"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="暂停"
-                android:id="@+id/move_bt_pause"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:background="@drawable/shape_corner"
-                android:layout_gravity="center_vertical"/>
 
             <Button
                 android:layout_width="0dp"
@@ -272,7 +263,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="地图"
+                android:text="汇总"
                 android:id="@+id/move_bt_map"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"

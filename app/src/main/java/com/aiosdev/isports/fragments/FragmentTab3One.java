@@ -67,14 +67,16 @@ public class FragmentTab3One extends LazyFragment implements LocationListener, G
 		tabName = bundle.getString(INTENT_STRING_TABNAME);
 		index = bundle.getInt(INTENT_INT_POSITION);
 
-		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
-		SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map3);
-		mapFragment.getMapAsync(FragmentTab3One.this);
-
 		btStart = (Button) findViewById(R.id.bt_tab3_one_start);
 		btStop = (Button) findViewById(R.id.bt_tab3_one_stop);
 		btStart.setEnabled(false);
 		btStop.setEnabled(false);
+
+		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
+		SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map3);
+		mapFragment.getMapAsync(FragmentTab3One.this);
+
+
 
 	}
 
