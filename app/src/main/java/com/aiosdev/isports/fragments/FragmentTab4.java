@@ -7,14 +7,10 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -29,10 +25,8 @@ import com.aiosdev.isports.R;
 import com.aiosdev.isports.alerm.AlarmManagerUtil;
 import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.User;
-import com.aiosdev.isports.tabmain.SecondLayerFragment;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
-import com.shizhefei.view.indicator.IndicatorViewPager.IndicatorFragmentPagerAdapter;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -50,6 +44,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
     private int index;
 
     private EditText etName;
+    private Spinner spinSex;
 
     private EditText etPaceLength;
     private TextView tvSb1;
@@ -67,7 +62,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
     private Button btReset;
     private Button btClear;
 
-    private Switch swAlerm;
+    private Switch swAlarm;
     private TextView tvAlermTime;
     private Spinner spinAlarmType;
 
@@ -88,8 +83,9 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
         btReset = (Button) findViewById(R.id.bt_setting_reset);
         btClear = (Button) findViewById(R.id.bt_setting_clear);
 
-        //用户名
+        //用户名,性别
         etName = (EditText) findViewById(R.id.et_name);
+        spinSex = (Spinner) findViewById(R.id.spinner_sex);
 
         //初始步幅设定
         etPaceLength = (EditText) findViewById(R.id.et_pace_length);
@@ -99,9 +95,6 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
 
         //灵敏度设定
         sbPara = (SeekBar) findViewById(R.id.sb_para);
-        sbPara.setProgress(3);
-        tvSb2 = (TextView) findViewById(R.id.tv_sb2_value);
-        tvSb2.setText(sbPara.getProgress() + "(推荐)");
 
         //体重设定
         etWeight = (EditText) findViewById(R.id.et_weight);
@@ -116,7 +109,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
         tvSb4.setText("步");
 
         //闹钟设定
-        swAlerm = (Switch) findViewById(R.id.sw_alerm);
+        swAlarm = (Switch) findViewById(R.id.sw_alerm);
         tvAlermTime = (TextView) findViewById(R.id.tv_alerm_clock);
         spinAlarmType = (Spinner) findViewById(R.id.spinner_alarm_type);
 
@@ -162,27 +155,63 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
         Log.d("setting:", mUser.toString());
 
         etName.setText(mUser.getName());
+
+        if("男".equals(mUser.getSex())){
+            spinSex.setSelection(0);
+        }else {
+            spinSex.setSelection(1);
+        }
+
         etWeight.setText(mUser.getWeight() + "");
         etPaceLength.setText(mUser.getAvgStep() + "");
         etPlan.setText(mUser.getStepCount() + "");
+
         sbPara.setProgress(mUser.getSensitivity());
+        tvSb2 = (TextView) findViewById(R.id.tv_sb2_value);
+        if(3 == sbPara.getProgress()) {
+            tvSb2.setText(sbPara.getProgress() + "(推荐)");
+        }else {
+            tvSb2.setText(sbPara.getProgress() + "");
+        }
+
+        sbPara.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar bar, int i, boolean b) {
+                if(3 == i) {
+                    tvSb2.setText(i + "(推荐)");
+                }else {
+                    tvSb2.setText(i + "");
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar bar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar bar) {
+
+            }
+        });
+
         int initSwAlerm = mUser.getAlerm();
         if(initSwAlerm == 1) {
-            swAlerm.setChecked(true);
+            swAlarm.setChecked(true);
         }else {
-            swAlerm.setChecked(false);
+            swAlarm.setChecked(false);
         }
 
         tvAlermTime.setText(mUser.getAlermTime());
         spinAlarmType.setSelection(mUser.getAlermType());
 
-        swAlerm.setOnClickListener(this);
+        swAlarm.setOnClickListener(this);
         tvAlermTime.setOnClickListener(this);
         btCommit.setOnClickListener(this);
         btReset.setOnClickListener(this);
         btClear.setOnClickListener(this);
 
-        swAlerm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton button, boolean b) {
                 if (b) {
@@ -291,6 +320,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
 
         //保存其他参数设置
         mUser.setName(etName.getText().toString().trim());
+        mUser.setSex(spinSex.getSelectedItem().toString().trim());
         mUser.setWeight(Integer.parseInt(etWeight.getText().toString().trim()));
         mUser.setAvgStep(Integer.parseInt(etPaceLength.getText().toString().trim()));
         mUser.setSensitivity((sbPara.getProgress()));
@@ -337,38 +367,4 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
             }
         }, hour, minute, true).show();
     }
-
-
-    private class MyAdapter extends IndicatorFragmentPagerAdapter {
-
-        public MyAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
-        }
-
-        @Override
-        public int getCount() {
-            return 5;
-        }
-
-        @Override
-        public View getViewForTab(int position, View convertView, ViewGroup container) {
-            if (convertView == null) {
-                convertView = inflate.inflate(R.layout.tab_top, container, false);
-            }
-            TextView textView = (TextView) convertView;
-            textView.setText(tabName + " " + position);
-            return convertView;
-        }
-
-        @Override
-        public Fragment getFragmentForPage(int position) {
-            SecondLayerFragment mainFragment = new SecondLayerFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(SecondLayerFragment.INTENT_STRING_TABNAME, tabName);
-            bundle.putInt(SecondLayerFragment.INTENT_INT_POSITION, position);
-            mainFragment.setArguments(bundle);
-            return mainFragment;
-        }
-    }
-
 }

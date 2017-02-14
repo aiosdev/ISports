@@ -107,7 +107,9 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
             tvDate.setText(mTask.getDate());
             tvTaskNo.setText(mTask.getTaskNo());
             tvDuration.setText(mTask.getDuration() + "");
-            tvStartTime.setText(locationList.get(0).getDateTime().substring(11, 19));
+            if(!locationList.isEmpty()) {
+                tvStartTime.setText(locationList.get(0).getDateTime().substring(11, 19));
+            }
             //tvStopTime.setText(locationList.get(locationList.size() - 1).getDateTime());
             tvSteps.setText(mTask.getStep() + "");
             tvDistances.setText(mTask.getDistance() + "");

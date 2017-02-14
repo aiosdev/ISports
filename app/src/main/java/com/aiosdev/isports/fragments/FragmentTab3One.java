@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aiosdev.isports.R;
-import com.aiosdev.isports.tabmain.SecondLayerFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -197,39 +196,6 @@ public class FragmentTab3One extends LazyFragment implements LocationListener, G
 		Toast.makeText(getActivity(), "新位置被检测" + i++ , Toast.LENGTH_SHORT).show();
 		Log.d("新位置：", i+"");
 
-	}
-
-
-	private class MyAdapter extends IndicatorFragmentPagerAdapter {
-
-		public MyAdapter(FragmentManager fragmentManager) {
-			super(fragmentManager);
-		}
-
-		@Override
-		public int getCount() {
-			return 5;
-		}
-
-		@Override
-		public View getViewForTab(int position, View convertView, ViewGroup container) {
-			if (convertView == null) {
-				convertView = inflate.inflate(R.layout.tab_top, container, false);
-			}
-			TextView textView = (TextView) convertView;
-			textView.setText(tabName + " " + position);
-			return convertView;
-		}
-
-		@Override
-		public Fragment getFragmentForPage(int position) {
-			SecondLayerFragment mainFragment = new SecondLayerFragment();
-			Bundle bundle = new Bundle();
-			bundle.putString(SecondLayerFragment.INTENT_STRING_TABNAME, tabName);
-			bundle.putInt(SecondLayerFragment.INTENT_INT_POSITION, position);
-			mainFragment.setArguments(bundle);
-			return mainFragment;
-		}
 	}
 
 	private void createLocationRequest() {

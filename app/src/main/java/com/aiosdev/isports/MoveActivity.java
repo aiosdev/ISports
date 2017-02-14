@@ -3,15 +3,10 @@ package com.aiosdev.isports;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
@@ -32,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aiosdev.isports.data.Location;
 import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.Task;
 import com.aiosdev.isports.data.User;
@@ -46,9 +40,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -66,8 +57,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import static android.R.attr.data;
 
 
 public class MoveActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener  {
@@ -87,8 +76,8 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
     private TextView paceDistance;
     private TextView paceCalories;
     private TextView paceSpeedAvg;
-    private TextView paceSpeedHeigh;
-    private TextView paceSpeedLow;
+    //private TextView paceSpeedHeigh;
+    private TextView tvTaskNo;
 
     private Button btStart;
     private Button btStop;
@@ -154,12 +143,12 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                     if(avgStep == 0){
                         avgStep = 60;
                     }
-                    distance = Float.valueOf(msg.arg1 * 60 /100);
+                    distance = Float.valueOf(msg.arg1 * avgStep /100);
                     distance = Float.parseFloat(df.format(distance));
                     MoveActivity.this.paceDistance.setText(distance + "米");
 
                     //刷新热量统计
-                    calories = Float.parseFloat(String.valueOf(50 * distance * 0.8214 / 1000));
+                    calories = Float.parseFloat(String.valueOf(user.getWeight() * distance * 0.8214 / 1000));
                     calories = Float.parseFloat(df.format(calories));
                     MoveActivity.this.paceCalories.setText(calories + "卡");
 
@@ -269,7 +258,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
     private void initTaskNo() {
         queryNewTaskNoByCurrentDate();
         taskNo++;
-        paceSpeedLow.setText(taskNo + "");
+        tvTaskNo.setText(taskNo + "");
     }
 
     private void initListener() {
@@ -301,8 +290,8 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
         paceDistance = (TextView) findViewById(R.id.move_pace_distance);
         paceCalories = (TextView) findViewById(R.id.move_pace_calories);
         paceSpeedAvg = (TextView) findViewById(R.id.move_pace_speed_average);
-        paceSpeedHeigh = (TextView) findViewById(R.id.move_pace_speed_heigh);
-        paceSpeedLow = (TextView) findViewById(R.id.move_pace_speed_low);
+        //paceSpeedHeigh = (TextView) findViewById(R.id.move_pace_speed_heigh);
+        tvTaskNo = (TextView) findViewById(R.id.move_pace_task_no);
 
 
         //Button

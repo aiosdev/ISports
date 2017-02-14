@@ -29,6 +29,7 @@ import android.util.Log;
 
 import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.MapDbHelper;
+import com.aiosdev.isports.data.User;
 import com.aiosdev.isports.tools.MoveDetector;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -82,6 +83,8 @@ public class MoveService extends Service implements SensorEventListener, com.goo
 
     private int taskNo;
 
+    private User mUser;
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -94,6 +97,8 @@ public class MoveService extends Service implements SensorEventListener, com.goo
     public void onCreate() {
         super.onCreate();
         Log.d("Service声明周期：", "onCreate()");
+
+        mUser = User.getInstence(this);
 
         initArgus();
 
@@ -428,7 +433,7 @@ public class MoveService extends Service implements SensorEventListener, com.goo
                         mLastExtremes[extType][k] = mLastValues[k];
                         float diff = Math.abs(mLastExtremes[extType][k] - mLastExtremes[1 - extType][k]);
 
-                        if (diff > 3.0) {
+                        if (diff > mUser.getSensitivity()) {
                             boolean isAlmostAsLargeAsPrevious = diff > (mLastDiff[k] * 2 / 3);
                             boolean isPreviousLargeEnough = mLastDiff[k] > (diff / 3);
                             boolean isNotContra = (mLastMatch != 1 - extType);

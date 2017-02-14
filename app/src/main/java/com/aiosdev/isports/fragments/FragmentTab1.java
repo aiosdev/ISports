@@ -19,7 +19,6 @@ import com.aiosdev.isports.MoveActivity;
 import com.aiosdev.isports.MoveWithMapActivity;
 import com.aiosdev.isports.R;
 import com.aiosdev.isports.data.User;
-import com.aiosdev.isports.tabmain.SecondLayerFragment;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.IndicatorViewPager.IndicatorFragmentPagerAdapter;
@@ -174,39 +173,6 @@ public class FragmentTab1 extends LazyFragment {
 		tvTotalDuration = (TextView) findViewById(R.id.tv_total_duration);
 		tvAvgStep = (TextView) findViewById(R.id.tv_avg_step);
 		ivSex = (ImageView) findViewById(R.id.image_person);
-	}
-
-
-	private class MyAdapter extends IndicatorFragmentPagerAdapter {
-
-		public MyAdapter(FragmentManager fragmentManager) {
-			super(fragmentManager);
-		}
-
-		@Override
-		public int getCount() {
-			return 5;
-		}
-
-		@Override
-		public View getViewForTab(int position, View convertView, ViewGroup container) {
-			if (convertView == null) {
-				convertView = inflate.inflate(R.layout.tab_top, container, false);
-			}
-			TextView textView = (TextView) convertView;
-			textView.setText(tabName + " " + position);
-			return convertView;
-		}
-
-		@Override
-		public Fragment getFragmentForPage(int position) {
-			SecondLayerFragment mainFragment = new SecondLayerFragment();
-			Bundle bundle = new Bundle();
-			bundle.putString(SecondLayerFragment.INTENT_STRING_TABNAME, tabName);
-			bundle.putInt(SecondLayerFragment.INTENT_INT_POSITION, position);
-			mainFragment.setArguments(bundle);
-			return mainFragment;
-		}
 	}
 
 }

@@ -25,7 +25,6 @@ import com.aiosdev.isports.R;
 import com.aiosdev.isports.adapter.RecyclerAdapterList;
 import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.Task;
-import com.aiosdev.isports.tabmain.SecondLayerFragment;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.Indicator;
 import com.shizhefei.view.indicator.IndicatorViewPager;
@@ -66,53 +65,6 @@ public class FragmentTab5One extends LazyFragment {
         btSearch = (Button) findViewById(R.id.bt_search);
 
         datelist = new ArrayList<>();
-
-
-
-        /*
-        ViewPager viewPager = (ViewPager) findViewById(R.id.fragment_tabmain_viewPager);
-        Indicator indicator = (Indicator) findViewById(R.id.fragment_tabmain_indicator);
-
-        switch (index) {
-            case 0:
-                indicator.setScrollBar(new ColorBar(getApplicationContext(), Color.RED, 5));
-                break;
-            case 1:
-                indicator.setScrollBar(new ColorBar(getApplicationContext(), Color.RED, 0, ScrollBar.Gravity.CENTENT_BACKGROUND));
-                break;
-            case 2:
-                indicator.setScrollBar(new ColorBar(getApplicationContext(), Color.RED, 5, ScrollBar.Gravity.TOP));
-                break;
-            case 3:
-                indicator.setScrollBar(new LayoutBar(getApplicationContext(), R.layout.layout_slidebar, ScrollBar.Gravity.CENTENT_BACKGROUND));
-                break;
-            case 4:
-                indicator.setScrollBar(new ColorBar(getApplicationContext(), Color.RED, 5));
-                break;
-            case 5:
-                indicator.setScrollBar(new ColorBar(getApplicationContext(), Color.RED, 5));
-                break;
-        }
-
-        float unSelectSize = 16;
-        float selectSize = unSelectSize * 1.2f;
-
-        int selectColor = res.getColor(R.color.tab_top_text_2);
-        int unSelectColor = res.getColor(R.color.tab_top_text_1);
-        indicator.setOnTransitionListener(new OnTransitionTextListener().setColor(selectColor, unSelectColor).setSize(selectSize, unSelectSize));
-
-        viewPager.setOffscreenPageLimit(4);
-
-        indicatorViewPager = new IndicatorViewPager(indicator, viewPager);
-        inflate = LayoutInflater.from(getApplicationContext());
-
-        // 注意这里 的FragmentManager 是 getChildFragmentManager(); 因为是在Fragment里面
-        // 而在activity里面用FragmentManager 是 getSupportFragmentManager()
-        indicatorViewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
-
-        Log.d("cccc", "Fragment 将要创建View " + this);
-        */
-
     }
 
     @Override
@@ -137,66 +89,9 @@ public class FragmentTab5One extends LazyFragment {
                 startActivity(intent);
             }
         });
-
     }
 
-    private class MyAdapter extends IndicatorFragmentPagerAdapter {
 
-        public MyAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public View getViewForTab(int position, View convertView, ViewGroup container) {
-            if (convertView == null) {
-                switch (position){
-                    case 0:
-                        convertView = inflate.inflate(R.layout.fragment_tab_5_one, container, false);
-                        break;
-                    case 1:
-                        convertView = inflate.inflate(R.layout.fragment_tab_5_one, container, false);
-                        break;
-                }
-
-            }
-            //TextView textView = (TextView) convertView;
-            //textView.setText(tabName + " " + position);
-            return convertView;
-        }
-
-        @Override
-        public Fragment getFragmentForPage(int position) {
-            switch (position){
-                case 0:
-                    FragmentTab5One fragmentTab5Temp = new FragmentTab5One();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(SecondLayerFragment.INTENT_STRING_TABNAME, tabName);
-                    bundle.putInt(SecondLayerFragment.INTENT_INT_POSITION, position);
-                    fragmentTab5Temp.setArguments(bundle);
-                    return fragmentTab5Temp;
-                case 1:
-                    FragmentTab5One fragmentTab5Temp1 = new FragmentTab5One();
-                    Bundle bundle1 = new Bundle();
-                    bundle1.putString(SecondLayerFragment.INTENT_STRING_TABNAME, tabName);
-                    bundle1.putInt(SecondLayerFragment.INTENT_INT_POSITION, position);
-                    fragmentTab5Temp1.setArguments(bundle1);
-                    return fragmentTab5Temp1;
-            }
-
-
-            SecondLayerFragment mainFragment = new SecondLayerFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(SecondLayerFragment.INTENT_STRING_TABNAME, tabName);
-            bundle.putInt(SecondLayerFragment.INTENT_INT_POSITION, position);
-            mainFragment.setArguments(bundle);
-            return mainFragment;
-        }
-    }
 
     private void queryPointByDate() {
         datelist.clear();

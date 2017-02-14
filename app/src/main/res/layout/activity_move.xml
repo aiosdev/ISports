@@ -120,8 +120,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="2"
                     android:gravity="center"
-                    android:id="@+id/tv_move_current_week"
-                    android:text="星期一"/>
+                    android:id="@+id/tv_move_current_week"/>
             </LinearLayout>
 
 
@@ -168,7 +167,7 @@
                             android:layout_weight="3"
                             android:gravity="center_vertical"
                             android:id="@+id/move_pace_distance"
-                            android:text="2000米"/>
+                            android:text="0米"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -192,7 +191,7 @@
                             android:layout_weight="3"
                             android:gravity="center_vertical"
                             android:id="@+id/move_pace_calories"
-                            android:text="3254卡路里"/>
+                            android:text="0卡路里"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -207,7 +206,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:text="速度"/>
+                            android:text="速度："/>
 
                         <TextView
                             android:layout_width="0dp"
@@ -216,7 +215,30 @@
                             android:layout_weight="3"
                             android:id="@+id/move_pace_speed_average"
                             android:gravity="center_vertical"
-                            android:text="3 米/秒"/>
+                            android:text="0 米/秒"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="2"
+                            android:gravity="center_vertical"
+                            android:text="任务编号："/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="30dp"
+                            android:layout_weight="2"
+                            android:id="@+id/move_pace_task_no"
+                            android:gravity="center_vertical"/>
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -226,7 +248,8 @@
                     android:orientation="vertical"
                     android:background="@drawable/shape_corner"
                     android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -240,56 +263,12 @@
                         android:layout_weight="2"
                         android:gravity="center"
                         android:id="@+id/move_pace_count"
-                        android:text="2000"
-                        android:textSize="24dp"
+                        android:text="0"
+                        android:textSize="30dp"
                         android:textColor="@color/colorAccent"/>
                 </LinearLayout>
 
             </LinearLayout>
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="最高："/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="30dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:id="@+id/move_pace_speed_heigh"
-                    android:text="6 米/秒"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="30dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="最低："/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="30dp"
-                    android:layout_weight="1"
-                    android:id="@+id/move_pace_speed_low"
-                    android:gravity="center_vertical"
-                    android:text="1 米/秒"/>
-            </LinearLayout>
-
 
         </LinearLayout>
 

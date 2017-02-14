@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aiosdev.isports.fragments.FragmentTab5;
-import com.aiosdev.isports.tabmain.FirstLayerFragment;
 import com.aiosdev.isports.fragments.FragmentTab1;
 import com.aiosdev.isports.fragments.FragmentTab2;
 import com.aiosdev.isports.fragments.FragmentTab3;
@@ -96,10 +95,6 @@ public class MainActivity extends FragmentActivity {
                 case 4:
                     bundle.putString(FragmentTab5.INTENT_STRING_TABNAME, tabNames[position]);
                     bundle.putInt(FragmentTab5.INTENT_INT_INDEX, position);
-                    break;
-                default:
-                    bundle.putString(FirstLayerFragment.INTENT_STRING_TABNAME, tabNames[position]);
-                    bundle.putInt(FirstLayerFragment.INTENT_INT_INDEX, position);
                     break;
             }
 
