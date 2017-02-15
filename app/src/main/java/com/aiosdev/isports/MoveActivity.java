@@ -51,6 +51,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -96,6 +97,8 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
     private Float calories = Float.valueOf(0);// 热量：卡路里
     private Float velocity = Float.valueOf(0);// 速度：米每秒
 
+    private String strCalories;
+
     private int step_length = 0;  //步长
     private int weight = 0;       //体重
     private int total_step = 0;   //走的总步数
@@ -135,27 +138,26 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                     MoveActivity.this.paceCount.setText(msg.arg1 + "");
                     total_step = msg.arg1;
 
-                    //保留小数点后两位
-                    DecimalFormat df = new DecimalFormat("#.##");
-
-                    //刷新距离统计
+                    //刷新距离统计,保留小数点后两位
                     int avgStep = user.getAvgStep();
                     if(avgStep == 0){
                         avgStep = 60;
                     }
                     distance = Float.valueOf(msg.arg1 * avgStep /100);
-                    distance = Float.parseFloat(df.format(distance));
+                    BigDecimal bDistance = new BigDecimal(distance);
+                    distance = bDistance.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     MoveActivity.this.paceDistance.setText(distance + "米");
 
-                    //刷新热量统计
+                    //刷新热量统计,保留小数点后两位
                     calories = Float.parseFloat(String.valueOf(user.getWeight() * distance * 0.8214 / 1000));
-                    calories = Float.parseFloat(df.format(calories));
+                    BigDecimal bCalories = new BigDecimal(calories);
+                    calories = bCalories.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     MoveActivity.this.paceCalories.setText(calories + "卡");
 
-                    //刷新平均速度
-
+                    //刷新平均速度,保留小数点后两位
                     velocity = distance / sportTimer;
-                    velocity = Float.parseFloat(df.format(velocity));
+                    BigDecimal bVelocity = new BigDecimal(distance);
+                    velocity = bVelocity.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     MoveActivity.this.paceSpeedAvg.setText(velocity + "米/秒");
 
                     break;

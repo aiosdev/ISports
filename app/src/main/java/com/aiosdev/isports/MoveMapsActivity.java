@@ -187,12 +187,12 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
             public static double computeDistanceBetween(LatLng from, LatLng to)
             Returns the distance between two LatLngs, in meters.
            */
-                double dis3 = computeDistanceBetween(begin, end);
+                //double dis3 = computeDistanceBetween(begin, end);
 
-                DecimalFormat df = new DecimalFormat("#.##");
-                dis3 = Double.parseDouble(df.format(dis3));
+                //DecimalFormat df = new DecimalFormat("#.##");
+                //dis3 = Double.parseDouble(df.format(dis3));
 
-                Log.d("Distence: ---", dis3 + "");
+                //Log.d("Distence: ---", dis3 + "");
 
             }
 
