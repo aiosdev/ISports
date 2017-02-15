@@ -268,7 +268,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
 
     private void clearAllData() {
         mUser.setGrade("初级");
-        mUser.setTitle("小白");
+        mUser.setTitle("列兵");
         mUser.setTotalStep(0);
         mUser.setTotalDuration(0);
         mUser.setTotalDistance(Float.parseFloat("0"));

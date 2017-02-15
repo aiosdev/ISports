@@ -169,7 +169,7 @@ public class FragmentTab1 extends LazyFragment {
 		tvTotalCalories.setText(user.getTotalCalories() + " 卡");
 
 		//时间显示，将秒转换为小时，分钟，秒
-		user.setTotalDuration(1234567);
+		//user.setTotalDuration(1234567);
 		int hourTemp = user.getTotalDuration() / 3600;
 		int minutTemp = user.getTotalDuration() % 3600 / 60;
 		int secTemp = user.getTotalDuration() % 3600 % 60;
