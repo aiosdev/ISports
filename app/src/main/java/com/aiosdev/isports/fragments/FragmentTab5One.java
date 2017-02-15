@@ -3,6 +3,7 @@ package com.aiosdev.isports.fragments;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,11 +20,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aiosdev.isports.MoveMapsActivity;
 import com.aiosdev.isports.R;
 import com.aiosdev.isports.adapter.RecyclerAdapterList;
 import com.aiosdev.isports.data.MapContract;
+import com.aiosdev.isports.data.MapDbHelper;
 import com.aiosdev.isports.data.Task;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.Indicator;
@@ -70,32 +73,39 @@ public class FragmentTab5One extends LazyFragment {
     @Override
     protected void onFragmentStartLazy() {
         super.onFragmentStartLazy();
-        //加载RecyclerView数据
-        queryPointByDate();
-        RecyclerView recycleView = (RecyclerView) findViewById(R.id.rv_search);
-        recycleView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, true));
-        adapter = new RecyclerAdapterList(getActivity(), datelist);
-        recycleView.setAdapter(adapter);
+        //判断数据库是否存在
+        if(tableIsExist(MapContract.TaskEntry.TABLE_NAME)){
+            //加载RecyclerView数据
+            queryPointByDate();
+            RecyclerView recycleView = (RecyclerView) findViewById(R.id.rv_search);
+            recycleView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, true));
+            adapter = new RecyclerAdapterList(getActivity(), datelist);
+            recycleView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new RecyclerAdapterList.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, Object object, View view) {
+            adapter.setOnItemClickListener(new RecyclerAdapterList.OnItemClickListener() {
+                @Override
+                public void onItemClick(int position, Object object, View view) {
 
-                Intent intent = new Intent();
-                intent.putExtra("flag", "FragmentTab5");
-                intent.putExtra("taskNo", datelist.get(position).getTaskNo());
-                intent.putExtra("date", datelist.get(position).getDate());
-                intent.setClass(getActivity(), MoveMapsActivity.class);
-                startActivity(intent);
-            }
-        });
+                    Intent intent = new Intent();
+                    intent.putExtra("flag", "FragmentTab5");
+                    intent.putExtra("taskNo", datelist.get(position).getTaskNo());
+                    intent.putExtra("date", datelist.get(position).getDate());
+                    intent.setClass(getActivity(), MoveMapsActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }else {
+            Toast.makeText(getActivity(), "暂时没有数据！", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
 
 
     private void queryPointByDate() {
         datelist.clear();
-        String columns[] = new String[]{MapContract.TaskEntry.COLUMN_DATE, MapContract.TaskEntry.COLUMN_TASK_NO};
+        String columns[] = new String[]{MapContract.TaskEntry.COLUMN_DATE, MapContract.TaskEntry.COLUMN_TASK_NO, MapContract.TaskEntry.COLUMN_STEP};
         Uri myUri = MapContract.TaskEntry.CONTENT_URI;
         //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
         Cursor cur = null;
@@ -107,9 +117,9 @@ public class FragmentTab5One extends LazyFragment {
 
             do {
                 Task task = new Task();
-                task.setDate(cur.getString(cur.getColumnIndex("date")));
-                ;
-                task.setTaskNo(cur.getString(cur.getColumnIndex("task_no")));
+                task.setDate(cur.getString(cur.getColumnIndex(MapContract.TaskEntry.COLUMN_DATE)));
+                task.setTaskNo(cur.getString(cur.getColumnIndex(MapContract.TaskEntry.COLUMN_TASK_NO)));
+                task.setStep(cur.getInt(cur.getColumnIndex(MapContract.TaskEntry.COLUMN_STEP)));
 
                 datelist.add(0, task);
 
@@ -117,5 +127,33 @@ public class FragmentTab5One extends LazyFragment {
 
 
         }
+    }
+
+    /**
+     * 判断某张表是否存在
+     */
+    public boolean tableIsExist(String tableName) {
+        boolean result = false;
+        if (tableName == null) {
+            return false;
+        }
+        Cursor cursor = null;
+        MapDbHelper dbHelper = new MapDbHelper(getActivity());
+        try {
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            //这里表名可以是Sqlite_master
+            String sql = "select count(*) as c from sqlite_master" + " where type ='table' and name ='" + tableName.trim() + "' ";
+            cursor = db.rawQuery(sql, null);
+            if (cursor.moveToNext()) {
+                int count = cursor.getInt(0);
+                if (count > 0) {
+                    result = true;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
