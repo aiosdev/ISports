@@ -28,13 +28,21 @@ public class FragmentTab5Two extends LazyFragment {
 	private SimpleAdapter sim_adapter;
 
 	// 图片封装为一个数组
-	private int[] icon = { R.mipmap.runner, R.mipmap.lockv,
-			R.mipmap.runner, R.mipmap.runner, R.mipmap.runner,
-			R.mipmap.runner, R.mipmap.lockv, R.mipmap.lock1,
-			R.mipmap.runner, R.mipmap.runner, R.mipmap.runner,
-			R.mipmap.lockv };
+	private int[] icon = { R.mipmap.pic_titile_1_1, R.mipmap.pic_titile_1_2, R.mipmap.pic_titile_1_3, R.mipmap.pic_titile_1_4,
+			R.mipmap.pic_titile_2_1, R.mipmap.pic_titile_2_2, R.mipmap.pic_titile_2_3, R.mipmap.pic_titile_2_4,
+			R.mipmap.pic_titile_3_1, R.mipmap.pic_titile_3_2, R.mipmap.pic_titile_3_3, R.mipmap.pic_titile_3_4,
+			R.mipmap.pic_titile_4_1, R.mipmap.pic_titile_4_2, R.mipmap.pic_titile_4_3, R.mipmap.pic_titile_4_4,
+			R.mipmap.pic_titile_3_5, R.mipmap.pic_titile_4_5};
 	private String[] iconName = { "通讯录", "日历", "照相机", "时钟", "游戏", "短信", "铃声",
 			"设置", "语音", "天气", "浏览器", "视频" };
+
+	//判断等级和头衔的变化
+	private String[] strGrade = {"初级", "初级", "初级", "初级", "中级", "中级", "中级", "中级", "高级", "高级", "高级",
+			"高级", "运动专家", "运动专家", "运动专家", "运动专家", "资深运动专家", "资深运动专家"};
+	private String[] strTitle = {"列兵", "一等兵", "二等兵", "三等兵", "少尉", "中尉", "上尉", "大尉",
+			"少校", "中校", "上校", "大校", "少将", "中将", "上将", "四星上将", "元帅", "司令"};
+	private int[] intSteps = {0, 1000 , 2000, 4000, 8000, 24000, 60000, 120000, 240000, 360000, 500000,
+			650000, 820000, 1000000, 1250000, 1600000, 2000000, 3000000};
 
 	@Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
@@ -64,7 +72,7 @@ public class FragmentTab5Two extends LazyFragment {
 		for(int i=0;i<icon.length;i++){
 			Map<String, Object> map = new HashMap<>();
 			map.put("image", icon[i]);
-			map.put("text", iconName[i]);
+			map.put("text", strTitle[i]);
 			data_list.add(map);
 		}
 

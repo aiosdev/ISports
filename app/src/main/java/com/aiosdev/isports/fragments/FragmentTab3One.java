@@ -192,7 +192,7 @@ public class FragmentTab3One extends LazyFragment implements LocationListener, G
 	public void onLocationChanged(Location location) {
 
 		mMap.clear();
-		mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())));
+		mMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title(location.getLatitude() + "," + location.getLongitude()));
 
 		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 17));
 		Toast.makeText(getActivity(), "新位置被检测" + i++ , Toast.LENGTH_SHORT).show();
