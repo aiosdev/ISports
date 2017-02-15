@@ -202,7 +202,6 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(locationList.get(0).getLat()), Double.parseDouble(locationList.get(0).getLon())), 17));
 
-
         }
 
     }

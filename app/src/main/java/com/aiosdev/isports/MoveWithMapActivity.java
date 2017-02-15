@@ -53,6 +53,7 @@ import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -139,27 +140,26 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
                     MoveWithMapActivity.this.paceCount.setText(msg.arg1 + "");
                     total_step = msg.arg1;
 
-                    //保留小数点后两位
-                    DecimalFormat df = new DecimalFormat("#.##");
-
-                    //刷新距离统计
+                    //刷新距离统计,保留小数点后两位
                     int avgStep = user.getAvgStep();
                     if(avgStep == 0){
                         avgStep = 60;
                     }
                     distance = Float.valueOf(msg.arg1 * avgStep /100);
-                    distance = Float.parseFloat(df.format(distance));
+                    BigDecimal bDistance = new BigDecimal(distance);
+                    distance = bDistance.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     MoveWithMapActivity.this.paceDistance.setText(distance + "米");
 
-                    //刷新热量统计
+                    //刷新热量统计,保留小数点后两位
                     calories = Float.parseFloat(String.valueOf(user.getWeight() * distance * 0.8214 / 1000));
-                    calories = Float.parseFloat(df.format(calories));
+                    BigDecimal bCalories = new BigDecimal(calories);
+                    calories = bCalories.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     MoveWithMapActivity.this.paceCalories.setText(calories + "卡");
 
-                    //刷新平均速度
-
+                    //刷新平均速度,保留小数点后两位
                     velocity = distance / sportTimer;
-                    velocity = Float.parseFloat(df.format(velocity));
+                    BigDecimal bVelocity = new BigDecimal(distance);
+                    velocity = bVelocity.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     MoveWithMapActivity.this.paceSpeedAvg.setText(velocity + "米/秒");
 
                     break;

@@ -23,6 +23,8 @@ import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.IndicatorViewPager.IndicatorFragmentPagerAdapter;
 
+import java.math.BigDecimal;
+
 public class FragmentTab1 extends LazyFragment {
 	private IndicatorViewPager indicatorViewPager;
 	private LayoutInflater inflate;
@@ -156,9 +158,24 @@ public class FragmentTab1 extends LazyFragment {
 		tvGrade.setText(user.getGrade());
 		tvTitle.setText(user.getTitle());
 		tvTotalSteps.setText(user.getTotalStep() + " 步");
-		tvTotalDistance.setText(user.getTotalDistance() + " 米");
+
+		//里程显示，将米转换为公里
+		Float distTemp = user.getTotalDistance() / 1000;
+		BigDecimal bDistTemp = new BigDecimal(distTemp);
+		distTemp = bDistTemp.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+
+		tvTotalDistance.setText(distTemp + " 公里");
+
 		tvTotalCalories.setText(user.getTotalCalories() + " 卡");
-		tvTotalDuration.setText(user.getTotalDuration() + " 秒");
+
+		//时间显示，将秒转换为小时，分钟，秒
+		user.setTotalDuration(1234567);
+		int hourTemp = user.getTotalDuration() / 3600;
+		int minutTemp = user.getTotalDuration() % 3600 / 60;
+		int secTemp = user.getTotalDuration() % 3600 % 60;
+		tvTotalDuration.setText(hourTemp + " 小时 " + minutTemp + " 分钟 " + secTemp  + " 秒");
+
+
 		tvAvgStep.setText(user.getAvgStep() + " 厘米");
 	}
 
