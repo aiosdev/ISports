@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Administrator on 2017/2/3 0003.
  */
@@ -21,7 +23,7 @@ public class User {
     private int totalDuration;//累计时长(秒)
     private int avgStep;//平均步幅（厘米）
     private Float avgSpeed;//平均速度
-    private int sensitivity;
+    private Float sensitivity;
     private int alerm;   //1-开，0-关，默认闹钟开启后每天都响
     private int alermType; //1-闹铃，0-震动
     private String alermTime; //设定时间，格式 00:00
@@ -139,11 +141,11 @@ public class User {
         this.avgSpeed = avgSpeed;
     }
 
-    public int getSensitivity() {
+    public Float getSensitivity() {
         return sensitivity;
     }
 
-    public void setSensitivity(int sensitivity) {
+    public void setSensitivity(Float sensitivity) {
         this.sensitivity = sensitivity;
     }
 
@@ -201,7 +203,7 @@ public class User {
             setSex(mPreferences.getString("sex", ""));
             setWeight(mPreferences.getInt("weight", 0));
             setAvgStep(mPreferences.getInt("pace_length", 0));
-            setSensitivity(mPreferences.getInt("sensitivity", 0));
+            setSensitivity(mPreferences.getFloat("sensitivity", 0));
             setGrade(mPreferences.getString("grade", ""));
             setTitle(mPreferences.getString("title", ""));
             setStepCount(mPreferences.getInt("step_count_plan", 0));
@@ -227,13 +229,17 @@ public class User {
             editor.putString("sex", getSex());
             editor.putInt("weight", getWeight());
             editor.putInt("pace_length", getAvgStep());
-            editor.putInt("sensitivity", getSensitivity());
+            editor.putFloat("sensitivity", getSensitivity());
             editor.putString("grade", getGrade());
             editor.putString("title", getTitle());
             editor.putInt("step_count_plan", getStepCount()); //步
             editor.putInt("total_step", getTotalStep());          //步
             editor.putFloat("total_distance", getTotalDistance());  //公里
-            editor.putFloat("total_calories", getTotalCalories());  //卡路里
+
+            BigDecimal bCalories = new BigDecimal(getTotalCalories());
+            float calories = bCalories.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+            editor.putFloat("total_calories", calories);  //卡路里
+
             editor.putInt("total_duration", getTotalDuration());  //分钟
             editor.putFloat("avg_speed", getAvgSpeed());       //米/秒
             editor.putInt("alerm", getAlerm());  //闹钟开关

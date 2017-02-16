@@ -166,21 +166,29 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
         etPaceLength.setText(mUser.getAvgStep() + "");
         etPlan.setText(mUser.getStepCount() + "");
 
-        sbPara.setProgress(mUser.getSensitivity());
+        for(int i=0;i<=100;i++){
+            if(i == mUser.getSensitivity() * 10){
+                sbPara.setProgress(i);
+                break;
+            }
+        }
+
+
         tvSb2 = (TextView) findViewById(R.id.tv_sb2_value);
-        if(3 == sbPara.getProgress()) {
-            tvSb2.setText(sbPara.getProgress() + "(推荐)");
+        if(20 == sbPara.getProgress()) {
+            tvSb2.setText(2 + "(推荐)");
         }else {
-            tvSb2.setText(sbPara.getProgress() + "");
+            tvSb2.setText((float)sbPara.getProgress() / 10 + "");
         }
 
         sbPara.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar bar, int i, boolean b) {
-                if(3 == i) {
-                    tvSb2.setText(i + "(推荐)");
+                if(20 == i) {
+                    tvSb2.setText((float)(i / 10) + "(推荐)");
                 }else {
-                    tvSb2.setText(i + "");
+                    float iTemp = (float) i;
+                    tvSb2.setText(iTemp / 10 + "");
                 }
             }
 
@@ -323,7 +331,9 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
         mUser.setSex(spinSex.getSelectedItem().toString().trim());
         mUser.setWeight(Integer.parseInt(etWeight.getText().toString().trim()));
         mUser.setAvgStep(Integer.parseInt(etPaceLength.getText().toString().trim()));
-        mUser.setSensitivity((sbPara.getProgress()));
+
+        float senTemp = (float)sbPara.getProgress();
+        mUser.setSensitivity(senTemp / 10);
         mUser.setStepCount(Integer.parseInt(etPlan.getText().toString().trim()));
 
         mUser.saveData(getActivity());

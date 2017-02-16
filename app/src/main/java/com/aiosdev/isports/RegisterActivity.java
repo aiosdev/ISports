@@ -58,9 +58,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         //灵敏度设定
         sbPara = (SeekBar) findViewById(R.id.sb_para);
-        sbPara.setProgress(3);
+        sbPara.setProgress(2 * 10);
         tvSb2 = (TextView) findViewById(R.id.tv_sb2_value);
-        tvSb2.setText(sbPara.getProgress() + "(推荐)");
+        tvSb2.setText(2 + "(推荐)");
 
         //体重设定
         etWeight = (EditText) findViewById(R.id.et_weight);
@@ -77,10 +77,11 @@ public class RegisterActivity extends AppCompatActivity {
         sbPara.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar bar, int i, boolean b) {
-                if(3 == i) {
-                    tvSb2.setText(i + "(推荐)");
+                if(20 == i) {
+                    tvSb2.setText((float)(i / 10) + "(推荐)");
                 }else {
-                    tvSb2.setText(i + "");
+                    float iTemp = (float) i;
+                    tvSb2.setText(iTemp / 10 + "");
                 }
             }
 
@@ -114,7 +115,10 @@ public class RegisterActivity extends AppCompatActivity {
                     user.setSex(spinnerSex.getSelectedItem().toString().trim());
                     user.setWeight(Integer.parseInt(etWeight.getText().toString()));
                     user.setAvgStep(Integer.parseInt(etPaceLength.getText().toString()));
-                    user.setSensitivity(sbPara.getProgress());
+
+                    float senTemp = (float)sbPara.getProgress();
+                    user.setSensitivity(senTemp / 10);
+
                     user.setGrade("初级");
                     user.setTitle("列兵");
                     user.setStepCount(Integer.parseInt(etPlan.getText().toString()));

@@ -138,14 +138,19 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
                 case 0x14:
                     //刷新步数统计
                     MoveWithMapActivity.this.paceCount.setText(msg.arg1 + "");
-                    total_step = msg.arg1;
+                    //total_step = msg.arg1;
+                    if (msg.arg1 % 2 == 0) {
+                        total_step = msg.arg1;
+                    } else {
+                        total_step = msg.arg1 + 1;
+                    }
 
                     //刷新距离统计,保留小数点后两位
                     int avgStep = user.getAvgStep();
                     if(avgStep == 0){
                         avgStep = 60;
                     }
-                    distance = Float.valueOf(msg.arg1 * avgStep /100);
+                    distance = Float.valueOf(total_step * avgStep /100);
                     BigDecimal bDistance = new BigDecimal(distance);
                     distance = bDistance.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     MoveWithMapActivity.this.paceDistance.setText(distance + "米");
@@ -157,11 +162,12 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
                     MoveWithMapActivity.this.paceCalories.setText(calories + "卡");
 
                     //刷新平均速度,保留小数点后两位
-                    velocity = distance / sportTimer;
-                    BigDecimal bVelocity = new BigDecimal(distance);
-                    velocity = bVelocity.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                    MoveWithMapActivity.this.paceSpeedAvg.setText(velocity + "米/秒");
-
+                    if(sportTimer != 0) {
+                        velocity = distance / sportTimer;
+                        BigDecimal bVelocity = new BigDecimal(velocity);
+                        velocity = bVelocity.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                        MoveWithMapActivity.this.paceSpeedAvg.setText(velocity + "米/秒");
+                    }
                     break;
                 case 0x15:
                     WeatherInfo weatherInfoRes = (WeatherInfo) msg.getData().getSerializable("info");
@@ -576,6 +582,7 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
                 contentValues.put(MapContract.TaskEntry.COLUMN_CALORIES, calories);
                 contentValues.put(MapContract.TaskEntry.COLUMN_DURATION, sportTimer);
                 contentValues.put(MapContract.TaskEntry.COLUMN_AVG_SPEED, velocity);
+                contentValues.put(MapContract.TaskEntry.COLUMN_AVG_STEP, (int)(distance / total_step * 100));
                 Uri url = MapContract.TaskEntry.CONTENT_URI;
                 getContentResolver().insert(url, contentValues);
 
@@ -657,6 +664,7 @@ public class MoveWithMapActivity extends AppCompatActivity implements LocationLi
                 task.setCalories(calories);
                 task.setDuration(sportTimer);
                 task.setAvg_speed(velocity);
+                task.setAvg_step((int) (distance / total_step * 100));
 
                 Intent intent = new Intent();
                 intent.putExtra("flag", "MoveActivity");
