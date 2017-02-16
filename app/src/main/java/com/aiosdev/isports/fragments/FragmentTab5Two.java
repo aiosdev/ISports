@@ -1,15 +1,23 @@
 package com.aiosdev.isports.fragments;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.aiosdev.isports.R;
 import com.aiosdev.isports.data.User;
+import com.aiosdev.isports.tools.StepArcView;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 
@@ -32,6 +40,8 @@ public class FragmentTab5Two extends LazyFragment {
 
 	private List<Map<String, Object>> data_list;
 	private SimpleAdapter sim_adapter;
+
+	private User user;
 
 	// 图片封装为一个数组
 	private int[] intTitleicon;
@@ -68,7 +78,7 @@ public class FragmentTab5Two extends LazyFragment {
 	protected void onFragmentStartLazy() {
 		super.onFragmentStartLazy();
 
-		User user = User.getInstence(getActivity());
+		user = User.getInstence(getActivity());
 
 		//显示当前等级
 		tvCurrentGrade.setText(user.getGrade());
@@ -109,6 +119,42 @@ public class FragmentTab5Two extends LazyFragment {
 		sim_adapter = new SimpleAdapter(getActivity(), data_list, R.layout.item_fragment_tab5_one_gridview, from, to);
 		//配置适配器
 		gdView.setAdapter(sim_adapter);
+
+		gdView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> view, View view1, int i, long l) {
+				showDes(intSteps[i]);
+			}
+		});
+	}
+
+	private void showDes(int steps) {
+		Dialog dialog = new AlertDialog.Builder(getActivity())
+				.setTitle("晋级提示")
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setView(createView(steps))
+				// 设置内容
+				.setNegativeButton("确定",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+												int whichButton) {
+							}
+						}).create();// 创建
+		// 显示对话框
+		dialog.show();
+	}
+
+	private View createView(int steps) {
+		LinearLayout layout = new LinearLayout(getActivity());
+		layout.setOrientation(LinearLayout.HORIZONTAL);
+		LinearLayout.LayoutParams paramLl = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		layout.setLayoutParams(paramLl);
+
+		StepArcView arcView = new StepArcView(getActivity());
+		arcView.setCurrentCount(steps, user.getTotalStep());
+		layout.addView(arcView);
+
+		return layout;
 	}
 
 	public List<Map<String, Object>> getData(){
