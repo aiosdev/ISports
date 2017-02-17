@@ -324,6 +324,9 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
             }
 
 
+        }else {
+            AlarmManagerUtil.cancelAlarm(getActivity(), 0);
+            Toast.makeText(getActivity(), "闹钟取消成功", Toast.LENGTH_LONG).show();
         }
 
         //保存其他参数设置

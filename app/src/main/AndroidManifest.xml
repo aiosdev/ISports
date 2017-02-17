@@ -49,7 +49,7 @@
 
         <receiver android:name=".alerm.LoongggAlarmReceiver">
             <intent-filter>
-                <action android:name="com.loonggg.alarm.clock"/>
+                <action android:name="com.aiosdev.isports"/>
             </intent-filter>
         </receiver>
 
