@@ -18,7 +18,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/shape_corner"
-            android:text="开始跟踪定位"/>
+            android:text="@string/tab3_fragment1_xml_bt_start_navigation"/>
 
         <Button
             android:id="@+id/bt_tab3_one_stop"
@@ -28,7 +28,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@drawable/shape_corner"
-            android:text="停止跟踪定位"/>
+            android:text="@string/tab3_fragment1_xml_bt_stop_navigation"/>
     </LinearLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"

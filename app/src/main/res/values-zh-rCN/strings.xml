@@ -1,6 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">我的运动</string>
+
+    <!-- MainActivity -->
+    <string name="main_activity_tab_name1">计步</string>
+    <string name="main_activity_tab_name2">统计</string>
+    <string name="main_activity_tab_name3">地图</string>
+    <string name="main_activity_tab_name4">设置</string>
+    <string name="main_activity_tab_name5">查询</string>
+
+    <!-- register -->
+    <string name="register_xml_page_title">用户信息注册</string>
+    <string name="register_xml_nickname">昵称：</string>
+    <string name="register_xml_sex">性别：</string>
+    <string name="register_xml_weight">体重：</string>
+    <string name="register_xml_weight_hint">请输入整数值</string>
+    <string name="register_xml_pace_length">初始步幅：</string>
+    <string name="register_xml_sensibility">灵敏度：</string>
+    <string name="register_xml_plan">每日计划：</string>
+    <string name="register_xml_plan_hint">推荐6000步</string>
+    <string name="register_xml_bt_save">保存信息</string>
+    <string name="register_xml_bt_reset">重新登记</string>
+
+    <string name="register_activity_unit_pace_length">厘米</string>
+    <string name="register_activity_unit_weight">公斤</string>
+    <string name="register_activity_unit_steps">步</string>
+    <string name="register_activity_recommand">（推荐）</string>
+
+    <string name="register_activity_toast_success">信息设定完成，准备开始运动之旅!</string>
+    <string name="register_activity_toast_valid_nickname">昵称不能为空！</string>
+    <string name="register_activity_toast_valid_weight_null">体重不能为空！</string>
+    <string name="register_activity_toast_valid_weight_fail">体重失真，请重新输入！</string>
+    <string name="register_activity_toast_valid_pace_lenght_null">步幅不能为空！</string>
+    <string name="register_activity_toast_valid_pace_lenght_fail">步幅失真，请重新输入！</string>
+    <string name="register_activity_toast_valid_plan_null">计划步数不能为空！</string>
+    <string name="register_activity_toast_valid_plan_fail">计划步数不科学，请重新输入！</string>
+
+
+    <!-- Tab1相关 -->
+    <string name="tab1_xml_page_title1">个人信息</string>
+    <string name="tab1_xml_grade">等级：</string>
+    <string name="tab1_xml_title">头衔：</string>
+
+    <string name="tab1_xml_page_title2">运动历史记录</string>
+    <string name="tab1_xml_steps">步数：</string>
+    <string name="tab1_xml_distance">里程：</string>
+    <string name="tab1_xml_calories">热量：</string>
+    <string name="tab1_xml_duration">时长：</string>
+    <string name="tab1_xml_pace_length">平均步幅：</string>
+
+    <string name="tab1_xml_page_title3">运动指令</string>
+    <string name="tab1_xml_bt_normal">普通计步</string>
+    <string name="tab1_xml_bt_special">带地图计步</string>
+
+    <string name="tab1_activity_unit_distance"> 公里</string>
+    <string name="tab1_activity_unit_steps"> 步</string>
+    <string name="tab1_activity_unit_calories"> 卡</string>
+    <string name="tab1_activity_unit_hour"> 小时 </string>
+    <string name="tab1_activity_unit_minute"> 分钟 </string>
+    <string name="tab1_activity_unit_second"> 秒</string>
+    <string name="tab1_activity_unit_pace_length"> 厘米</string>
+
+    <!-- Tab2相关 -->
+
+
+
+
+
+    <!-- Tab3相关 -->
+    <string name="tab3_fragment_tab1_name">实时跟踪</string>
+    <string name="tab3_fragment_tab2_name">目的地导航</string>
+
+    <string name="tab3_fragment1_xml_bt_start_navigation">开始跟踪定位</string>
+    <string name="tab3_fragment1_xml_bt_stop_navigation">停止跟踪定位</string>
+
+    <string name="tab3_fragment2_xml_tv_title">任意位置到目的地导航：</string>
+    <string name="tab3_fragment2_xml_et_begin_address">起始地址,邮编或坐标</string>
+    <string name="tab3_fragment2_xml_et_end_address">目的地址,邮编或坐标</string>
+    <string name="tab3_fragment2_xml_bt_commit">确定</string>
+
+    <!-- Tab4相关 -->
+    <string name="tab4_xml_title">用户参数设置</string>
+    <string name="tab4_xml_title_hint">请输入用户名</string>
+    <string name="tab4_xml_alarm">闹钟提醒：</string>
+    <string name="tab4_xml_alarm_type">提醒方式：</string>
+    <string name="tab4_xml_bt_save">保存设置</string>
+    <string name="tab4_xml_bt_reset">重新设置</string>
+    <string name="tab4_xml_bt_clear_all">从头再来</string>
+
+    <string name="tab4_fragment_toast_open_alarm">打开</string>
+    <string name="tab4_fragment_toast_close_alarm">关闭</string>
+
+    <string name="tab4_fragment_dialog_title">警告</string>
+    <string name="tab4_fragment_dialog_msg">是否放弃当前等级与头衔，并删除全部历史数据？</string>
+    <string name="tab4_fragment_dialog_bt1">确认</string>
+    <string name="tab4_fragment_dialog_bt2">取消</string>
+    <string name="tab4_fragment_toast_clear_all">数据清除干净！</string>
+    <string name="tab4_fragment_toast_alarm_msg">今天该运动了！</string>
+    <string name="tab4_fragment_toast_alarm_setting_yes">闹钟设置成功</string>
+    <string name="tab4_fragment_toast_alarm_setting_no">闹钟取消成功</string>
+    <string name="tab4_fragment_toast_setting_yes">参数设置成功</string>
+
+
+    <!-- Tab5相关 -->
+
+
+
+
+    <!-- Tab1相关 -->
+
+
+
+
+
     <string name="sunday">星期天</string>
     <string name="monday">星期一</string>
     <string name="tuesday">星期二</string>

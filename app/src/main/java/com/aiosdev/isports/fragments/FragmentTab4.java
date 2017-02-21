@@ -91,7 +91,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
         etPaceLength = (EditText) findViewById(R.id.et_pace_length);
         //etPaceLength.setProgress(60);
         tvSb1 = (TextView) findViewById(R.id.tv_sb1_value);
-        tvSb1.setText("厘米");
+        tvSb1.setText(getString(R.string.tab1_activity_unit_pace_length));
 
         //灵敏度设定
         sbPara = (SeekBar) findViewById(R.id.sb_para);
@@ -100,13 +100,13 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
         etWeight = (EditText) findViewById(R.id.et_weight);
         //etWeight.setProgress(50);
         tvSb3 = (TextView) findViewById(R.id.tv_sb3_value);
-        tvSb3.setText("公斤");
+        tvSb3.setText(getString(R.string.register_activity_unit_weight));
 
         //计划设定
         etPlan = (EditText) findViewById(R.id.et_plan);
         //etPlan.setProgress(5000);
         tvSb4 = (TextView) findViewById(R.id.tv_sb4_value);
-        tvSb4.setText("步");
+        tvSb4.setText(getString(R.string.register_activity_unit_steps));
 
         //闹钟设定
         swAlarm = (Switch) findViewById(R.id.sw_alerm);
@@ -176,7 +176,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
 
         tvSb2 = (TextView) findViewById(R.id.tv_sb2_value);
         if(20 == sbPara.getProgress()) {
-            tvSb2.setText(2 + "(推荐)");
+            tvSb2.setText(2 + getString(R.string.register_activity_recommand));
         }else {
             tvSb2.setText((float)sbPara.getProgress() / 10 + "");
         }
@@ -185,7 +185,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
             @Override
             public void onProgressChanged(SeekBar bar, int i, boolean b) {
                 if(20 == i) {
-                    tvSb2.setText((float)(i / 10) + "(推荐)");
+                    tvSb2.setText((float)(i / 10) + getString(R.string.register_activity_recommand));
                 }else {
                     float iTemp = (float) i;
                     tvSb2.setText(iTemp / 10 + "");
@@ -224,11 +224,11 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
             public void onCheckedChanged(CompoundButton button, boolean b) {
                 if (b) {
                     mUser.setAlerm(1);
-                    Toast.makeText(getActivity(), "打开", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.tab4_fragment_toast_open_alarm), Toast.LENGTH_SHORT).show();
 
                 } else {
                     mUser.setAlerm(0);
-                    Toast.makeText(getActivity(), "关闭", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.tab4_fragment_toast_close_alarm), Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -252,11 +252,11 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
 
     private void ClearDialog() {
         Dialog dialog = new AlertDialog.Builder(getActivity())
-                .setTitle("警告")
+                .setTitle(getString(R.string.tab4_fragment_dialog_title))
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setMessage("是否放弃当前等级与头衔，并删除全部历史数据？")
+                .setMessage(getString(R.string.tab4_fragment_dialog_msg))
                 // 设置内容
-                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.tab4_fragment_dialog_bt1), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -264,7 +264,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
                         //Main.this.finish();
                     }
                 })
-                .setNegativeButton("取消",
+                .setNegativeButton(getString(R.string.tab4_fragment_dialog_bt2),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
@@ -294,7 +294,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
         Uri urlLocation = MapContract.LoactionEntry.CONTENT_URI;
         getActivity().getContentResolver().delete(urlLocation, null, null);
 
-        Toast.makeText(getActivity(), "数据清除干净！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.tab4_fragment_toast_clear_all), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -318,15 +318,15 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
                 String[] times = time.split(":");
 
                 AlarmManagerUtil.setAlarm(getActivity(), 1, Integer.parseInt(times[0]), Integer.parseInt
-                        (times[1]), 0, 0, "今天该运动了！", mUser.getAlermType());
+                        (times[1]), 0, 0, getString(R.string.tab4_fragment_toast_alarm_msg), mUser.getAlermType());
 
-                Toast.makeText(getActivity(), "闹钟设置成功", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.tab4_fragment_toast_alarm_setting_yes), Toast.LENGTH_LONG).show();
             }
 
 
         }else {
             AlarmManagerUtil.cancelAlarm(getActivity(), 0);
-            Toast.makeText(getActivity(), "闹钟取消成功", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getString(R.string.tab4_fragment_toast_alarm_setting_no), Toast.LENGTH_LONG).show();
         }
 
         //保存其他参数设置
@@ -341,7 +341,7 @@ public class FragmentTab4 extends LazyFragment implements View.OnClickListener {
 
         mUser.saveData(getActivity());
 
-        Toast.makeText(getActivity(), "参数设置成功", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getString(R.string.tab4_fragment_toast_setting_yes), Toast.LENGTH_LONG).show();
     }
 
     private void setAlermClock() {

@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="个人信息"
+                android:text="@string/tab1_xml_page_title1"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
 
@@ -43,8 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="30dp"
-                    android:gravity="center_vertical"
-                    android:text="小老虎"/>
+                    android:gravity="center_vertical"/>
             </LinearLayout>
 
             <LinearLayout
@@ -58,7 +57,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="等级："/>
+                    android:text="@string/tab1_xml_grade"/>
 
                 <TextView
                     android:id="@+id/tv_grade"
@@ -66,8 +65,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="初级"/>
+                    android:gravity="center_vertical"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -75,7 +73,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="头衔："/>
+                    android:text="@string/tab1_xml_title"/>
 
                 <TextView
                     android:id="@+id/tv_title"
@@ -83,8 +81,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="小白"/>
+                    android:gravity="center_vertical"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -99,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="运动历史记录"
+                android:text="@string/tab1_xml_page_title2"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
 
@@ -114,7 +111,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="步数："/>
+                    android:text="@string/tab1_xml_steps"/>
 
                 <TextView
                     android:id="@+id/tv_total_step"
@@ -136,7 +133,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="里程："/>
+                    android:text="@string/tab1_xml_distance"/>
 
                 <TextView
                     android:id="@+id/tv_total_distance"
@@ -158,7 +155,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="热量："/>
+                    android:text="@string/tab1_xml_calories"/>
 
                 <TextView
                     android:id="@+id/tv_total_calories"
@@ -180,7 +177,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="时长："/>
+                    android:text="@string/tab1_xml_duration"/>
 
                 <TextView
                     android:id="@+id/tv_total_duration"
@@ -202,7 +199,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="平均步幅："/>
+                    android:text="@string/tab1_xml_pace_length"/>
 
                 <TextView
                     android:id="@+id/tv_avg_step"
@@ -226,7 +223,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="运动指令"
+                android:text="@string/tab1_xml_page_title3"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
 
@@ -246,7 +243,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     android:background="@drawable/shape_corner"
-                    android:text="普通计步"/>
+                    android:text="@string/tab1_xml_bt_normal"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -259,7 +256,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     android:background="@drawable/shape_corner"
-                    android:text="带地图计步"/>
+                    android:text="@string/tab1_xml_bt_special"/>
 
                 <TextView
                     android:layout_width="0dp"

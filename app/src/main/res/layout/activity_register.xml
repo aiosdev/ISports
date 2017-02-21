@@ -22,7 +22,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="用户信息注册"
+            android:text="@string/register_xml_page_title"
             android:textSize="20sp"
             android:textStyle="bold"/>
 
@@ -38,7 +38,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="昵称："/>
+                android:text="@string/register_xml_nickname"/>
 
             <EditText
                 android:id="@+id/tv_name"
@@ -67,7 +67,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="性别："/>
+                android:text="@string/register_xml_sex"/>
 
             <Spinner
                 android:id="@+id/spinner_sex"
@@ -97,7 +97,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="体重："/>
+                android:text="@string/register_xml_weight"/>
 
             <EditText
                 android:id="@+id/et_weight"
@@ -106,7 +106,7 @@
                 android:layout_weight="2"
                 android:inputType="number"
                 android:gravity="center"
-                android:hint="请输入整数值"
+                android:hint="@string/register_xml_weight_hint"
                 android:maxLines="1"/>
 
 
@@ -130,7 +130,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="初始步幅："/>
+                android:text="@string/register_xml_pace_length"/>
 
             <EditText
                 android:id="@+id/et_pace_length"
@@ -162,7 +162,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="灵敏度："/>
+                android:text="@string/register_xml_sensibility"/>
 
             <SeekBar
                 android:id="@+id/sb_para"
@@ -191,7 +191,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="每日计划："/>
+                android:text="@string/register_xml_plan"/>
 
             <EditText
                 android:id="@+id/et_plan"
@@ -200,7 +200,7 @@
                 android:layout_weight="2"
                 android:inputType="number"
                 android:gravity="center"
-                android:hint="推荐6000步"
+                android:hint="@string/register_xml_plan_hint"
                 android:text="6000"
                 android:maxLines="1"/>
 
@@ -231,7 +231,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:background="@drawable/shape_corner"
-                android:text="保存信息"/>
+                android:text="@string/register_xml_bt_save"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -244,7 +244,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:background="@drawable/shape_corner"
-                android:text="重新登记"/>
+                android:text="@string/register_xml_bt_reset"/>
 
             <TextView
                 android:layout_width="0dp"

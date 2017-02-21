@@ -54,31 +54,31 @@ public class RegisterActivity extends AppCompatActivity {
         etPaceLength = (EditText) findViewById(R.id.et_pace_length);
         //etPaceLength.setProgress(60);
         tvSb1 = (TextView) findViewById(R.id.tv_sb1_value);
-        tvSb1.setText("厘米");
+        tvSb1.setText(R.string.register_activity_unit_pace_length);
 
         //灵敏度设定
         sbPara = (SeekBar) findViewById(R.id.sb_para);
         sbPara.setProgress(2 * 10);
         tvSb2 = (TextView) findViewById(R.id.tv_sb2_value);
-        tvSb2.setText(2 + "(推荐)");
+        tvSb2.setText(2 + R.string.register_activity_recommand);
 
         //体重设定
         etWeight = (EditText) findViewById(R.id.et_weight);
         //etWeight.setProgress(50);
         tvSb3 = (TextView) findViewById(R.id.tv_sb3_value);
-        tvSb3.setText("公斤");
+        tvSb3.setText(R.string.register_activity_unit_weight);
 
         //计划设定
         etPlan = (EditText) findViewById(R.id.et_plan);
         //etPlan.setProgress(5000);
         tvSb4 = (TextView) findViewById(R.id.tv_sb4_value);
-        tvSb4.setText("步");
+        tvSb4.setText(R.string.register_activity_unit_steps);
 
         sbPara.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar bar, int i, boolean b) {
                 if(20 == i) {
-                    tvSb2.setText((float)(i / 10) + "(推荐)");
+                    tvSb2.setText((float)(i / 10) + "" + R.string.register_activity_recommand);
                 }else {
                     float iTemp = (float) i;
                     tvSb2.setText(iTemp / 10 + "");
@@ -147,7 +147,7 @@ public class RegisterActivity extends AppCompatActivity {
                 editor.putFloat("avg_speed", 0);       //米/秒
                 editor.commit();
                 */
-                    Toast.makeText(getApplicationContext(), "信息设定完成，准备开始运动之旅!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.register_activity_toast_success, Toast.LENGTH_SHORT).show();
                     new Thread() {
                         @Override
                         public void run() {
@@ -209,7 +209,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //验证名字
         if(tvName.getText().toString().isEmpty()){
-            Toast.makeText(getApplicationContext(), "昵称不能为空！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.register_activity_toast_valid_nickname, Toast.LENGTH_LONG).show();
             tvName.setFocusable(true);
             tvName.setFocusableInTouchMode(true);
             tvName.requestFocus();
@@ -218,13 +218,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         //验证体重
         if(etWeight.getText().toString().isEmpty()){
-            Toast.makeText(getApplicationContext(), "体重不能为空！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.register_activity_toast_valid_weight_null, Toast.LENGTH_LONG).show();
             etWeight.setFocusable(true);
             etWeight.setFocusableInTouchMode(true);
             etWeight.requestFocus();
             res = false;
         }else if (Integer.parseInt(etWeight.getText().toString()) > 300 || Integer.parseInt(etWeight.getText().toString()) < 30) {
-            Toast.makeText(getApplicationContext(), "体重失真，请重新输入！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.register_activity_toast_valid_weight_fail, Toast.LENGTH_LONG).show();
             etWeight.setText(null);
             etWeight.setFocusable(true);
             etWeight.setFocusableInTouchMode(true);
@@ -234,13 +234,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         //验证初始步幅
         if(etPaceLength.getText().toString().isEmpty()){
-            Toast.makeText(getApplicationContext(), "步幅不能为空！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.register_activity_toast_valid_pace_lenght_null, Toast.LENGTH_LONG).show();
             etPaceLength.setFocusable(true);
             etPaceLength.setFocusableInTouchMode(true);
             etPaceLength.requestFocus();
             res = false;
         }else if (Integer.parseInt(etPaceLength.getText().toString()) > 150 || Integer.parseInt(etPaceLength.getText().toString()) < 20) {
-            Toast.makeText(getApplicationContext(), "步幅失真，请重新输入！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.register_activity_toast_valid_pace_lenght_fail, Toast.LENGTH_LONG).show();
             etPaceLength.setText(null);
             etPaceLength.setFocusable(true);
             etPaceLength.setFocusableInTouchMode(true);
@@ -250,13 +250,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         //验证计划步数
         if(etPlan.getText().toString().isEmpty()){
-            Toast.makeText(getApplicationContext(), "计划步数不能为空！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.register_activity_toast_valid_plan_null, Toast.LENGTH_LONG).show();
             etPlan.setFocusable(true);
             etPlan.setFocusableInTouchMode(true);
             etPlan.requestFocus();
             res = false;
         }else if (Integer.parseInt(etPlan.getText().toString()) > 10000 || Integer.parseInt(etPlan.getText().toString()) < 1000) {
-            Toast.makeText(getApplicationContext(), "计划步数不科学，请重新输入！", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.register_activity_toast_valid_plan_fail, Toast.LENGTH_LONG).show();
             etPlan.setText(null);
             etPlan.setFocusable(true);
             etPlan.setFocusableInTouchMode(true);
