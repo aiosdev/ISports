@@ -12,7 +12,7 @@ import java.util.Calendar;
  * Created by loonggg on 2016/3/21.
  */
 public class AlarmManagerUtil {
-    public static final String ALARM_ACTION = "com.loonggg.alarm.clock";
+    public static final String ALARM_ACTION = "com.aiosdev.isports";
 
     public static void setAlarmTime(Context context, long timeInMillis, Intent intent) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -24,8 +24,8 @@ public class AlarmManagerUtil {
         }
     }
 
-    public static void cancelAlarm(Context context, String action, int id) {
-        Intent intent = new Intent(action);
+    public static void cancelAlarm(Context context, int id) {
+        Intent intent = new Intent(ALARM_ACTION);
         PendingIntent pi = PendingIntent.getBroadcast(context, id, intent, PendingIntent
                 .FLAG_CANCEL_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

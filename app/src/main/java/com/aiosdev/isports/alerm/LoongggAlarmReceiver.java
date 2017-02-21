@@ -30,5 +30,4 @@ public class LoongggAlarmReceiver extends BroadcastReceiver {
         context.startActivity(clockIntent);
     }
 
-
 }

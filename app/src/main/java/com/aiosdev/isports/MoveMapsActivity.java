@@ -106,16 +106,16 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
         }else {
             tvDate.setText(mTask.getDate());
             tvTaskNo.setText(mTask.getTaskNo());
-            tvDuration.setText(mTask.getDuration() + "");
+            tvDuration.setText(mTask.getDuration() + "秒");
             if(!locationList.isEmpty()) {
                 tvStartTime.setText(locationList.get(0).getDateTime().substring(11, 19));
             }
             //tvStopTime.setText(locationList.get(locationList.size() - 1).getDateTime());
-            tvSteps.setText(mTask.getStep() + "");
-            tvDistances.setText(mTask.getDistance() + "");
-            tvCalories.setText(mTask.getCalories() + "");
-            tvAvgStep.setText(mTask.getAvg_step() + "");
-            tvVelocity.setText(mTask.getAvg_speed() + "");
+            tvSteps.setText(mTask.getStep() + " 步");
+            tvDistances.setText(mTask.getDistance() + " 米");
+            tvCalories.setText(mTask.getCalories() + " 卡");
+            tvAvgStep.setText(mTask.getAvg_step() + " 厘米");
+            tvVelocity.setText(mTask.getAvg_speed() + " 米/秒");
         }
     }
 

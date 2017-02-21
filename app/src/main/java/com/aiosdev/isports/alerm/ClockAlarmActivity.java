@@ -2,11 +2,13 @@ package com.aiosdev.isports.alerm;
 
 import android.app.Activity;
 import android.app.Service;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
 
+import com.aiosdev.isports.MainActivity;
 import com.aiosdev.isports.R;
 
 
@@ -53,6 +55,7 @@ public class ClockAlarmActivity extends Activity {
                     }
                     dialog.dismiss();
                     finish();
+                    startActivity(new Intent(ClockAlarmActivity.this, MainActivity.class));
                 }
             }
         });
