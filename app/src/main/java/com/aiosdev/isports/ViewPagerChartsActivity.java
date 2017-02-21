@@ -57,6 +57,7 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
     ViewPager mViewPager;
 
     private List<Task> datelist;
+    private Task mTask;
 
 
     @Override
@@ -302,29 +303,28 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
 
     }
 
-    private void queryPointByDate() {
-        datelist.clear();
-        String columns[] = new String[]{MapContract.TaskEntry.COLUMN_DATE, MapContract.TaskEntry.COLUMN_TASK_NO, MapContract.TaskEntry.COLUMN_STEP};
+    private void queryTaskByDate(String date, String taskNo) {
+
         Uri myUri = MapContract.TaskEntry.CONTENT_URI;
         //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
         Cursor cur = null;
+        String condition = "date = ? and task_no = ?";
+        String[] argus = {date, taskNo};
 
-        String orderbyTimeAsc = "_id" + " desc";
-        cur = getContentResolver().query(myUri, columns, null, null, orderbyTimeAsc);
+        cur = this.getContentResolver().query(myUri, null, condition, argus, null);
 
         if (cur.moveToFirst()) {
-
             do {
-                Task task = new Task();
-                task.setDate(cur.getString(cur.getColumnIndex(MapContract.TaskEntry.COLUMN_DATE)));
-                task.setTaskNo(cur.getString(cur.getColumnIndex(MapContract.TaskEntry.COLUMN_TASK_NO)));
-                task.setStep(cur.getInt(cur.getColumnIndex(MapContract.TaskEntry.COLUMN_STEP)));
-
-                datelist.add(0, task);
-
+                mTask = new Task();
+                mTask.setDate(cur.getString(cur.getColumnIndex("date"))); ;
+                mTask.setTaskNo(cur.getString(cur.getColumnIndex("task_no")));
+                mTask.setStep(cur.getInt(cur.getColumnIndex("step")));
+                mTask.setDistance(cur.getFloat(cur.getColumnIndex("distance")));
+                mTask.setCalories(cur.getFloat(cur.getColumnIndex("calories")));
+                mTask.setDuration(cur.getInt(cur.getColumnIndex("duration")));
+                mTask.setAvg_step(cur.getInt(cur.getColumnIndex("avg_step")));
+                mTask.setAvg_speed(cur.getFloat(cur.getColumnIndex("avg_speed")));
             } while (cur.moveToNext());
-
-
         }
     }
 
