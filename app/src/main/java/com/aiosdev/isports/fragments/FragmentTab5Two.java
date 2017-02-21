@@ -112,8 +112,7 @@ public class FragmentTab5Two extends LazyFragment {
 
 		data_list = new ArrayList<>();
 		//获取数据
-		getData();
-		//新建适配器
+		getData();		//新建适配器
 		String [] from ={"image","text"};
 		int [] to = {R.id.image,R.id.text};
 		sim_adapter = new SimpleAdapter(getActivity(), data_list, R.layout.item_fragment_tab5_one_gridview, from, to);

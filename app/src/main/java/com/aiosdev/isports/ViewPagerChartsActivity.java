@@ -1,5 +1,7 @@
 package com.aiosdev.isports;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
+import com.aiosdev.isports.data.MapContract;
+import com.aiosdev.isports.data.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +55,9 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+
+    private List<Task> datelist;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,8 +199,12 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
             return rootView;
         }
 
+
+
         private LineChartData generateLineChartData() {
-            int numValues = 20;
+            int numValues = 7;
+
+
 
             List<PointValue> values = new ArrayList<PointValue>();
             for (int i = 0; i < numValues; ++i) {
@@ -206,8 +218,8 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
             lines.add(line);
 
             LineChartData data = new LineChartData(lines);
-            data.setAxisXBottom(new Axis().setName("Axis X"));
-            data.setAxisYLeft(new Axis().setName("Axis Y").setHasLines(true));
+            data.setAxisXBottom(new Axis().setName("日期"));
+            data.setAxisYLeft(new Axis().setName("总步数").setHasLines(true));
             return data;
 
         }
@@ -288,6 +300,32 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
             return data;
         }
 
+    }
+
+    private void queryPointByDate() {
+        datelist.clear();
+        String columns[] = new String[]{MapContract.TaskEntry.COLUMN_DATE, MapContract.TaskEntry.COLUMN_TASK_NO, MapContract.TaskEntry.COLUMN_STEP};
+        Uri myUri = MapContract.TaskEntry.CONTENT_URI;
+        //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
+        Cursor cur = null;
+
+        String orderbyTimeAsc = "_id" + " desc";
+        cur = getContentResolver().query(myUri, columns, null, null, orderbyTimeAsc);
+
+        if (cur.moveToFirst()) {
+
+            do {
+                Task task = new Task();
+                task.setDate(cur.getString(cur.getColumnIndex(MapContract.TaskEntry.COLUMN_DATE)));
+                task.setTaskNo(cur.getString(cur.getColumnIndex(MapContract.TaskEntry.COLUMN_TASK_NO)));
+                task.setStep(cur.getInt(cur.getColumnIndex(MapContract.TaskEntry.COLUMN_STEP)));
+
+                datelist.add(0, task);
+
+            } while (cur.moveToNext());
+
+
+        }
     }
 
     /**

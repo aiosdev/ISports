@@ -1,16 +1,9 @@
 package com.aiosdev.isports.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +14,6 @@ import com.aiosdev.isports.R;
 import com.aiosdev.isports.data.User;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
-import com.shizhefei.view.indicator.IndicatorViewPager.IndicatorFragmentPagerAdapter;
 
 import java.math.BigDecimal;
 

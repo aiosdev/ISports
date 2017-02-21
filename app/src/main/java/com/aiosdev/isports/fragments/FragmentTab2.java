@@ -3,20 +3,18 @@ package com.aiosdev.isports.fragments;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.aiosdev.isports.R;
 import com.aiosdev.isports.ViewPagerChartsActivity;
-
+import com.aiosdev.isports.data.User;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
-import com.shizhefei.view.indicator.IndicatorViewPager.IndicatorFragmentPagerAdapter;
+
+import java.math.BigDecimal;
 
 public class FragmentTab2 extends LazyFragment {
 	private IndicatorViewPager indicatorViewPager;
@@ -25,6 +23,13 @@ public class FragmentTab2 extends LazyFragment {
 	public static final String INTENT_INT_INDEX = "intent_int_index";
 	private String tabName;
 	private int index;
+
+	private TextView tvTotalSteps;
+	private TextView tvTotalDistance;
+	private TextView tvTotalDuration;
+	private TextView tvTotalCalories;
+	private TextView tvAvgStep;
+
 
 	@Override
 	protected void onCreateViewLazy(Bundle savedInstanceState) {
@@ -36,7 +41,9 @@ public class FragmentTab2 extends LazyFragment {
 		tabName = bundle.getString(INTENT_STRING_TABNAME);
 		index = bundle.getInt(INTENT_INT_INDEX);
 
-		Button btStat = (Button) findViewById(R.id.bt_stat);
+        initView();
+
+        Button btStat = (Button) findViewById(R.id.bt_stat);
 		btStat.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -81,6 +88,35 @@ public class FragmentTab2 extends LazyFragment {
 
 		Log.d("cccc", "Fragment 将要创建View " + this);
 		*/
+		User user = User.getInstence(getActivity());
+		tvTotalSteps.setText(user.getTotalStep() + " 步");
+
+		//里程显示，将米转换为公里
+		Float distTemp = user.getTotalDistance() / 1000;
+		BigDecimal bDistTemp = new BigDecimal(distTemp);
+		distTemp = bDistTemp.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+
+		tvTotalDistance.setText(distTemp + " 公里");
+
+		tvTotalCalories.setText(user.getTotalCalories() + " 卡");
+
+		//时间显示，将秒转换为小时，分钟，秒
+		//user.setTotalDuration(1234567);
+		int hourTemp = user.getTotalDuration() / 3600;
+		int minutTemp = user.getTotalDuration() % 3600 / 60;
+		int secTemp = user.getTotalDuration() % 3600 % 60;
+		tvTotalDuration.setText(hourTemp + " 小时 " + minutTemp + " 分钟 " + secTemp  + " 秒");
+
+
+		tvAvgStep.setText(user.getAvgStep() + " 厘米");
 	}
+
+    private void initView() {
+        tvTotalSteps = (TextView) findViewById(R.id.tv_total_step);
+        tvTotalDistance = (TextView) findViewById(R.id.tv_total_distance);
+        tvTotalCalories = (TextView) findViewById(R.id.tv_total_calories);
+        tvTotalDuration = (TextView) findViewById(R.id.tv_total_duration);
+        tvAvgStep = (TextView) findViewById(R.id.tv_avg_step);
+    }
 
 }

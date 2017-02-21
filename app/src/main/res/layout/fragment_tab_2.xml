@@ -15,14 +15,132 @@
         android:layout_height="1px"
         android:background="#000000" />
 
-    <GridView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="423dp"
-        android:id="@+id/gridview"
-        android:numColumns="2"
-        android:gravity="center">
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
 
-    </GridView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="运动历史记录"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="步数："/>
+
+            <TextView
+                android:id="@+id/tv_total_step"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="3"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="里程："/>
+
+            <TextView
+                android:id="@+id/tv_total_distance"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="3"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="热量："/>
+
+            <TextView
+                android:id="@+id/tv_total_calories"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="3"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="时长："/>
+
+            <TextView
+                android:id="@+id/tv_total_duration"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="3"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="平均步幅："/>
+
+            <TextView
+                android:id="@+id/tv_avg_step"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="3"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
