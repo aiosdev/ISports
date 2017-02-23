@@ -1,9 +1,16 @@
 package com.aiosdev.isports.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +21,7 @@ import com.aiosdev.isports.R;
 import com.aiosdev.isports.data.User;
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.view.indicator.IndicatorViewPager;
+import com.shizhefei.view.indicator.IndicatorViewPager.IndicatorFragmentPagerAdapter;
 
 import java.math.BigDecimal;
 
@@ -149,26 +157,26 @@ public class FragmentTab1 extends LazyFragment {
 		}
 		tvGrade.setText(user.getGrade());
 		tvTitle.setText(user.getTitle());
-		tvTotalSteps.setText(user.getTotalStep() + " 步");
+		tvTotalSteps.setText(user.getTotalStep() + this.getString(R.string.tab1_activity_unit_steps));
 
 		//里程显示，将米转换为公里
 		Float distTemp = user.getTotalDistance() / 1000;
 		BigDecimal bDistTemp = new BigDecimal(distTemp);
 		distTemp = bDistTemp.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 
-		tvTotalDistance.setText(distTemp + " 公里");
+		tvTotalDistance.setText(distTemp + this.getString(R.string.tab1_activity_unit_distance));
 
-		tvTotalCalories.setText(user.getTotalCalories() + " 卡");
+		tvTotalCalories.setText(user.getTotalCalories() + this.getString(R.string.tab1_activity_unit_calories));
 
 		//时间显示，将秒转换为小时，分钟，秒
 		//user.setTotalDuration(1234567);
 		int hourTemp = user.getTotalDuration() / 3600;
 		int minutTemp = user.getTotalDuration() % 3600 / 60;
 		int secTemp = user.getTotalDuration() % 3600 % 60;
-		tvTotalDuration.setText(hourTemp + " 小时 " + minutTemp + " 分钟 " + secTemp  + " 秒");
+		tvTotalDuration.setText(hourTemp + this.getString(R.string.tab1_activity_unit_hour) + minutTemp + this.getString(R.string.tab1_activity_unit_minute) + secTemp  + this.getString(R.string.tab1_activity_unit_second));
 
 
-		tvAvgStep.setText(user.getAvgStep() + " 厘米");
+		tvAvgStep.setText(user.getAvgStep() + this.getString(R.string.tab1_activity_unit_pace_length));
 	}
 
 

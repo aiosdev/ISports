@@ -44,7 +44,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     private class MyAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
-        private String[] tabNames = {"计步", "统计", "地图", "设置", "查询"};
+        private String[] tabNames = {getString(R.string.main_activity_tab_name1), getString(R.string.main_activity_tab_name2), getString(R.string.main_activity_tab_name3), getString(R.string.main_activity_tab_name4), getString(R.string.main_activity_tab_name5)};
         private int[] tabIcons = {R.drawable.maintab_1_selector, R.drawable.maintab_2_selector, R.drawable.maintab_3_selector,
                 R.drawable.maintab_4_selector, R.drawable.maintab_5_selector};
         private LayoutInflater inflater;

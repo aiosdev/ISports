@@ -43,6 +43,7 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
     private PolylineOptions mPolylineOptions;
 
     private String date;
+    private String taskNo;
 
     private Task mTask;
 
@@ -65,9 +66,11 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
         Intent intent = getIntent();
         if("MoveActivity".equals(intent.getStringExtra("flag"))){
             mTask = (Task) intent.getSerializableExtra("task");
+            date = mTask.getDate();
+            taskNo = mTask.getTaskNo();
         }else if("FragmentTab5".equals(intent.getStringExtra("flag"))){
-            String date = intent.getStringExtra("date");
-            String taskNo = intent.getStringExtra("taskNo");
+            date = intent.getStringExtra("date");
+            taskNo = intent.getStringExtra("taskNo");
             queryTaskByDate(date, taskNo);
         }
 
@@ -231,11 +234,11 @@ public class MoveMapsActivity extends FragmentActivity implements  OnMapReadyCal
 
         String orderbyTimeAsc = MapContract.LoactionEntry.COLUMN_DATE_TIME + " asc";
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-        date = df.format(new Date()).substring(0, 10);
+        //SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        //date = df.format(new Date()).substring(0, 10);
         //String[] args = {date, mTask.getTaskNo()};
 
-        cur = this.getContentResolver().query(myUri, columns, "substr(" + MapContract.LoactionEntry.COLUMN_DATE_TIME + ", 1, 10) = ? and " + MapContract.LoactionEntry.COLUMN_TASK_NO + " = ?", new String[]{date, mTask.getTaskNo()}, orderbyTimeAsc);
+        cur = this.getContentResolver().query(myUri, columns, "substr(" + MapContract.LoactionEntry.COLUMN_DATE_TIME + ", 1, 10) = ? and " + MapContract.LoactionEntry.COLUMN_TASK_NO + " = ?", new String[]{date, taskNo}, orderbyTimeAsc);
 
         if (cur.moveToFirst()) {
             //String taskNo = null;

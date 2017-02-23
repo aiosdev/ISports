@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="任意位置到目的地导航："
+            android:text="@string/tab3_fragment2_xml_tv_title"
             android:textSize="17sp"
             android:textStyle="bold"/>
 
@@ -26,7 +26,7 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:gravity="center"
-            android:hint="起始地址,邮编或坐标"
+            android:hint="@string/tab3_fragment2_xml_et_begin_address"
             android:maxLines="1"/>
 
         <AutoCompleteTextView
@@ -35,7 +35,7 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:gravity="center"
-            android:hint="目的地址,邮编或坐标"
+            android:hint="@string/tab3_fragment2_xml_et_end_address"
             android:maxLines="1"/>
 
         <Button
@@ -44,7 +44,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@drawable/shape_corner"
-            android:text="确定"/>
+            android:text="@string/tab3_fragment2_xml_bt_commit"/>
     </LinearLayout>
 
 </LinearLayout>

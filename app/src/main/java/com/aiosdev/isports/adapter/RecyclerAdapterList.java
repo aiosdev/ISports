@@ -50,6 +50,8 @@ public class RecyclerAdapterList extends RecyclerView.Adapter<RecyclerAdapterLis
         holder.tvDate.setText(date);
         holder.tvTaskNo.setText("编号 " + taskNo);
         holder.tvSteps.setText(list.get(position).getStep() + " 步");
+        int locations = getLocations(date, taskNo);
+        holder.tvLocations.setText(String.valueOf(locations));
         holder.btDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +74,17 @@ public class RecyclerAdapterList extends RecyclerView.Adapter<RecyclerAdapterLis
                     listener.onItemClick(position, date, v);
             }
         });
+    }
+
+    private int getLocations(String date, String taskNo) {
+        int res = 0;
+        Uri urlTask = MapContract.LoactionEntry.CONTENT_URI;
+        String columns[] = new String[]{"count(*)"};
+        String whereTask = "substr(" + MapContract.LoactionEntry.COLUMN_DATE_TIME + ", 1, 10) = ? and task_no = ?";
+        String[] argusTask = {date, taskNo};
+        res = context.getContentResolver().query(urlTask, columns,whereTask, argusTask,null).getColumnCount();
+
+        return res;
     }
 
     private void delItemData(String date, String taskNo) {
@@ -101,6 +114,7 @@ public class RecyclerAdapterList extends RecyclerView.Adapter<RecyclerAdapterLis
         private TextView tvDate;      //日期
         private TextView tvTaskNo;    //任务编号
         private TextView tvSteps;    //步数
+        private TextView tvLocations;  //坐标点数量
         private Button btDel;
 
 
@@ -110,6 +124,7 @@ public class RecyclerAdapterList extends RecyclerView.Adapter<RecyclerAdapterLis
             tvTaskNo = (TextView) view.findViewById(R.id.item_task_no);
             tvSteps = (TextView) view.findViewById(R.id.item_steps);
             btDel = (Button) view.findViewById(R.id.item_del);
+            tvLocations = (TextView) view.findViewById(R.id.item_locations);
 
         }
     }

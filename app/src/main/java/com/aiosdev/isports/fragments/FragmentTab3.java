@@ -120,12 +120,12 @@ public class FragmentTab3 extends LazyFragment {
 					case 0:
 						convertView = inflate.inflate(R.layout.tab_top, container, false);
 						TextView textView = (TextView) convertView;
-						textView.setText("实时跟踪");
+						textView.setText(getString(R.string.tab3_fragment_tab1_name));
 						break;
 					case 1:
 						convertView = inflate.inflate(R.layout.tab_top, container, false);
 						TextView textView1 = (TextView) convertView;
-						textView1.setText("目的地导航");
+						textView1.setText(getString(R.string.tab3_fragment_tab2_name));
 						break;
 				}
 

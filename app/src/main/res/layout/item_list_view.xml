@@ -35,6 +35,13 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:id="@+id/item_steps"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/item_locations"/>
+
                 <Button
                     android:layout_width="0dp"
                     android:layout_weight="2"
