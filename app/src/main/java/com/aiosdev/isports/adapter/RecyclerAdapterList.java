@@ -1,6 +1,5 @@
 package com.aiosdev.isports.adapter;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -119,12 +118,12 @@ public class RecyclerAdapterList extends RecyclerView.Adapter<RecyclerAdapterLis
 
 
         public MyViewHolder(View view) {
-            super(view);
-            tvDate = (TextView) view.findViewById(R.id.item_view);
-            tvTaskNo = (TextView) view.findViewById(R.id.item_task_no);
-            tvSteps = (TextView) view.findViewById(R.id.item_steps);
-            btDel = (Button) view.findViewById(R.id.item_del);
-            tvLocations = (TextView) view.findViewById(R.id.item_locations);
+                super(view);
+                tvDate = (TextView) view.findViewById(R.id.item_view);
+                tvTaskNo = (TextView) view.findViewById(R.id.item_task_no);
+                tvSteps = (TextView) view.findViewById(R.id.item_steps);
+                btDel = (Button) view.findViewById(R.id.item_del);
+                tvLocations = (TextView) view.findViewById(R.id.item_locations);
 
         }
     }

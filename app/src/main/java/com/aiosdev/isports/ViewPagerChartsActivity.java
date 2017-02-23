@@ -59,7 +59,7 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
      */
     ViewPager mViewPager;
 
-    private List<Task> taskList;
+
     private Task mTask;
 
 
@@ -68,6 +68,8 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
         super.onCreate(savedInstanceState);
         LitePal.initialize(this);
         setContentView(R.layout.activity_view_pager_charts);
+
+
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -125,6 +127,8 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+        private List<Task> taskList;
+
         public PlaceholderFragment() {
         }
 
@@ -143,6 +147,9 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_view_pager_charts, container, false);
             RelativeLayout layout = (RelativeLayout) rootView;
+
+            taskList = new ArrayList<>();
+            queryTask();
             int sectionNum = getArguments().getInt(ARG_SECTION_NUMBER);
             switch (sectionNum) {
                 case 1:
@@ -208,13 +215,11 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
 
         private LineChartData generateLineChartData() {
             int numValues = 10;
-            List<Task> task;
-            queryTask();
 
 
             List<PointValue> values = new ArrayList<PointValue>();
             for (int i = 0; i < numValues; ++i) {
-                values.add(new PointValue(i, task.get(i)));
+                values.add(new PointValue(i, taskList.get(i).getStep()));
             }
 
             Line line = new Line(values);
@@ -306,12 +311,14 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
             return data;
         }
 
-        public List<Task> queryTask() {
+        private List<Task> queryTask() {
 
-            List<Task> taskList = DataSupport.select("step").limit(10).find(Task.class);
+            taskList = DataSupport.select("step").limit(10).find(Task.class);
             return taskList;
         }
+
     }
+
 
 
 
@@ -337,7 +344,7 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
 //                mTask.setAvg_step(cur.getInt(cur.getColumnIndex("avg_step")));
 //                mTask.setAvg_speed(cur.getFloat(cur.getColumnIndex("avg_speed")));
 
-                taskList.add(0, mTask);
+                //taskList.add(0, mTask);
 
             } while (cur.moveToNext());
         }
