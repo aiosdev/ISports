@@ -18,6 +18,9 @@ import android.widget.RelativeLayout;
 import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.Task;
 
+import org.litepal.LitePal;
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,13 +59,14 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
      */
     ViewPager mViewPager;
 
-    private List<Task> datelist;
+    private List<Task> taskList;
     private Task mTask;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LitePal.initialize(this);
         setContentView(R.layout.activity_view_pager_charts);
 
         // Set up the action bar.
@@ -203,13 +207,14 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
 
 
         private LineChartData generateLineChartData() {
-            int numValues = 7;
-
+            int numValues = 10;
+            List<Task> task;
+            queryTask();
 
 
             List<PointValue> values = new ArrayList<PointValue>();
             for (int i = 0; i < numValues; ++i) {
-                values.add(new PointValue(i, (float) Math.random() * 100f));
+                values.add(new PointValue(i, task.get(i)));
             }
 
             Line line = new Line(values);
@@ -301,7 +306,14 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
             return data;
         }
 
+        public List<Task> queryTask() {
+
+            List<Task> taskList = DataSupport.select("step").limit(10).find(Task.class);
+            return taskList;
+        }
     }
+
+
 
     private void queryTaskByDate(String date, String taskNo) {
 
@@ -322,10 +334,14 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
                 mTask.setDistance(cur.getFloat(cur.getColumnIndex("distance")));
                 mTask.setCalories(cur.getFloat(cur.getColumnIndex("calories")));
                 mTask.setDuration(cur.getInt(cur.getColumnIndex("duration")));
-                mTask.setAvg_step(cur.getInt(cur.getColumnIndex("avg_step")));
-                mTask.setAvg_speed(cur.getFloat(cur.getColumnIndex("avg_speed")));
+//                mTask.setAvg_step(cur.getInt(cur.getColumnIndex("avg_step")));
+//                mTask.setAvg_speed(cur.getFloat(cur.getColumnIndex("avg_speed")));
+
+                taskList.add(0, mTask);
+
             } while (cur.moveToNext());
         }
+        cur.close();
     }
 
     /**
