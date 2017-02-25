@@ -19,7 +19,6 @@ import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.Task;
 
 import org.litepal.LitePal;
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,6 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.BubbleChartView;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
-import lecho.lib.hellocharts.view.PieChartView;
 import lecho.lib.hellocharts.view.PreviewLineChartView;
 
 public class ViewPagerChartsActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -60,7 +58,7 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
     ViewPager mViewPager;
 
 
-    private Task mTask;
+
 
 
     @Override
@@ -128,6 +126,7 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         private List<Task> taskList;
+        private Task mTask;
 
         public PlaceholderFragment() {
         }
@@ -149,7 +148,8 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
             RelativeLayout layout = (RelativeLayout) rootView;
 
             taskList = new ArrayList<>();
-            queryTask();
+//            queryTask();
+            queryTaskByDate();
             int sectionNum = getArguments().getInt(ARG_SECTION_NUMBER);
             switch (sectionNum) {
                 case 1:
@@ -197,15 +197,15 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
 
                     layout.addView(previewLineChartView);
                     break;
-                case 5:
-                    PieChartView pieChartView = new PieChartView(getActivity());
-                    pieChartView.setPieChartData(generatePieChartData());
-
-                    /** Note: Chart is within ViewPager so enable container scroll mode. **/
-                    pieChartView.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
-
-                    layout.addView(pieChartView);
-                    break;
+//                case 5:
+//                    PieChartView pieChartView = new PieChartView(getActivity());
+//                    pieChartView.setPieChartData(generatePieChartData());
+//
+//                    /** Note: Chart is within ViewPager so enable container scroll mode. **/
+//                    pieChartView.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
+//
+//                    layout.addView(pieChartView);
+//                    break;
             }
 
             return rootView;
@@ -299,7 +299,7 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
 
         }
 
-        private PieChartData generatePieChartData() {
+        private PieChartData generatePieChartDalistta() {
             int numValues = 6;
 
             List<SliceValue> values = new ArrayList<SliceValue>();
@@ -311,45 +311,44 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
             return data;
         }
 
-        private List<Task> queryTask() {
+//        private List<Task> queryTask() {
+//
+//            taskList = DataSupport.select("step").limit(10).find(Task.class);
+//            return taskList;
+//        }
 
-            taskList = DataSupport.select("step").limit(10).find(Task.class);
-            return taskList;
-        }
+        private void queryTaskByDate() {
 
-    }
+            Uri myUri = MapContract.TaskEntry.CONTENT_URI;
+            //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
+            Cursor cur = null;
+            String condition = "date = ?";
+//            String[] argus = {date};
 
+            cur = getActivity().getContentResolver().query(myUri, null, condition, null, null);
+//            cur = getActivity().getContentResolver().query(myUri, null, condition, argus, null);
 
-
-
-    private void queryTaskByDate(String date, String taskNo) {
-
-        Uri myUri = MapContract.TaskEntry.CONTENT_URI;
-        //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
-        Cursor cur = null;
-        String condition = "date = ? and task_no = ?";
-        String[] argus = {date, taskNo};
-
-        cur = this.getContentResolver().query(myUri, null, condition, argus, null);
-
-        if (cur.moveToFirst()) {
-            do {
-                mTask = new Task();
-                mTask.setDate(cur.getString(cur.getColumnIndex("date"))); ;
-                mTask.setTaskNo(cur.getString(cur.getColumnIndex("task_no")));
-                mTask.setStep(cur.getInt(cur.getColumnIndex("step")));
-                mTask.setDistance(cur.getFloat(cur.getColumnIndex("distance")));
-                mTask.setCalories(cur.getFloat(cur.getColumnIndex("calories")));
-                mTask.setDuration(cur.getInt(cur.getColumnIndex("duration")));
+            if (cur.moveToFirst()) {
+                do {
+                    mTask = new Task();
+                    mTask.setDate(cur.getString(cur.getColumnIndex("date")));
+//                    mTask.setTaskNo(cur.getString(cur.getColumnIndex("task_no")));
+                    mTask.setStep(cur.getInt(cur.getColumnIndex("step")));
+                    mTask.setDistance(cur.getFloat(cur.getColumnIndex("distance")));
+                    mTask.setCalories(cur.getFloat(cur.getColumnIndex("calories")));
+                    mTask.setDuration(cur.getInt(cur.getColumnIndex("duration")));
 //                mTask.setAvg_step(cur.getInt(cur.getColumnIndex("avg_step")));
 //                mTask.setAvg_speed(cur.getFloat(cur.getColumnIndex("avg_speed")));
 
-                //taskList.add(0, mTask);
+                    taskList.add(0, mTask);
 
-            } while (cur.moveToNext());
+                } while (cur.moveToNext());
+            }
+            cur.close();
         }
-        cur.close();
+
     }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the sections/tabs/pages.

@@ -4,22 +4,15 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aiosdev.isports.MoveMapsActivity;
@@ -29,14 +22,7 @@ import com.aiosdev.isports.data.MapContract;
 import com.aiosdev.isports.data.MapDbHelper;
 import com.aiosdev.isports.data.Task;
 import com.shizhefei.fragment.LazyFragment;
-import com.shizhefei.view.indicator.Indicator;
 import com.shizhefei.view.indicator.IndicatorViewPager;
-import com.shizhefei.view.indicator.IndicatorViewPager.IndicatorFragmentPagerAdapter;
-import com.shizhefei.view.indicator.slidebar.ColorBar;
-import com.shizhefei.view.indicator.slidebar.LayoutBar;
-import com.shizhefei.view.indicator.slidebar.ScrollBar;
-import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
-
 
 import java.util.ArrayList;
 import java.util.List;
