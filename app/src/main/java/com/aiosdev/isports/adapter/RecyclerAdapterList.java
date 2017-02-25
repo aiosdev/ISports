@@ -47,8 +47,8 @@ public class RecyclerAdapterList extends RecyclerView.Adapter<RecyclerAdapterLis
         final String date = list.get(position).getDate();
         final String taskNo = list.get(position).getTaskNo();
         holder.tvDate.setText(date);
-        holder.tvTaskNo.setText("编号 " + taskNo);
-        holder.tvSteps.setText(list.get(position).getStep() + " 步");
+        holder.tvTaskNo.setText(context.getString(R.string.tab5_fragment_one_adapter_tv_taskno) + taskNo);
+        holder.tvSteps.setText(list.get(position).getStep() + context.getString(R.string.tab1_activity_unit_steps));
         int locations = getLocations(date, taskNo);
         holder.tvLocations.setText(String.valueOf(locations));
         holder.btDel.setOnClickListener(new View.OnClickListener() {

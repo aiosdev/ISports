@@ -125,6 +125,8 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+        private List<Task> dataFinalList;
+
         private List<Task> taskList;
         private Task mTask;
 
@@ -146,6 +148,8 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_view_pager_charts, container, false);
             RelativeLayout layout = (RelativeLayout) rootView;
+
+            dataFinalList = new ArrayList<>();
 
             taskList = new ArrayList<>();
 //            queryTask();
@@ -342,9 +346,20 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
 
                     taskList.add(0, mTask);
 
+
                 } while (cur.moveToNext());
             }
             cur.close();
+        }
+
+        private void getFinalDatas(List<Task> dataList){
+            for(Task data: dataList){
+                for(Task newData: dataFinalList){
+                    if(newData.getDate().equals(data.getDate())){
+                        newData.setStep(newData.getStep() + data.getStep());
+                    }
+                }
+            }
         }
 
     }
@@ -388,5 +403,7 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
             return null;
         }
     }
+
+
 
 }

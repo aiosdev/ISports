@@ -103,8 +103,12 @@
 
 
     <!-- Tab5相关 -->
+    <string name="tab5_fragment_tab1_name">数据查询</string>
+    <string name="tab5_fragment_tab2_name">成就查询</string>
 
-
+    <string name="tab5_fragment_one_bt_action">历史数据查询(需要联网)</string>
+    <string name="tab5_fragment_one_listview_bt_del">删除</string>
+    <string name="tab5_fragment_one_adapter_tv_taskno">编号</string>
 
 
     <!-- Tab1相关 -->

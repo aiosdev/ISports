@@ -14,7 +14,7 @@
         android:id="@+id/bt_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="历史数据查询(需要联网)"/>
+        android:text="@string/tab5_fragment_one_bt_action"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
