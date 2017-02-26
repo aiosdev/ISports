@@ -38,7 +38,7 @@
 
 
     <!-- Tab1相关 -->
-    <string name="tab1_xml_page_title1">user's detail</string>
+    <string name="tab1_xml_page_title1">user detail</string>
     <string name="tab1_xml_grade">level:</string>
     <string name="tab1_xml_title">title:</string>
 
