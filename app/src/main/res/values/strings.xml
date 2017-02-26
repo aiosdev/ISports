@@ -3,63 +3,63 @@
     <string name="app_name">iSport</string>
 
     <!-- MainActivity -->
-    <string name="main_activity_tab_name1">计步</string>
-    <string name="main_activity_tab_name2">统计</string>
-    <string name="main_activity_tab_name3">地图</string>
-    <string name="main_activity_tab_name4">设置</string>
-    <string name="main_activity_tab_name5">查询</string>
+    <string name="main_activity_tab_name1">step</string>
+    <string name="main_activity_tab_name2">statistics</string>
+    <string name="main_activity_tab_name3">map</string>
+    <string name="main_activity_tab_name4">location</string>
+    <string name="main_activity_tab_name5">search</string>
 
     <!-- register -->
-    <string name="register_xml_page_title">用户信息注册</string>
-    <string name="register_xml_nickname">昵称：</string>
-    <string name="register_xml_sex">性别：</string>
-    <string name="register_xml_weight">体重：</string>
-    <string name="register_xml_weight_hint">请输入整数值</string>
-    <string name="register_xml_pace_length">初始步幅：</string>
-    <string name="register_xml_sensibility">灵敏度：</string>
-    <string name="register_xml_plan">每日计划：</string>
-    <string name="register_xml_plan_hint">推荐6000步</string>
-    <string name="register_xml_bt_save">保存信息</string>
-    <string name="register_xml_bt_reset">重新登记</string>
+    <string name="register_xml_page_title">User register</string>
+    <string name="register_xml_nickname">ID:</string>
+    <string name="register_xml_sex">gender:</string>
+    <string name="register_xml_weight">weight:</string>
+    <string name="register_xml_weight_hint">enter an integer</string>
+    <string name="register_xml_pace_length">starting pace:</string>
+    <string name="register_xml_sensibility">Sensitivity:</string>
+    <string name="register_xml_plan">daily plan</string>
+    <string name="register_xml_plan_hint">recommend 6000 steps</string>
+    <string name="register_xml_bt_save">save information</string>
+    <string name="register_xml_bt_reset">re-register</string>
 
-    <string name="register_activity_unit_pace_length">厘米</string>
-    <string name="register_activity_unit_weight">公斤</string>
-    <string name="register_activity_unit_steps">步</string>
-    <string name="register_activity_recommand">（推荐）</string>
+    <string name="register_activity_unit_pace_length">cm</string>
+    <string name="register_activity_unit_weight">kg</string>
+    <string name="register_activity_unit_steps">step</string>
+    <string name="register_activity_recommand">(recommend)</string>
 
-    <string name="register_activity_toast_success">信息设定完成，准备开始运动之旅!</string>
-    <string name="register_activity_toast_valid_nickname">昵称不能为空！</string>
-    <string name="register_activity_toast_valid_weight_null">体重不能为空！</string>
-    <string name="register_activity_toast_valid_weight_fail">体重失真，请重新输入！</string>
-    <string name="register_activity_toast_valid_pace_lenght_null">步幅不能为空！</string>
-    <string name="register_activity_toast_valid_pace_lenght_fail">步幅失真，请重新输入！</string>
-    <string name="register_activity_toast_valid_plan_null">计划步数不能为空！</string>
-    <string name="register_activity_toast_valid_plan_fail">计划步数不科学，请重新输入！</string>
+    <string name="register_activity_toast_success">The information is set up and start to move!</string>
+    <string name="register_activity_toast_valid_nickname">ID is required!</string>
+    <string name="register_activity_toast_valid_weight_null">weight is required!</string>
+    <string name="register_activity_toast_valid_weight_fail">weight is invalid, please try again!</string>
+    <string name="register_activity_toast_valid_pace_lenght_null">step is required!</string>
+    <string name="register_activity_toast_valid_pace_lenght_fail">step is invalid, please try again!</string>
+    <string name="register_activity_toast_valid_plan_null">planning step is required!</string>
+    <string name="register_activity_toast_valid_plan_fail">planning step is invalid, please try again!</string>
 
 
     <!-- Tab1相关 -->
-    <string name="tab1_xml_page_title1">个人信息</string>
-    <string name="tab1_xml_grade">等级：</string>
-    <string name="tab1_xml_title">头衔：</string>
+    <string name="tab1_xml_page_title1">user's detail</string>
+    <string name="tab1_xml_grade">level:</string>
+    <string name="tab1_xml_title">title:</string>
 
-    <string name="tab1_xml_page_title2">运动历史记录</string>
-    <string name="tab1_xml_steps">步数：</string>
-    <string name="tab1_xml_distance">里程：</string>
-    <string name="tab1_xml_calories">热量：</string>
-    <string name="tab1_xml_duration">时长：</string>
-    <string name="tab1_xml_pace_length">平均步幅：</string>
+    <string name="tab1_xml_page_title2">movement record</string>
+    <string name="tab1_xml_steps">steps:</string>
+    <string name="tab1_xml_distance">distance:</string>
+    <string name="tab1_xml_calories">calories:</string>
+    <string name="tab1_xml_duration">duration:</string>
+    <string name="tab1_xml_pace_length">avg pace:</string>
 
-    <string name="tab1_xml_page_title3">运动指令</string>
-    <string name="tab1_xml_bt_normal">普通计步</string>
-    <string name="tab1_xml_bt_special">带地图计步</string>
+    <string name="tab1_xml_page_title3">movement</string>
+    <string name="tab1_xml_bt_normal">normal step</string>
+    <string name="tab1_xml_bt_special">step with map</string>
 
-    <string name="tab1_activity_unit_distance"> 公里</string>
-    <string name="tab1_activity_unit_steps"> 步</string>
-    <string name="tab1_activity_unit_calories"> 卡</string>
-    <string name="tab1_activity_unit_hour"> 小时 </string>
-    <string name="tab1_activity_unit_minute"> 分钟 </string>
-    <string name="tab1_activity_unit_second"> 秒</string>
-    <string name="tab1_activity_unit_pace_length"> 厘米</string>
+    <string name="tab1_activity_unit_distance">km</string>
+    <string name="tab1_activity_unit_steps">step</string>
+    <string name="tab1_activity_unit_calories"> calories</string>
+    <string name="tab1_activity_unit_hour"> hour </string>
+    <string name="tab1_activity_unit_minute"> minute </string>
+    <string name="tab1_activity_unit_second"> second</string>
+    <string name="tab1_activity_unit_pace_length"> cm</string>
 
     <!-- Tab2相关 -->
 
