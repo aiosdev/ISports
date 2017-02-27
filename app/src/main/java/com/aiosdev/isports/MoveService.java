@@ -35,10 +35,15 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static com.google.maps.android.SphericalUtil.computeDistanceBetween;
 
 public class MoveService extends Service implements SensorEventListener, com.google.android.gms.location.LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -84,6 +89,9 @@ public class MoveService extends Service implements SensorEventListener, com.goo
     private int taskNo;
 
     private User mUser;
+
+    private Location myLocationStart;
+    private Location locationBefore;
 
 
     @Override
@@ -242,11 +250,13 @@ public class MoveService extends Service implements SensorEventListener, com.goo
             return;
         }
 
-        Location myLocation =
+        myLocationStart =
                 LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (myLocation != null) {
-            Log.d("myLocation:", myLocation + "");
-            updateToNewLocation(myLocation);
+        if (myLocationStart != null) {
+            Log.d("myLocation:", myLocationStart + "");
+            updateToNewLocation(myLocationStart);
+
+            locationBefore = myLocationStart;
         }
 
         //开始定位前构造LocationRequest类设置定位时的属性.比如隔多久定位一次，设置定位精度等等
@@ -269,13 +279,35 @@ public class MoveService extends Service implements SensorEventListener, com.goo
 
     @Override
     public void onLocationChanged(Location location) {
+
         Log.d("service位置变化：", "lat= " + location.getLatitude() + "; lon= " + location.getLongitude());
         if (location != null) {
 
             //计算距离
-            //double dis3 = computeDistanceBetween(begin, end);
+            if(locationBefore != null) {
 
+                LatLng end = new LatLng(location.getLatitude(), location.getLongitude());
+                LatLng begin = new LatLng(locationBefore.getLatitude(), locationBefore.getLongitude());
+                Log.d("dis 计算begin点**********", "lat:" +locationBefore.getLatitude() + "," + locationBefore.getLongitude());
+                Log.d("dis 计算end点**********", "lat:" +location.getLatitude() + "," + location.getLongitude());
 
+                double dis3 = computeDistanceBetween(begin, end);
+                BigDecimal bDistance = new BigDecimal(dis3);
+                float dis = bDistance.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+
+                Message stepMessage = handler.obtainMessage();
+                stepMessage.what = 0x16;
+                Bundle bundle = new Bundle();
+                bundle.putFloat("distance", dis);
+                stepMessage.setData(bundle);
+                try {
+                    mActivityMessenger.send(stepMessage);
+
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
+            }
             //保存数据库
             ContentValues contentValues = new ContentValues();
             contentValues.put(MapContract.LoactionEntry.COLUMN_TASK_NO, taskNo);
@@ -289,6 +321,9 @@ public class MoveService extends Service implements SensorEventListener, com.goo
             Uri url = MapContract.LoactionEntry.CONTENT_URI;
             getContentResolver().insert(url, contentValues);
             Log.d("物理位置存档：", "成功记录一条信息：lat= " + location.getLatitude() + "; lon= " + location.getLongitude());
+
+            //传递location
+            locationBefore = location;
 
         } else {
             System.out.println("---测试mylocation---location为null");

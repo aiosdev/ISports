@@ -145,6 +145,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                     //刷新距离统计,保留小数点后两位
+                    /*
                     int avgStep = user.getAvgStep();
                     if(avgStep == 0){
                         avgStep = 60;
@@ -153,6 +154,7 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
                     BigDecimal bDistance = new BigDecimal(distance);
                     distance = bDistance.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     MoveActivity.this.paceDistance.setText(distance + "米");
+                   */
 
                     //刷新热量统计,保留小数点后两位
                     calories = Float.parseFloat(String.valueOf(user.getWeight() * distance * 0.8214 / 1000));
@@ -176,6 +178,14 @@ public class MoveActivity extends AppCompatActivity implements View.OnClickListe
 
                     int temp = ((int) Double.parseDouble(weatherInfoRes.getMain().getTemp())) - 273;
                     weatherTemp.setText(temp + "°C");
+                    break;
+                case 0x16:
+                    Bundle bundle = msg.getData();
+                    float dis = bundle.getFloat("distance");
+
+                    distance += dis;
+                    Log.d("distance**********", dis + "");
+                    MoveActivity.this.paceDistance.setText(distance + "米");
                     break;
             }
 
