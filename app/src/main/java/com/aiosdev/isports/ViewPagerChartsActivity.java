@@ -223,7 +223,7 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
 
             List<PointValue> values = new ArrayList<PointValue>();
             for (int i = 0; i < numValues; ++i) {
-                values.add(new PointValue(i, taskList.get(i).getStep()));
+                values.add(new PointValue(i, dataFinalList.get(i).getStep()));
             }
 
             Line line = new Line(values);
@@ -361,7 +361,7 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
                         newData.setDistance(newData.getDistance() + data.getDistance());
                         newData.setDuration(newData.getDuration() + data.getDuration());
 
-                        
+                        dataFinalList.add(newData);
                     }
                 }
             }
