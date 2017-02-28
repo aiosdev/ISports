@@ -68,47 +68,47 @@
 
 
     <!-- Tab3相关 -->
-    <string name="tab3_fragment_tab1_name">实时跟踪</string>
-    <string name="tab3_fragment_tab2_name">目的地导航</string>
+    <string name="tab3_fragment_tab1_name">real-time tracking</string>
+    <string name="tab3_fragment_tab2_name">destination navigation</string>
 
-    <string name="tab3_fragment1_xml_bt_start_navigation">开始跟踪定位</string>
-    <string name="tab3_fragment1_xml_bt_stop_navigation">停止跟踪定位</string>
+    <string name="tab3_fragment1_xml_bt_start_navigation">start tracking</string>
+    <string name="tab3_fragment1_xml_bt_stop_navigation">stop tracking</string>
 
     <string name="tab3_fragment2_xml_tv_title">任意位置到目的地导航：</string>
-    <string name="tab3_fragment2_xml_et_begin_address">起始地址,邮编或坐标</string>
-    <string name="tab3_fragment2_xml_et_end_address">目的地址,邮编或坐标</string>
-    <string name="tab3_fragment2_xml_bt_commit">确定</string>
+    <string name="tab3_fragment2_xml_et_begin_address">start address, postcode or geo coordinates</string>
+    <string name="tab3_fragment2_xml_et_end_address">destination address, postcode or geo coordinates</string>
+    <string name="tab3_fragment2_xml_bt_commit">OK</string>
 
     <!-- Tab4相关 -->
-    <string name="tab4_xml_title">用户参数设置</string>
-    <string name="tab4_xml_title_hint">请输入用户名</string>
-    <string name="tab4_xml_alarm">闹钟提醒：</string>
-    <string name="tab4_xml_alarm_type">提醒方式：</string>
-    <string name="tab4_xml_bt_save">保存设置</string>
-    <string name="tab4_xml_bt_reset">重新设置</string>
-    <string name="tab4_xml_bt_clear_all">从头再来</string>
+    <string name="tab4_xml_title">user profile</string>
+    <string name="tab4_xml_title_hint">enter your ID</string>
+    <string name="tab4_xml_alarm">alarm: </string>
+    <string name="tab4_xml_alarm_type">remind type</string>
+    <string name="tab4_xml_bt_save">save</string>
+    <string name="tab4_xml_bt_reset">reset</string>
+    <string name="tab4_xml_bt_clear_all">clear all</string>
 
-    <string name="tab4_fragment_toast_open_alarm">打开</string>
-    <string name="tab4_fragment_toast_close_alarm">关闭</string>
+    <string name="tab4_fragment_toast_open_alarm">open</string>
+    <string name="tab4_fragment_toast_close_alarm">close</string>
 
-    <string name="tab4_fragment_dialog_title">警告</string>
-    <string name="tab4_fragment_dialog_msg">是否放弃当前等级与头衔，并删除全部历史数据？</string>
-    <string name="tab4_fragment_dialog_bt1">确认</string>
-    <string name="tab4_fragment_dialog_bt2">取消</string>
-    <string name="tab4_fragment_toast_clear_all">数据清除干净！</string>
+    <string name="tab4_fragment_dialog_title">warning</string>
+    <string name="tab4_fragment_dialog_msg">give up level and title, and delete history record?</string>
+    <string name="tab4_fragment_dialog_bt1">OK</string>
+    <string name="tab4_fragment_dialog_bt2">cancel</string>
+    <string name="tab4_fragment_toast_clear_all">data clear!</string>
     <string name="tab4_fragment_toast_alarm_msg">今天该运动了！</string>
-    <string name="tab4_fragment_toast_alarm_setting_yes">闹钟设置成功</string>
-    <string name="tab4_fragment_toast_alarm_setting_no">闹钟取消成功</string>
-    <string name="tab4_fragment_toast_setting_yes">参数设置成功</string>
+    <string name="tab4_fragment_toast_alarm_setting_yes">alarm set</string>
+    <string name="tab4_fragment_toast_alarm_setting_no">alarm discard</string>
+    <string name="tab4_fragment_toast_setting_yes">setting is done</string>
 
 
     <!-- Tab5相关 -->
-    <string name="tab5_fragment_tab1_name">数据查询</string>
-    <string name="tab5_fragment_tab2_name">成就查询</string>
+    <string name="tab5_fragment_tab1_name">record query</string>
+    <string name="tab5_fragment_tab2_name">achievement query</string>
 
-    <string name="tab5_fragment_one_bt_action">历史数据查询(需要联网)</string>
-    <string name="tab5_fragment_one_listview_bt_del">删除</string>
-    <string name="tab5_fragment_one_adapter_tv_taskno">编号</string>
+    <string name="tab5_fragment_one_bt_action">history query(networking needed)</string>
+    <string name="tab5_fragment_one_listview_bt_del">delete</string>
+    <string name="tab5_fragment_one_adapter_tv_taskno">number</string>
 
 
     <!-- Tab1相关 -->
@@ -117,11 +117,11 @@
 
 
 
-    <string name="sunday">星期天</string>
-    <string name="monday">星期一</string>
-    <string name="tuesday">星期二</string>
-    <string name="wednesday">星期三</string>
-    <string name="thursday">星期四</string>
-    <string name="friday">星期五</string>
-    <string name="saturday">星期六</string>
+    <string name="sunday">sunday</string>
+    <string name="monday">monday</string>
+    <string name="tuesday">tuesday</string>
+    <string name="wednesday">wednesday</string>
+    <string name="thursday">thursday</string>
+    <string name="friday">friday</string>
+    <string name="saturday">saturday</string>
 </resources>

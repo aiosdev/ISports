@@ -357,6 +357,11 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
                 for(Task newData: dataFinalList){
                     if(newData.getDate().equals(data.getDate())){
                         newData.setStep(newData.getStep() + data.getStep());
+                        newData.setCalories(newData.getCalories() + data.getCalories());
+                        newData.setDistance(newData.getDistance() + data.getDistance());
+                        newData.setDuration(newData.getDuration() + data.getDuration());
+
+                        
                     }
                 }
             }
