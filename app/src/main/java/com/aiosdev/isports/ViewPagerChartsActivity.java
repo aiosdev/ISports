@@ -218,7 +218,7 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
 
 
         private LineChartData generateLineChartData() {
-            int numValues = 10;
+            int numValues = taskList.size();
 
 
             List<PointValue> values = new ArrayList<PointValue>();
@@ -323,20 +323,21 @@ public class ViewPagerChartsActivity extends ActionBarActivity implements Action
 
         private void queryTaskByDate() {
 
+            String columns[] = new String[]{MapContract.TaskEntry.COLUMN_DATE, MapContract.TaskEntry.COLUMN_TASK_NO, MapContract.TaskEntry.COLUMN_STEP, MapContract.TaskEntry.COLUMN_DISTANCE, MapContract.TaskEntry.COLUMN_CALORIES, MapContract.TaskEntry.COLUMN_DURATION};
             Uri myUri = MapContract.TaskEntry.CONTENT_URI;
             //Cursor cur = FavoriteActivity.this.managedQuery(myUri, columns, null, null, null);
             Cursor cur = null;
             String condition = "date = ?";
 //            String[] argus = {date};
 
-            cur = getActivity().getContentResolver().query(myUri, null, condition, null, null);
+            cur = getActivity().getContentResolver().query(myUri, columns, null, null, null);
 //            cur = getActivity().getContentResolver().query(myUri, null, condition, argus, null);
 
             if (cur.moveToFirst()) {
                 do {
                     mTask = new Task();
                     mTask.setDate(cur.getString(cur.getColumnIndex("date")));
-//                    mTask.setTaskNo(cur.getString(cur.getColumnIndex("task_no")));
+                    mTask.setTaskNo(cur.getString(cur.getColumnIndex("task_no")));
                     mTask.setStep(cur.getInt(cur.getColumnIndex("step")));
                     mTask.setDistance(cur.getFloat(cur.getColumnIndex("distance")));
                     mTask.setCalories(cur.getFloat(cur.getColumnIndex("calories")));
